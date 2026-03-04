@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="base-path" content="/">
 
-  <title>Get Involved — VirWave</title>
-  <meta name="description" content="Sign up for early access, event updates, or partnership opportunities with VirWave.">
+  <title>Get in Touch — VirWave</title>
+  <meta name="description" content="Get in touch with VirWave — join the waitlist, inquire about partnerships, licensing, or event updates.">
 
   <!-- OpenGraph -->
-  <meta property="og:title" content="Get Involved — VirWave">
-  <meta property="og:description" content="Sign up for early access, event updates, or partnership opportunities.">
+  <meta property="og:title" content="Get in Touch — VirWave">
+  <meta property="og:description" content="Join the waitlist, inquire about partnerships, licensing, or event updates.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://virwave.com/interest/">
 
@@ -160,6 +160,7 @@
        • Input sanitization (strip tags, control chars)
        • Rate-limit: 1 submit per 3 seconds
        • URL param tracking (?source=, ?event=, ?campaign=)
+       • Pre-selects interest dropdown via ?interest= param
        ============================================================ */
     (function () {
       'use strict';
@@ -175,12 +176,25 @@
 
       var nameInput    = form.elements['name'];
       var emailInput   = form.elements['email'];
+      var interestSel  = form.elements['interest'];
       var messageInput = form.elements['message'];
       var consentInput = form.elements['consent'];
       var consentWrap  = consentInput ? consentInput.closest('.form-consent') : null;
 
       var emailError   = document.getElementById('form-email-error');
       var consentError = document.getElementById('form-consent-error');
+
+      /* --- Pre-select interest from URL param -------------- */
+      var _initParams = new URLSearchParams(window.location.search);
+      var presetInterest = _initParams.get('interest');
+      if (presetInterest && interestSel) {
+        for (var i = 0; i < interestSel.options.length; i++) {
+          if (interestSel.options[i].value === presetInterest) {
+            interestSel.value = presetInterest;
+            break;
+          }
+        }
+      }
 
       /* --- Constants --------------------------------------- */
       var EMAIL_RE   = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
