@@ -62,12 +62,17 @@
 
           <div class="form-group">
             <label for="form-name">Name <span class="text-muted">(optional)</span></label>
-            <input type="text" id="form-name" name="name" placeholder="Your name" autocomplete="name">
+            <input type="text" id="form-name" name="name" placeholder="Your name" autocomplete="name"
+                   maxlength="100" pattern="[\p{L}\p{M}\s.'-]+" aria-describedby="form-name-hint">
+            <span class="field-hint" id="form-name-hint">Letters, spaces, hyphens, apostrophes. <span class="char-count" data-for="form-name"></span></span>
           </div>
 
           <div class="form-group">
             <label for="form-email">Email address *</label>
-            <input type="email" id="form-email" name="email" placeholder="you@example.com" required autocomplete="email">
+            <input type="email" id="form-email" name="email" placeholder="you@example.com" required autocomplete="email"
+                   maxlength="254" aria-describedby="form-email-hint">
+            <span class="field-hint" id="form-email-hint">A valid email address — we'll never share it.</span>
+            <span class="field-error" id="form-email-error" role="alert"></span>
           </div>
 
           <div class="form-group">
@@ -83,17 +88,20 @@
 
           <div class="form-group">
             <label for="form-message">Message <span class="text-muted">(optional)</span></label>
-            <textarea id="form-message" name="message" placeholder="Tell us a bit about yourself or what you're looking for…"></textarea>
+            <textarea id="form-message" name="message" placeholder="Tell us a bit about yourself or what you're looking for…"
+                      maxlength="1000" aria-describedby="form-message-hint"></textarea>
+            <span class="field-hint" id="form-message-hint"><span class="char-count" data-for="form-message"></span></span>
           </div>
 
           <div class="form-consent">
-            <input type="checkbox" id="form-consent" name="consent" required>
+            <input type="checkbox" id="form-consent" name="consent" required aria-describedby="form-consent-error">
             <label for="form-consent">I agree to VirWave collecting my email address to send me updates. I can unsubscribe at any time. See our <a href="/privacy/">Privacy Policy</a>.</label>
           </div>
+          <span class="field-error" id="form-consent-error" role="alert"></span>
 
           <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Submit</button>
 
-          <p id="form-error" style="color: var(--gray-600); font-size: var(--text-sm); margin-top: var(--sp-4); display: none;"></p>
+          <p id="form-error" class="form-error-banner" role="alert" style="display: none;"></p>
         </form>
       </div>
 
@@ -143,17 +151,20 @@
   <script src="/assets/js/main.js"></script>
   <script>
     /* ============================================================
-       Interest Form Handler — Supabase Integration
+       Interest Form Handler — Validation & Supabase Integration
        
-       Inserts into the event_interest table via the PostgREST API.
-       URL params for tracking:
-         ?source=sxsw-2026      → tracks where the visitor came from
-         ?event=sxsw-2026       → which event (if applicable)
-         ?campaign=march-flyer  → optional campaign ID
+       Features:
+       • Real-time field validation on blur + input
+       • Visual valid/invalid states with icons
+       • Character counters for text fields
+       • Input sanitization (strip tags, control chars)
+       • Rate-limit: 1 submit per 3 seconds
+       • URL param tracking (?source=, ?event=, ?campaign=)
        ============================================================ */
     (function () {
       'use strict';
 
+      /* --- DOM refs ---------------------------------------- */
       var form = document.getElementById('vw-interest-form');
       var formContainer = document.getElementById('interest-form');
       var successEl = document.getElementById('form-success');
@@ -162,40 +173,203 @@
 
       if (!form) return;
 
+      var nameInput    = form.elements['name'];
+      var emailInput   = form.elements['email'];
+      var messageInput = form.elements['message'];
+      var consentInput = form.elements['consent'];
+      var consentWrap  = consentInput ? consentInput.closest('.form-consent') : null;
+
+      var emailError   = document.getElementById('form-email-error');
+      var consentError = document.getElementById('form-consent-error');
+
+      /* --- Constants --------------------------------------- */
+      var EMAIL_RE   = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+      var NAME_RE    = /^[\p{L}\p{M}\s.\-']*$/u;
+      var STRIP_TAGS = /<[^>]*>/g;
+      var CTRL_CHARS = /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g;
+      var RATE_MS    = 3000;
+
+      var lastSubmitAt = 0;
+      var touched = {};  // track which fields the user has interacted with
+
+      /* --- Sanitisation ------------------------------------ */
+      function sanitize(str) {
+        return (str || '').replace(STRIP_TAGS, '').replace(CTRL_CHARS, '').trim();
+      }
+
+      /* --- Character counters ------------------------------ */
+      document.querySelectorAll('.char-count[data-for]').forEach(function (el) {
+        var field = document.getElementById(el.dataset.for);
+        if (!field) return;
+        var max = parseInt(field.getAttribute('maxlength'), 10) || 0;
+
+        function update() {
+          var len = field.value.length;
+          if (max) {
+            el.textContent = len + ' / ' + max;
+            el.classList.toggle('warn', len >= max * 0.8 && len < max);
+            el.classList.toggle('limit', len >= max);
+          } else {
+            el.textContent = len > 0 ? len + ' chars' : '';
+          }
+        }
+
+        field.addEventListener('input', update);
+        update(); // init
+      });
+
+      /* --- Per-field validators ----------------------------- */
+      var validators = {
+        name: function () {
+          var val = sanitize(nameInput.value);
+          if (!val) return { valid: true, empty: true };           // optional
+          if (val.length > 100) return { valid: false, msg: 'Name must be under 100 characters.' };
+          if (!NAME_RE.test(val)) return { valid: false, msg: 'Only letters, spaces, hyphens, and apostrophes.' };
+          return { valid: true };
+        },
+
+        email: function () {
+          var val = sanitize(emailInput.value);
+          if (!val) return { valid: false, msg: 'Email is required.' };
+          if (val.length > 254) return { valid: false, msg: 'Email must be under 254 characters.' };
+          if (!EMAIL_RE.test(val)) return { valid: false, msg: 'Please enter a valid email (e.g. you@example.com).' };
+          return { valid: true };
+        },
+
+        message: function () {
+          var val = sanitize(messageInput.value);
+          if (!val) return { valid: true, empty: true };           // optional
+          if (val.length > 1000) return { valid: false, msg: 'Message must be under 1 000 characters.' };
+          return { valid: true };
+        },
+
+        consent: function () {
+          if (!consentInput.checked) return { valid: false, msg: 'You must agree to continue.' };
+          return { valid: true };
+        }
+      };
+
+      /* --- Show / clear field state ------------------------ */
+      function setFieldState(fieldEl, result, errorEl) {
+        // Don't show states on untouched fields
+        var fieldName = fieldEl.name || fieldEl.id;
+        if (!touched[fieldName] && !result.forceShow) return;
+
+        // Clear previous state
+        fieldEl.classList.remove('field-valid', 'field-invalid');
+        if (errorEl) {
+          errorEl.classList.remove('visible');
+          errorEl.textContent = '';
+        }
+
+        if (result.valid && !result.empty) {
+          fieldEl.classList.add('field-valid');
+        } else if (!result.valid) {
+          fieldEl.classList.add('field-invalid');
+          if (errorEl && result.msg) {
+            errorEl.textContent = result.msg;
+            errorEl.classList.add('visible');
+          }
+        }
+      }
+
+      function setConsentState(result) {
+        if (!touched['consent'] && !result.forceShow) return;
+        if (consentWrap) consentWrap.classList.toggle('consent-error', !result.valid);
+        if (consentError) {
+          consentError.textContent = result.valid ? '' : (result.msg || '');
+          consentError.classList.toggle('visible', !result.valid);
+        }
+      }
+
+      /* --- Validate all fields ----------------------------- */
+      function validateAll(forceShow) {
+        var nameRes    = validators.name();
+        var emailRes   = validators.email();
+        var messageRes = validators.message();
+        var consentRes = validators.consent();
+
+        if (forceShow) {
+          nameRes.forceShow = emailRes.forceShow = messageRes.forceShow = consentRes.forceShow = true;
+        }
+
+        setFieldState(nameInput,    nameRes,    null);
+        setFieldState(emailInput,   emailRes,   emailError);
+        setFieldState(messageInput, messageRes, null);
+        setConsentState(consentRes);
+
+        return nameRes.valid && emailRes.valid && messageRes.valid && consentRes.valid;
+      }
+
+      /* --- Attach real-time listeners ---------------------- */
+      [nameInput, emailInput, messageInput].forEach(function (field) {
+        field.addEventListener('blur', function () {
+          touched[field.name] = true;
+          validateAll(false);
+        });
+        // Live feedback after field has been touched
+        field.addEventListener('input', function () {
+          if (touched[field.name]) validateAll(false);
+        });
+        // Paste handler: strip tags on paste
+        field.addEventListener('paste', function (e) {
+          setTimeout(function () {
+            field.value = sanitize(field.value);
+            if (touched[field.name]) validateAll(false);
+          }, 0);
+        });
+      });
+
+      consentInput.addEventListener('change', function () {
+        touched['consent'] = true;
+        validateAll(false);
+      });
+
+      /* --- Submit handler ---------------------------------- */
       form.addEventListener('submit', async function (e) {
         e.preventDefault();
-        errorEl.style.display = 'none';
+        hideBanner();
 
-        // Basic validation
-        var email = form.email.value.trim();
-        var consent = form.consent.checked;
+        // Mark all fields as touched so errors show
+        ['name', 'email', 'message', 'consent'].forEach(function (k) { touched[k] = true; });
 
-        if (!email || !email.includes('@')) {
-          showError('Please enter a valid email address.');
+        var allValid = validateAll(true);
+        if (!allValid) {
+          // Focus the first invalid field
+          var firstInvalid = form.querySelector('.field-invalid, .consent-error input');
+          if (firstInvalid) firstInvalid.focus();
           return;
         }
-        if (!consent) {
-          showError('Please agree to the data collection terms to continue.');
+
+        // Rate limit
+        var now = Date.now();
+        if (now - lastSubmitAt < RATE_MS) {
+          showBanner('Please wait a moment before submitting again.');
           return;
         }
+        lastSubmitAt = now;
 
-        // Disable button during submission
+        // Disable button
         if (submitBtn) {
           submitBtn.disabled = true;
           submitBtn.textContent = 'Submitting…';
         }
 
-        // Read URL params for source tracking
-        var params = new URLSearchParams(window.location.search);
-        var source = params.get('source') || 'website';
-        var eventCode = params.get('event') || params.get('source') || 'website';
-        var campaignId = params.get('campaign') || null;
+        // Sanitise values before sending
+        var email   = sanitize(emailInput.value);
+        var name    = sanitize(nameInput.value) || null;
+        var message = sanitize(messageInput.value) || null;
 
-        // Build row matching event_interest table schema
+        // Read URL params for source tracking
+        var params     = new URLSearchParams(window.location.search);
+        var source     = sanitize(params.get('source')) || 'website';
+        var eventCode  = sanitize(params.get('event') || params.get('source')) || 'website';
+        var campaignId = sanitize(params.get('campaign')) || null;
+
         var row = {
           email: email,
           email_normalized: email.toLowerCase().trim(),
-          display_name: form.name.value.trim() || null,
+          display_name: name,
           consent_marketing: true,
           consent_release_updates: true,
           consent_privacy_version: '2026-03-04',
@@ -204,7 +378,7 @@
           event_code: eventCode,
           campaign_id: campaignId,
           interest_type: form.interest.value,
-          message: form.message.value.trim() || null
+          message: message
         };
 
         var result = await VWSupabase.insert('event_interest', row);
@@ -232,13 +406,18 @@
           submitBtn.textContent = 'Submit';
         }
 
-        showError('Something went wrong. Please try emailing us directly at kate@virwave.com.');
+        showBanner('Something went wrong. Please try emailing us directly at kate@virwave.com.');
         console.error('Supabase insert error:', result.error);
       });
 
-      function showError(msg) {
+      /* --- Banner helpers ---------------------------------- */
+      function showBanner(msg) {
         errorEl.textContent = msg;
         errorEl.style.display = 'block';
+      }
+      function hideBanner() {
+        errorEl.style.display = 'none';
+        errorEl.textContent = '';
       }
     })();
   </script>

@@ -771,6 +771,100 @@ h1, h2, h3, h4, h5, h6 {
   resize: vertical;
 }
 
+/* --- Field hints & character counters ---------------------- */
+.field-hint {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--gray-400);
+  margin-top: var(--sp-1);
+  transition: color var(--transition);
+}
+
+.char-count {
+  float: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.char-count.warn {
+  color: #C27028;
+  font-weight: 500;
+}
+
+.char-count.limit {
+  color: #C0392B;
+  font-weight: 600;
+}
+
+/* --- Validation states ------------------------------------- */
+.field-error {
+  display: none;
+  font-size: var(--text-xs);
+  color: #C0392B;
+  margin-top: var(--sp-1);
+  line-height: 1.4;
+}
+
+.field-error.visible {
+  display: block;
+}
+
+.form-error-banner {
+  color: #C0392B;
+  font-size: var(--text-sm);
+  margin-top: var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  background: rgba(192, 57, 43, 0.06);
+  border: 1px solid rgba(192, 57, 43, 0.15);
+  border-radius: var(--radius);
+}
+
+/* Valid field (has value + passes validation) */
+.form-group input.field-valid,
+.form-group textarea.field-valid {
+  border-color: #2A9D5C;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%232A9D5C' viewBox='0 0 16 16'%3E%3Cpath d='M13.485 3.929a1 1 0 0 1 .086 1.406l-5.5 6.5a1 1 0 0 1-1.472.066l-3-3a1 1 0 1 1 1.414-1.414l2.214 2.214 4.852-5.686a1 1 0 0 1 1.406-.086Z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px;
+  padding-right: 2.5rem;
+}
+
+/* Invalid field (touched + fails validation) */
+.form-group input.field-invalid,
+.form-group textarea.field-invalid {
+  border-color: #C0392B;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23C0392B' viewBox='0 0 16 16'%3E%3Cpath d='M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm-.75 4a.75.75 0 0 1 1.5 0v3a.75.75 0 0 1-1.5 0V5Zm.75 6.25a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px;
+  padding-right: 2.5rem;
+}
+
+.form-group input.field-invalid:focus,
+.form-group textarea.field-invalid:focus {
+  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.12);
+}
+
+.form-group input.field-valid:focus,
+.form-group textarea.field-valid:focus {
+  box-shadow: 0 0 0 3px rgba(42, 157, 92, 0.12);
+}
+
+/* Consent checkbox error */
+.form-consent.consent-error label {
+  color: #C0392B;
+}
+.form-consent.consent-error input[type="checkbox"] {
+  outline: 2px solid #C0392B;
+  outline-offset: 1px;
+}
+
+/* Disabled submit state */
+button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .form-consent {
   display: flex;
   gap: var(--sp-3);
