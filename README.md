@@ -38,19 +38,27 @@ Then open `http://localhost:8000`.
 ├── terms/
 │   └── index.html          # Terms of service
 ├── interest/
-│   └── index.html          # Interest / sign-up form (QR-linkable)
+│   └── index.html          # Interest / sign-up form
 ├── assets/
 │   ├── css/styles.css      # All styles
 │   ├── js/
 │   │   ├── main.js         # Nav, visibility system, utilities
+│   │   ├── supabase.js     # Lightweight PostgREST client (no SDK)
 │   │   ├── blog.js         # Blog listing, post rendering, preview
 │   │   └── markdown.js     # Client-side markdown parser (no deps)
+│   ├── qr/                 # Generated QR codes (images gitignored)
+│   │   └── manifest.json   # Index of all generated QR codes
 │   ├── favicon.png
 │   └── logo_virwave.avif
+├── scripts/
+│   ├── generate-qr.py      # Branded QR code generator (see below)
+│   └── README.md           # Script documentation for AI agents
 ├── _config.json            # Visibility config (hide pages/sections)
+├── _supabase.json          # Supabase connection config (public anon key)
 ├── sitemap.xml
 ├── robots.txt
-├── LICENSE
+├── CNAME                   # Custom domain: virwave.com
+├── LICENSE                 # Dual license: MIT (code) + All Rights Reserved (content)
 └── .gitignore
 ```
 
@@ -90,14 +98,51 @@ Edit `_config.json` to control visibility without changing HTML:
 
 ## Interest form
 
-The form at `/interest/` is a generic inbound form suitable for:
-- Event sign-ups (link with `?source=event-name`)
-- General early-access interest
-- Partnership inquiries
+The form at `/interest/` is the primary inbound form for all CTAs across the site.
 
-Currently stores to `localStorage` as a placeholder. Replace the submit handler with your backend (Supabase, Formspree, etc.).
+**Features:**
+- Multi-select interest pills (early-access, event, partnership, licensing, general)
+- Split consent: required (release updates) + optional (marketing) — aligned with the v3 app
+- Real-time validation with visual states, character counters, rate limiting
+- Submits to Supabase via PostgREST (configured in `_supabase.json`)
+- Duplicate detection: unique constraint on `(email_normalized, event_code)`
 
-The page includes a QR code placeholder section — replace with a real QR code pointing to `https://virwave.com/interest/`.
+**URL parameters** pre-select interests and enable source tracking:
+
+| Param | Example | Effect |
+|-------|---------|--------|
+| `interest` | `?interest=partnership` | Pre-checks the matching pill(s). Supports comma-separated. Alias: `waitlist` → `early-access` |
+| `source` | `?source=qr_event-name` | Stored in `source` column for attribution |
+| `event` | `?event=kate-breathwork-berlin` | Stored in `event_code` column |
+| `campaign` | `?campaign=spring-2026` | Stored in `campaign_id` column |
+
+**CTA routing** across the site:
+- "Join Waitlist" → `/interest/?interest=early-access`
+- "Partnerships" → `/interest/?interest=partnership`
+- "Licensing" → `/interest/?interest=licensing`
+- "Get in Touch" → `/interest/?interest=general`
+
+## QR code generator
+
+Generate branded, print-ready QR codes for events and campaigns. See [`scripts/README.md`](scripts/README.md) for full documentation.
+
+Quick start:
+
+```bash
+# Activate the Python venv first
+source .venv/bin/activate
+
+# Generate a QR code for an event
+python scripts/generate-qr.py --event "Kate Breathwork Berlin 2026-04"
+
+# With custom interest + campaign
+python scripts/generate-qr.py --event "Wellness Expo" --interest partnership --campaign spring-expo
+
+# List all generated codes
+python scripts/generate-qr.py --list
+```
+
+Output goes to `assets/qr/` with a `manifest.json` index. QR images are gitignored; the manifest is tracked.
 
 ## GitHub Pages deployment
 
@@ -115,7 +160,9 @@ The page includes a QR code placeholder section — replace with a real QR code 
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+Dual license — see [LICENSE](LICENSE):
+- **Code** (HTML, CSS, JS): MIT License
+- **Content** (blog posts, editorial copy, images, logos): All Rights Reserved — VirWave OAM
 
 ---
 

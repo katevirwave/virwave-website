@@ -53,7 +53,7 @@
     <div class="container">
 
       <div class="section-header">
-        <h1>Get involved with VirWave</h1>
+        <h1>Get in touch with VirWave</h1>
         <p>Whether you're interested in early access, attending an event, or exploring partnerships — we'd love to hear from you.</p>
       </div>
 
@@ -76,14 +76,29 @@
           </div>
 
           <div class="form-group">
-            <label for="form-interest">What are you interested in?</label>
-            <select id="form-interest" name="interest">
-              <option value="early-access">Early access to the app</option>
-              <option value="event">Event updates</option>
-              <option value="partnership">Partnership or collaboration</option>
-              <option value="licensing">Licensing inquiry</option>
-              <option value="general">General interest / Stay in touch</option>
-            </select>
+            <label>What are you interested in? <span class="text-muted">(select all that apply)</span></label>
+            <div class="interest-options" id="interest-options">
+              <label class="interest-option">
+                <input type="checkbox" name="interests" value="early-access">
+                <span>Early access to the app</span>
+              </label>
+              <label class="interest-option">
+                <input type="checkbox" name="interests" value="event">
+                <span>Event updates</span>
+              </label>
+              <label class="interest-option">
+                <input type="checkbox" name="interests" value="partnership">
+                <span>Partnership or collaboration</span>
+              </label>
+              <label class="interest-option">
+                <input type="checkbox" name="interests" value="licensing">
+                <span>Licensing inquiry</span>
+              </label>
+              <label class="interest-option">
+                <input type="checkbox" name="interests" value="general">
+                <span>General interest / Stay in touch</span>
+              </label>
+            </div>
           </div>
 
           <div class="form-group">
@@ -94,9 +109,17 @@
           </div>
 
           <div class="form-consent">
-            <input type="checkbox" id="form-consent" name="consent" required aria-describedby="form-consent-error">
-            <label for="form-consent">I agree to VirWave collecting my email address to send me updates. I can unsubscribe at any time. See our <a href="/privacy/">Privacy Policy</a>.</label>
+            <input type="checkbox" id="form-consent-updates" name="consent_updates" aria-describedby="form-consent-error">
+            <label for="form-consent-updates">I agree to receive release updates by email <span id="consent-required-flag">*</span></label>
           </div>
+
+          <div class="form-consent">
+            <input type="checkbox" id="form-consent-marketing" name="consent_marketing">
+            <label for="form-consent-marketing">I'd like VirWave invites, event news, and launch updates <span class="text-muted">(optional)</span></label>
+          </div>
+
+          <p class="form-legal-text">By submitting, you agree to our <a href="/privacy/">Privacy Policy</a> and <a href="/terms/">Terms of Service</a>. You can unsubscribe at any time.</p>
+
           <span class="field-error" id="form-consent-error" role="alert"></span>
 
           <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Submit</button>
@@ -108,25 +131,16 @@
       <!-- Success state (hidden by default) -->
       <div class="interest-form" id="form-success" style="display: none;">
         <div class="form-success">
+          <div class="success-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+          </div>
           <h3>Thank you!</h3>
-          <p>We've received your information. We'll be in touch soon.</p>
-          <a href="/" class="btn btn-ghost-dark btn-sm" style="margin-top: var(--sp-4);">Back to home</a>
+          <p>We've received your information and will be in touch soon.</p>
+          <a href="/" class="btn btn-primary btn-sm" style="margin-top: var(--sp-6);">Back to home</a>
         </div>
-      </div>
-
-      <!-- QR Code section for events -->
-      <div class="qr-section" data-section="interest-qr">
-        <h3>Scan to reach this page</h3>
-        <p class="text-muted" style="font-size: var(--text-sm);">Use this QR code at events or share it with others.</p>
-        <!-- 
-          Replace the src below with an actual QR code image pointing to 
-          https://virwave.com/interest/ (or your GitHub Pages URL).
-          You can generate one at any free QR code generator.
-        -->
-        <div style="width: 160px; height: 160px; background: var(--gray-100); border-radius: var(--radius); margin: var(--sp-4) auto; display: flex; align-items: center; justify-content: center; color: var(--gray-400); font-size: var(--text-sm);">
-          QR placeholder
-        </div>
-        <p class="text-muted" style="font-size: var(--text-xs);">virwave.com/interest</p>
       </div>
 
     </div>
@@ -157,10 +171,12 @@
        • Real-time field validation on blur + input
        • Visual valid/invalid states with icons
        • Character counters for text fields
+       • Multi-select interest pills (stored comma-separated)
+       • Split consent: required (release updates) + optional (marketing)
        • Input sanitization (strip tags, control chars)
        • Rate-limit: 1 submit per 3 seconds
        • URL param tracking (?source=, ?event=, ?campaign=)
-       • Pre-selects interest dropdown via ?interest= param
+       • Pre-checks interest via ?interest= param
        ============================================================ */
     (function () {
       'use strict';
@@ -174,27 +190,63 @@
 
       if (!form) return;
 
-      var nameInput    = form.elements['name'];
-      var emailInput   = form.elements['email'];
-      var interestSel  = form.elements['interest'];
-      var messageInput = form.elements['message'];
-      var consentInput = form.elements['consent'];
-      var consentWrap  = consentInput ? consentInput.closest('.form-consent') : null;
+      var nameInput       = form.elements['name'];
+      var emailInput      = form.elements['email'];
+      var messageInput    = form.elements['message'];
+      var consentUpdates  = document.getElementById('form-consent-updates');
+      var consentMktg     = document.getElementById('form-consent-marketing');
+      var consentWrap     = consentUpdates ? consentUpdates.closest('.form-consent') : null;
+      var interestBoxes   = form.querySelectorAll('input[name="interests"]');
 
-      var emailError   = document.getElementById('form-email-error');
-      var consentError = document.getElementById('form-consent-error');
+      var emailError      = document.getElementById('form-email-error');
+      var consentError    = document.getElementById('form-consent-error');
+      var consentFlag     = document.getElementById('consent-required-flag');
 
-      /* --- Pre-select interest from URL param -------------- */
+      /* --- Check whether early-access is selected ---------- */
+      function isEarlyAccessSelected() {
+        var found = false;
+        interestBoxes.forEach(function (cb) {
+          if (cb.value === 'early-access' && cb.checked) found = true;
+        });
+        return found;
+      }
+
+      /* --- Update consent required indicator ---------------- */
+      function updateConsentRequired() {
+        var req = isEarlyAccessSelected();
+        if (consentFlag) consentFlag.textContent = req ? '*' : '(optional)';
+        if (consentFlag) consentFlag.className = req ? '' : 'text-muted';
+        // Re-validate if user already interacted with consent
+        if (touched['consent']) validateAll(false);
+      }
+
+      /* --- Interest pill toggle (for :has() fallback) ------ */
+      interestBoxes.forEach(function (cb) {
+        cb.addEventListener('change', function () {
+          cb.closest('.interest-option').classList.toggle('selected', cb.checked);
+          updateConsentRequired();
+        });
+      });
+
+      /* --- Pre-check interest from URL param --------------- */
+      var INTEREST_ALIASES = { 'waitlist': 'early-access' };
       var _initParams = new URLSearchParams(window.location.search);
       var presetInterest = _initParams.get('interest');
-      if (presetInterest && interestSel) {
-        for (var i = 0; i < interestSel.options.length; i++) {
-          if (interestSel.options[i].value === presetInterest) {
-            interestSel.value = presetInterest;
-            break;
-          }
-        }
+      if (presetInterest) {
+        presetInterest.split(',').forEach(function (val) {
+          var key = (val.trim() || '').toLowerCase();
+          key = INTEREST_ALIASES[key] || key;
+          interestBoxes.forEach(function (cb) {
+            if (cb.value === key) {
+              cb.checked = true;
+              cb.closest('.interest-option').classList.add('selected');
+            }
+          });
+        });
       }
+
+      // Sync the required indicator after URL pre-selection
+      updateConsentRequired();
 
       /* --- Constants --------------------------------------- */
       var EMAIL_RE   = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -204,11 +256,20 @@
       var RATE_MS    = 3000;
 
       var lastSubmitAt = 0;
-      var touched = {};  // track which fields the user has interacted with
+      var touched = {};
 
       /* --- Sanitisation ------------------------------------ */
       function sanitize(str) {
         return (str || '').replace(STRIP_TAGS, '').replace(CTRL_CHARS, '').trim();
+      }
+
+      /* --- Get selected interests -------------------------- */
+      function getSelectedInterests() {
+        var selected = [];
+        interestBoxes.forEach(function (cb) {
+          if (cb.checked) selected.push(cb.value);
+        });
+        return selected;
       }
 
       /* --- Character counters ------------------------------ */
@@ -229,14 +290,14 @@
         }
 
         field.addEventListener('input', update);
-        update(); // init
+        update();
       });
 
       /* --- Per-field validators ----------------------------- */
       var validators = {
         name: function () {
           var val = sanitize(nameInput.value);
-          if (!val) return { valid: true, empty: true };           // optional
+          if (!val) return { valid: true, empty: true };
           if (val.length > 100) return { valid: false, msg: 'Name must be under 100 characters.' };
           if (!NAME_RE.test(val)) return { valid: false, msg: 'Only letters, spaces, hyphens, and apostrophes.' };
           return { valid: true };
@@ -252,37 +313,37 @@
 
         message: function () {
           var val = sanitize(messageInput.value);
-          if (!val) return { valid: true, empty: true };           // optional
+          if (!val) return { valid: true, empty: true };
           if (val.length > 1000) return { valid: false, msg: 'Message must be under 1 000 characters.' };
           return { valid: true };
         },
 
         consent: function () {
-          if (!consentInput.checked) return { valid: false, msg: 'You must agree to continue.' };
+          if (isEarlyAccessSelected() && !consentUpdates.checked) {
+            return { valid: false, msg: 'Early access requires consent to receive release updates.' };
+          }
           return { valid: true };
         }
       };
 
       /* --- Show / clear field state ------------------------ */
-      function setFieldState(fieldEl, result, errorEl) {
-        // Don't show states on untouched fields
+      function setFieldState(fieldEl, result, errorSpan) {
         var fieldName = fieldEl.name || fieldEl.id;
         if (!touched[fieldName] && !result.forceShow) return;
 
-        // Clear previous state
         fieldEl.classList.remove('field-valid', 'field-invalid');
-        if (errorEl) {
-          errorEl.classList.remove('visible');
-          errorEl.textContent = '';
+        if (errorSpan) {
+          errorSpan.classList.remove('visible');
+          errorSpan.textContent = '';
         }
 
         if (result.valid && !result.empty) {
           fieldEl.classList.add('field-valid');
         } else if (!result.valid) {
           fieldEl.classList.add('field-invalid');
-          if (errorEl && result.msg) {
-            errorEl.textContent = result.msg;
-            errorEl.classList.add('visible');
+          if (errorSpan && result.msg) {
+            errorSpan.textContent = result.msg;
+            errorSpan.classList.add('visible');
           }
         }
       }
@@ -296,7 +357,7 @@
         }
       }
 
-      /* --- Validate all fields ----------------------------- */
+      /* --- Validate all ------------------------------------ */
       function validateAll(forceShow) {
         var nameRes    = validators.name();
         var emailRes   = validators.email();
@@ -321,12 +382,10 @@
           touched[field.name] = true;
           validateAll(false);
         });
-        // Live feedback after field has been touched
         field.addEventListener('input', function () {
           if (touched[field.name]) validateAll(false);
         });
-        // Paste handler: strip tags on paste
-        field.addEventListener('paste', function (e) {
+        field.addEventListener('paste', function () {
           setTimeout(function () {
             field.value = sanitize(field.value);
             if (touched[field.name]) validateAll(false);
@@ -334,7 +393,7 @@
         });
       });
 
-      consentInput.addEventListener('change', function () {
+      consentUpdates.addEventListener('change', function () {
         touched['consent'] = true;
         validateAll(false);
       });
@@ -344,12 +403,10 @@
         e.preventDefault();
         hideBanner();
 
-        // Mark all fields as touched so errors show
         ['name', 'email', 'message', 'consent'].forEach(function (k) { touched[k] = true; });
 
         var allValid = validateAll(true);
         if (!allValid) {
-          // Focus the first invalid field
           var firstInvalid = form.querySelector('.field-invalid, .consent-error input');
           if (firstInvalid) firstInvalid.focus();
           return;
@@ -363,18 +420,21 @@
         }
         lastSubmitAt = now;
 
-        // Disable button
         if (submitBtn) {
           submitBtn.disabled = true;
-          submitBtn.textContent = 'Submitting…';
+          submitBtn.textContent = 'Submitting\u2026';
         }
 
-        // Sanitise values before sending
+        // Sanitise
         var email   = sanitize(emailInput.value);
         var name    = sanitize(nameInput.value) || null;
         var message = sanitize(messageInput.value) || null;
 
-        // Read URL params for source tracking
+        // Interests (comma-separated)
+        var interests = getSelectedInterests();
+        var interestType = interests.length > 0 ? interests.join(',') : 'general';
+
+        // URL params for source tracking
         var params     = new URLSearchParams(window.location.search);
         var source     = sanitize(params.get('source')) || 'website';
         var eventCode  = sanitize(params.get('event') || params.get('source')) || 'website';
@@ -384,14 +444,14 @@
           email: email,
           email_normalized: email.toLowerCase().trim(),
           display_name: name,
-          consent_marketing: true,
-          consent_release_updates: true,
+          consent_marketing: consentMktg.checked,
+          consent_release_updates: consentUpdates.checked,
           consent_privacy_version: '2026-03-04',
           consented_at: new Date().toISOString(),
           source: source,
           event_code: eventCode,
           campaign_id: campaignId,
-          interest_type: form.interest.value,
+          interest_type: interestType,
           message: message
         };
 
@@ -403,18 +463,16 @@
           return;
         }
 
-        // Handle duplicate signup gracefully
         if (result.error === 'duplicate') {
           formContainer.style.display = 'none';
           successEl.style.display = 'block';
           var h3 = successEl.querySelector('h3');
-          if (h3) h3.textContent = 'You\'re already on the list!';
+          if (h3) h3.textContent = 'You\u2019re already on the list!';
           var p = successEl.querySelector('p');
-          if (p) p.textContent = result.message;
+          if (p) p.textContent = 'Looks like you\u2019ve already signed up with this email. If your interests have changed, drop us a note at kate@virwave.com.';
           return;
         }
 
-        // Re-enable button on error
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.textContent = 'Submit';

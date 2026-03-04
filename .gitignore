@@ -25,3 +25,12 @@ build/
 # Local dev
 _local*/
 *.patch
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Generated QR codes (images are build artifacts; manifest is tracked)
+assets/qr/*.png
+assets/qr/*.webp
