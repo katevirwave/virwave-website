@@ -324,6 +324,41 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 680px;
 }
 
+/* Hero ambient particles — matches VirWave app splash screen */
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Outer span drifts on X axis */
+.particle {
+  position: absolute;
+  display: block;
+  animation: particle-x var(--dur-x) ease-in-out infinite alternate;
+}
+
+/* Inner span is the visible dot, drifts on Y axis */
+.particle > span {
+  display: block;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: var(--white-pure);
+  opacity: var(--opacity);
+  animation: particle-y var(--dur-y) ease-in-out infinite alternate;
+}
+
+@keyframes particle-x {
+  from { transform: translateX(0); }
+  to   { transform: translateX(var(--dx)); }
+}
+@keyframes particle-y {
+  from { transform: translateY(0); }
+  to   { transform: translateY(var(--dy)); }
+}
+
 .hero-eyebrow {
   font-size: var(--text-sm);
   font-weight: 500;
