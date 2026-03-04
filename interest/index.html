@@ -139,14 +139,17 @@
   </footer>
 
   <!-- Scripts -->
+  <script src="/assets/js/supabase.js"></script>
   <script src="/assets/js/main.js"></script>
   <script>
     /* ============================================================
-       Interest Form Handler
+       Interest Form Handler — Supabase Integration
        
-       Currently stores submissions to localStorage as a placeholder.
-       Replace the handleSubmit function body with your actual backend
-       integration (e.g., Supabase, Formspree, Google Forms, etc.)
+       Inserts into the event_interest table via the PostgREST API.
+       URL params for tracking:
+         ?source=sxsw-2026      → tracks where the visitor came from
+         ?event=sxsw-2026       → which event (if applicable)
+         ?campaign=march-flyer  → optional campaign ID
        ============================================================ */
     (function () {
       'use strict';
@@ -155,6 +158,7 @@
       var formContainer = document.getElementById('interest-form');
       var successEl = document.getElementById('form-success');
       var errorEl = document.getElementById('form-error');
+      var submitBtn = form ? form.querySelector('button[type="submit"]') : null;
 
       if (!form) return;
 
@@ -175,53 +179,61 @@
           return;
         }
 
-        // Collect data
-        var data = {
-          name: form.name.value.trim(),
+        // Disable button during submission
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Submitting…';
+        }
+
+        // Read URL params for source tracking
+        var params = new URLSearchParams(window.location.search);
+        var source = params.get('source') || 'website';
+        var eventCode = params.get('event') || params.get('source') || 'website';
+        var campaignId = params.get('campaign') || null;
+
+        // Build row matching event_interest table schema
+        var row = {
           email: email,
-          interest: form.interest.value,
-          message: form.message.value.trim(),
-          consent: true,
-          submittedAt: new Date().toISOString(),
-          source: new URLSearchParams(window.location.search).get('source') || 'website'
+          email_normalized: email.toLowerCase().trim(),
+          display_name: form.name.value.trim() || null,
+          consent_marketing: true,
+          consent_release_updates: true,
+          consent_privacy_version: '2026-03-04',
+          consented_at: new Date().toISOString(),
+          source: source,
+          event_code: eventCode,
+          campaign_id: campaignId,
+          interest_type: form.interest.value,
+          message: form.message.value.trim() || null
         };
 
-        try {
-          // === PLACEHOLDER: Replace with actual backend call ===
-          // Example with Formspree:
-          //   await fetch('https://formspree.io/f/YOUR_ID', {
-          //     method: 'POST',
-          //     headers: { 'Content-Type': 'application/json' },
-          //     body: JSON.stringify(data)
-          //   });
-          
-          // For now, store in localStorage
-          var submissions = JSON.parse(localStorage.getItem('vw_interest') || '[]');
-          submissions.push(data);
-          localStorage.setItem('vw_interest', JSON.stringify(submissions));
+        var result = await VWSupabase.insert('event_interest', row);
 
-          // Also mailto fallback: open email with data
-          // (Comment out if you have a real backend)
-          var mailto = 'mailto:kate@virwave.com?subject=' + 
-            encodeURIComponent('VirWave Interest: ' + data.interest) +
-            '&body=' + encodeURIComponent(
-              'Name: ' + (data.name || 'Not provided') + '\n' +
-              'Email: ' + data.email + '\n' +
-              'Interest: ' + data.interest + '\n' +
-              'Message: ' + (data.message || 'None') + '\n' +
-              'Source: ' + data.source
-            );
-
-          // Show success
+        if (result.ok) {
           formContainer.style.display = 'none';
           successEl.style.display = 'block';
-
-          // Optionally open mailto
-          // window.location.href = mailto;
-
-        } catch (err) {
-          showError('Something went wrong. Please try emailing us directly at kate@virwave.com.');
+          return;
         }
+
+        // Handle duplicate signup gracefully
+        if (result.error === 'duplicate') {
+          formContainer.style.display = 'none';
+          successEl.style.display = 'block';
+          var h3 = successEl.querySelector('h3');
+          if (h3) h3.textContent = 'You\'re already on the list!';
+          var p = successEl.querySelector('p');
+          if (p) p.textContent = result.message;
+          return;
+        }
+
+        // Re-enable button on error
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Submit';
+        }
+
+        showError('Something went wrong. Please try emailing us directly at kate@virwave.com.');
+        console.error('Supabase insert error:', result.error);
       });
 
       function showError(msg) {
