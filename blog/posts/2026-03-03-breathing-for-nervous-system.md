@@ -1,13 +1,13 @@
 # How Breathing Regulates Your Nervous System
 
-You've probably heard someone say "just take a deep breath" when you're stressed. It sounds almost too simple to be useful — but the science behind it is surprisingly robust.
+You've probably heard someone say "just take a deep breath" when you're stressed. It sounds almost too simple to work — but the science is solid.
 
 ## The autonomic nervous system
 
 Your body has two main modes of operation, both managed by the **autonomic nervous system (ANS)**:
 
 - **Sympathetic** — the "fight or flight" response. Heart rate increases, muscles tense, digestion slows. It's your body's alarm system.
-- **Parasympathetic** — the "rest and digest" response. Heart rate slows, muscles relax, your body recovers. This is where calm lives.
+- **Parasympathetic** — the "rest and digest" response. Heart rate slows, muscles relax, your body recovers. This is where regulation lives.
 
 Most of us spend too much time in the sympathetic state. Work deadlines, notification pings, doom-scrolling, traffic — the modern world keeps the alarm bell ringing.
 
@@ -27,7 +27,7 @@ Inhale for 4 seconds, hold for 4, exhale for 4, hold for 4. Used by everyone fro
 
 ### Extended Exhale (4-7-8)
 
-Inhale for 4 seconds, hold for 7, exhale for 8. The longer exhale drives parasympathetic activation. Often used as a sleep aid or for deep calming.
+Inhale for 4 seconds, hold for 7, exhale for 8. The longer exhale drives parasympathetic activation. Often used as a sleep aid or for deep nervous system regulation.
 
 ### Simple Slow Breathing
 
@@ -37,7 +37,7 @@ Just slow your breath down to about 6 breaths per minute. No counting required �
 
 VirWave gives you a visual guide for all of these techniques. Instead of counting in your head, you follow a fluid shape that breathes with you.
 
-> The goal isn't to master breathing. It's to make calm feel effortless.
+> The goal isn't to master breathing. It's to make regulation feel effortless.
 
 Choose your shape, choose your pace, and let your nervous system do the rest.
 

@@ -721,6 +721,44 @@ h1, h2, h3, h4, h5, h6 {
   margin: var(--sp-8) 0;
 }
 
+/* --- Event Banner (QR arrival) ------------------------------ */
+.event-banner {
+  text-align: center;
+  margin-bottom: var(--sp-10);
+}
+
+.event-banner-inner {
+  display: inline-block;
+  padding: var(--sp-6) var(--sp-10);
+  background: linear-gradient(135deg, rgba(13,33,55,0.04), rgba(10,126,164,0.06));
+  border: 1px solid rgba(10,126,164,0.12);
+  border-radius: var(--radius-lg);
+}
+
+.event-banner-eyebrow {
+  display: block;
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: var(--sp-1);
+}
+
+.event-banner-title {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: var(--sp-1);
+  letter-spacing: -0.015em;
+}
+
+.event-banner-sub {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  margin: 0;
+}
+
 /* --- Interest Form ----------------------------------------- */
 .form-page {
   padding-top: calc(64px + var(--sp-16));
@@ -730,6 +768,11 @@ h1, h2, h3, h4, h5, h6 {
 .interest-form {
   max-width: 540px;
   margin: 0 auto;
+  background: var(--white-pure);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-8) var(--sp-8) var(--sp-6);
+  box-shadow: var(--shadow-sm);
 }
 
 .form-group {
@@ -764,6 +807,11 @@ h1, h2, h3, h4, h5, h6 {
   outline: none;
   border-color: var(--teal);
   box-shadow: 0 0 0 3px rgba(10, 126, 164, 0.12);
+}
+
+.form-group input,
+.form-group textarea {
+  -webkit-appearance: none;   /* remove iOS inner shadow */
 }
 
 .form-group textarea {
@@ -890,6 +938,12 @@ button[type="submit"]:disabled {
   border-radius: var(--radius-lg);
   border: 1px solid rgba(10, 126, 164, 0.15);
 }
+
+/* Remove nested border when success replaces form card */
+#form-success .form-success {
+  border: none;
+  border-radius: 0;
+}
 .form-success .success-icon {
   margin-bottom: var(--sp-4);
 }
@@ -916,7 +970,7 @@ button[type="submit"]:disabled {
   display: flex;
   align-items: center;
   gap: var(--sp-2);
-  padding: 0.5rem 1rem;
+  padding: 0.625rem 1.125rem;
   border: 1px solid var(--border);
   border-radius: 100px;
   background: var(--white-pure);
@@ -925,6 +979,7 @@ button[type="submit"]:disabled {
   color: var(--text-muted);
   transition: all var(--transition);
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .interest-option:hover {
@@ -1016,6 +1071,34 @@ button[type="submit"]:disabled {
   .footer-inner { flex-direction: column; text-align: center; }
   .footer-links { justify-content: center; }
   .post-header h1 { font-size: var(--text-2xl); }
+
+  /* Form — card edge-to-edge on mobile */
+  .interest-form {
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+    margin-left: calc(var(--sp-6) * -1);
+    margin-right: calc(var(--sp-6) * -1);
+    padding: var(--sp-6) var(--sp-6) var(--sp-4);
+    box-shadow: none;
+  }
+
+  .form-page {
+    padding-top: calc(64px + var(--sp-10));
+    padding-bottom: var(--sp-10);
+  }
+
+  .event-banner-inner {
+    padding: var(--sp-4) var(--sp-6);
+  }
+
+  .event-banner-title {
+    font-size: var(--text-xl);
+  }
+
+  .section-header h1 {
+    font-size: var(--text-2xl);
+  }
 }
 
 @media (max-width: 480px) {

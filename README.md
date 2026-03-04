@@ -1,6 +1,6 @@
 # VirWave — Product Website
 
-Static website for [VirWave](https://virwave.com), a breathing and wellness companion.
+Static website for [VirWave](https://virwave.com), a breathing and emotional regulation companion.
 
 ## Running locally
 

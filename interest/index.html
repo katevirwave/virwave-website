@@ -6,11 +6,11 @@
   <meta name="base-path" content="/">
 
   <title>Get in Touch — VirWave</title>
-  <meta name="description" content="Get in touch with VirWave — join the waitlist, inquire about partnerships, licensing, or event updates.">
+  <meta name="description" content="Get in touch with VirWave — join the waitlist, inquire about partnerships, licensing, or events.">
 
   <!-- OpenGraph -->
   <meta property="og:title" content="Get in Touch — VirWave">
-  <meta property="og:description" content="Join the waitlist, inquire about partnerships, licensing, or event updates.">
+  <meta property="og:description" content="Join the waitlist, inquire about partnerships, licensing, or events.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://virwave.com/interest/">
 
@@ -52,9 +52,18 @@
   <main class="form-page">
     <div class="container">
 
+      <!-- Event context banner (shown when arriving via QR / event param) -->
+      <div class="event-banner" id="event-banner" style="display: none;">
+        <div class="event-banner-inner">
+          <span class="event-banner-eyebrow">You're at</span>
+          <h2 class="event-banner-title" id="event-banner-title"></h2>
+          <p class="event-banner-sub" id="event-banner-sub"></p>
+        </div>
+      </div>
+
       <div class="section-header">
         <h1>Get in touch with VirWave</h1>
-        <p>Whether you're interested in early access, attending an event, or exploring partnerships — we'd love to hear from you.</p>
+        <p>Early access, events, partnerships, or just curious — tell us what brought you here.</p>
       </div>
 
       <div class="interest-form" id="interest-form">
@@ -163,6 +172,38 @@
   <!-- Scripts -->
   <script src="/assets/js/supabase.js"></script>
   <script src="/assets/js/main.js"></script>
+
+  <!-- Event banner logic -->
+  <script>
+  (function () {
+    'use strict';
+    var EVENT_MAP = {
+      'founders-under-pressure-ucl-basekx-london-2026-03-04': {
+        title: 'Founders under Pressure',
+        sub: 'March 4, 2026 · UCL BaseKX, London · 6 pm'
+      }
+    };
+    var params = new URLSearchParams(window.location.search);
+    var eventCode = (params.get('event') || '').toLowerCase().trim();
+    if (eventCode && EVENT_MAP[eventCode]) {
+      var info = EVENT_MAP[eventCode];
+      var banner = document.getElementById('event-banner');
+      var titleEl = document.getElementById('event-banner-title');
+      var subEl = document.getElementById('event-banner-sub');
+      if (banner && titleEl) {
+        titleEl.textContent = info.title;
+        if (subEl && info.sub) subEl.textContent = info.sub;
+        banner.style.display = '';
+        // Update page header to be more personal
+        var h1 = document.querySelector('.section-header h1');
+        var p = document.querySelector('.section-header p');
+        if (h1) h1.textContent = 'Let\u2019s stay connected';
+        if (p) p.textContent = 'Drop your details and we\u2019ll keep you in the loop on VirWave — early access, events, and more.';
+      }
+    }
+  })();
+  </script>
+
   <script>
     /* ============================================================
        Interest Form Handler — Validation & Supabase Integration

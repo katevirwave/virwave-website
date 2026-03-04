@@ -1,5 +1,5 @@
 {
   "_comment": "Supabase connection for the website. The anon key is public by design — it only allows what RLS policies permit.",
-  "url": "https://dwhngndzgtkfnxahqxuk.supabase.co",
-  "anonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3aG5nbmR6Z3RrZm54YWhxeHVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEwODEwMTQsImV4cCI6MjA2NjY1NzAxNH0.UJ5riqRaklwpeAtzK59m45_kRM8VmfJrBq75UAK_ue0"
+  "url": "https://xswebtvkueusdaeboizp.supabase.co",
+  "anonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhzd2VidHZrdWV1c2RhZWJvaXpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NzQ0MDksImV4cCI6MjA4ODE1MDQwOX0.LGV_zNR3ODL4jh3eY0pjV-HuAg9ANKaWn7aNy1SORPA"
 }
