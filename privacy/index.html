@@ -16,6 +16,8 @@
 </head>
 <body>
 
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
   <!-- ========== Navigation ========== -->
   <nav class="site-nav" aria-label="Main navigation">
     <div class="container nav-inner">
@@ -43,7 +45,7 @@
 
 
   <!-- ========== Privacy Policy ========== -->
-  <main class="legal-page">
+  <main id="main-content" class="legal-page">
     <div class="container" style="max-width: 720px;">
 
       <h1>Privacy Policy</h1>
@@ -97,7 +99,7 @@
 
       <h2>3. How We Store and Protect Your Information</h2>
       <ul>
-        <li>All user data is stored in <a href="https://supabase.com" target="_blank" rel="noopener">Supabase</a>, a cloud database platform with encryption at rest and in transit.</li>
+        <li>All user data is stored in <a href="https://supabase.com" target="_blank" rel="noopener">Supabase<span class="sr-only"> (opens in new tab)</span></a>, a cloud database platform with encryption at rest and in transit.</li>
         <li>Row-Level Security (RLS) policies ensure that each user can only access their own data. No user can read, modify, or delete another user's records.</li>
         <li>Authentication is handled through Supabase Auth with support for email/password, Google, and Apple sign-in.</li>
         <li>We do not store passwords in plain text.</li>
@@ -161,12 +163,14 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <p class="footer-copy">&copy; 2026 VirWave OAM. All rights reserved.</p>
+      <nav aria-label="Footer">
       <ul class="footer-links">
         <li><a href="/privacy/">Privacy Policy</a></li>
         <li><a href="/terms/">Terms of Service</a></li>
         <li data-nav="blog"><a href="/blog/">Blog</a></li>
         <li><a href="/">Home</a></li>
       </ul>
+      </nav>
     </div>
   </footer>
 

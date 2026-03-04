@@ -22,6 +22,8 @@
 </head>
 <body>
 
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
   <!-- ========== Navigation ========== -->
   <nav class="site-nav" aria-label="Main navigation">
     <div class="container nav-inner">
@@ -49,7 +51,7 @@
 
 
   <!-- ========== Interest Form ========== -->
-  <main class="form-page">
+  <main id="main-content" class="form-page">
     <div class="container">
 
       <!-- Event context banner (shown when arriving via QR / event param) -->
@@ -85,8 +87,9 @@
           </div>
 
           <div class="form-group">
-            <label>What are you interested in? <span class="text-muted">(select all that apply)</span></label>
-            <div class="interest-options" id="interest-options">
+            <fieldset class="interest-fieldset">
+            <legend>What are you interested in? <span class="text-muted">(select all that apply)</span></legend>
+            <div class="interest-options" id="interest-options" role="group">
               <label class="interest-option">
                 <input type="checkbox" name="interests" value="early-access">
                 <span>Early access to the app</span>
@@ -108,6 +111,7 @@
                 <span>General interest / Stay in touch</span>
               </label>
             </div>
+            </fieldset>
           </div>
 
           <div class="form-group">
@@ -140,7 +144,7 @@
       <!-- Success state (hidden by default) -->
       <div class="interest-form" id="form-success" style="display: none;">
         <div class="form-success">
-          <div class="success-icon">
+          <div class="success-icon" aria-hidden="true">
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
               <polyline points="22 4 12 14.01 9 11.01"/>
@@ -160,12 +164,14 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <p class="footer-copy">&copy; 2026 VirWave OAM. All rights reserved.</p>
+      <nav aria-label="Footer">
       <ul class="footer-links">
         <li><a href="/privacy/">Privacy Policy</a></li>
         <li><a href="/terms/">Terms of Service</a></li>
         <li data-nav="blog"><a href="/blog/">Blog</a></li>
         <li><a href="/">Home</a></li>
       </ul>
+      </nav>
     </div>
   </footer>
 
