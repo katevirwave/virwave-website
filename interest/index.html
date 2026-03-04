@@ -69,12 +69,12 @@
       </div>
 
       <div class="interest-form" id="interest-form">
-        <form id="vw-interest-form" novalidate>
+        <form id="vw-interest-form" method="POST" action="" novalidate>
 
           <div class="form-group">
             <label for="form-name">Name <span class="text-muted">(optional)</span></label>
             <input type="text" id="form-name" name="name" placeholder="Your name" autocomplete="name"
-                   maxlength="100" pattern="[\p{L}\p{M}\s.'-]+" aria-describedby="form-name-hint">
+                   maxlength="100" pattern="[A-Za-z\u00C0-\u024F\u0400-\u04FF\s.'-]+" aria-describedby="form-name-hint">
             <span class="field-hint" id="form-name-hint">Letters, spaces, hyphens, apostrophes. <span class="char-count" data-for="form-name"></span></span>
           </div>
 
@@ -249,6 +249,9 @@
       var consentError    = document.getElementById('form-consent-error');
       var consentFlag     = document.getElementById('consent-required-flag');
 
+      var lastSubmitAt = 0;
+      var touched = {};
+
       /* --- Check whether early-access is selected ---------- */
       function isEarlyAccessSelected() {
         var found = false;
@@ -301,9 +304,6 @@
       var STRIP_TAGS = /<[^>]*>/g;
       var CTRL_CHARS = /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g;
       var RATE_MS    = 3000;
-
-      var lastSubmitAt = 0;
-      var touched = {};
 
       /* --- Sanitisation ------------------------------------ */
       function sanitize(str) {
