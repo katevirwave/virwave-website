@@ -1,0 +1,139 @@
+/* ============================================================
+   VirWave — Main JS
+   Handles: nav toggle, visibility system, shared utilities
+   ============================================================ */
+
+(function () {
+  'use strict';
+
+  /* --- Visibility / Hidden-pages system ---------------------- */
+  // Reads /_config.json to determine which sections/pages to hide.
+  // Any element with data-section="key" will be hidden if config says so.
+  // Pages listed under "hiddenPages" will redirect to home.
+
+  let siteConfig = null;
+
+  async function loadConfig() {
+    try {
+      const base = getBasePath();
+      const res = await fetch(base + '_config.json');
+      if (!res.ok) return {};
+      siteConfig = await res.json();
+      return siteConfig;
+    } catch {
+      siteConfig = {};
+      return {};
+    }
+  }
+
+  function applyVisibility(config) {
+    if (!config) return;
+
+    // Hide sections
+    const hiddenSections = config.hiddenSections || [];
+    hiddenSections.forEach(function (key) {
+      const els = document.querySelectorAll('[data-section="' + key + '"]');
+      els.forEach(function (el) { el.setAttribute('data-visibility', 'hidden'); });
+    });
+
+    // Hide nav items
+    const hiddenNav = config.hiddenNav || [];
+    hiddenNav.forEach(function (key) {
+      const els = document.querySelectorAll('[data-nav="' + key + '"]');
+      els.forEach(function (el) { el.setAttribute('data-visibility', 'hidden'); });
+    });
+
+    // Redirect if on a hidden page
+    const hiddenPages = config.hiddenPages || [];
+    const path = window.location.pathname.replace(/\/+$/, '') || '/';
+    for (var i = 0; i < hiddenPages.length; i++) {
+      var hp = hiddenPages[i].replace(/\/+$/, '') || '/';
+      if (path === hp || path === hp + '/index.html') {
+        window.location.href = getBasePath();
+        return;
+      }
+    }
+  }
+
+  /* --- Base path helper (works with GitHub Pages subdir) ----- */
+  function getBasePath() {
+    // If served from virwave-website/ subdir on GitHub Pages
+    var meta = document.querySelector('meta[name="base-path"]');
+    if (meta) return meta.getAttribute('content');
+    return '/';
+  }
+  window.VW = window.VW || {};
+  window.VW.getBasePath = getBasePath;
+
+  /* --- Mobile nav toggle ------------------------------------- */
+  function initNav() {
+    var toggle = document.getElementById('nav-toggle');
+    var links = document.getElementById('nav-links');
+    if (!toggle || !links) return;
+
+    toggle.addEventListener('click', function () {
+      var expanded = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!expanded));
+      links.classList.toggle('open');
+    });
+
+    // Close nav when a link is clicked (mobile)
+    links.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        links.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && links.classList.contains('open')) {
+        links.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.focus();
+      }
+    });
+  }
+
+  /* --- Current page highlight -------------------------------- */
+  function highlightCurrentPage() {
+    var path = window.location.pathname;
+    document.querySelectorAll('.nav-links a').forEach(function (a) {
+      var href = a.getAttribute('href');
+      if (!href) return;
+      // Normalize
+      var linkPath = new URL(href, window.location.origin).pathname;
+      if (path === linkPath || (linkPath !== '/' && path.startsWith(linkPath))) {
+        a.setAttribute('aria-current', 'page');
+      }
+    });
+  }
+
+  /* --- Smooth scroll for anchor links ------------------------ */
+  function initSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        var target = document.querySelector(a.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  }
+
+  /* --- Init -------------------------------------------------- */
+  async function init() {
+    var config = await loadConfig();
+    applyVisibility(config);
+    initNav();
+    highlightCurrentPage();
+    initSmoothScroll();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();

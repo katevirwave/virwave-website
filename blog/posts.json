@@ -1,0 +1,18 @@
+[
+  {
+    "slug": "what-is-virwave",
+    "title": "What Is VirWave? A Breathing Companion for Everyone",
+    "date": "2026-03-01",
+    "description": "An introduction to VirWave — what we're building, why breathing matters, and who it's for.",
+    "tags": ["about", "breathing", "wellness"],
+    "file": "2026-03-01-what-is-virwave.md"
+  },
+  {
+    "slug": "breathing-for-nervous-system",
+    "title": "How Breathing Regulates Your Nervous System",
+    "date": "2026-03-05",
+    "description": "A beginner-friendly look at how intentional breathing activates the parasympathetic nervous system and helps you shift from stress to calm.",
+    "tags": ["science", "breathing", "nervous system"],
+    "file": "2026-03-05-breathing-for-nervous-system.md"
+  }
+]

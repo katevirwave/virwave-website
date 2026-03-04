@@ -1,0 +1,8 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+Sitemap: https://virwave.com/sitemap.xml
+
+# Block access to internal asset directories from indexing
+Disallow: /assets/js/

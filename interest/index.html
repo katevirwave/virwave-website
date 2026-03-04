@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="base-path" content="/">
+
+  <title>Get Involved — VirWave</title>
+  <meta name="description" content="Sign up for early access, event updates, or partnership opportunities with VirWave.">
+
+  <!-- OpenGraph -->
+  <meta property="og:title" content="Get Involved — VirWave">
+  <meta property="og:description" content="Sign up for early access, event updates, or partnership opportunities.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://virwave.com/interest/">
+
+  <!-- Favicon -->
+  <link rel="icon" href="/assets/favicon.png" type="image/png">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body>
+
+  <!-- ========== Navigation ========== -->
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo" aria-label="VirWave home">
+        <img src="/assets/logo_virwave.avif" alt="" width="32" height="32">
+        VirWave
+      </a>
+
+      <button id="nav-toggle" class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+
+      <ul id="nav-links" class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li data-nav="blog"><a href="/blog/">Blog</a></li>
+        <li data-nav="products"><a href="/products/">Products</a></li>
+        <li><a href="/#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <!-- ========== Interest Form ========== -->
+  <main class="form-page">
+    <div class="container">
+
+      <div class="section-header">
+        <h1>Get involved with VirWave</h1>
+        <p>Whether you're interested in early access, attending an event, or exploring partnerships — we'd love to hear from you.</p>
+      </div>
+
+      <div class="interest-form" id="interest-form">
+        <form id="vw-interest-form" novalidate>
+
+          <div class="form-group">
+            <label for="form-name">Name <span class="text-muted">(optional)</span></label>
+            <input type="text" id="form-name" name="name" placeholder="Your name" autocomplete="name">
+          </div>
+
+          <div class="form-group">
+            <label for="form-email">Email address *</label>
+            <input type="email" id="form-email" name="email" placeholder="you@example.com" required autocomplete="email">
+          </div>
+
+          <div class="form-group">
+            <label for="form-interest">What are you interested in?</label>
+            <select id="form-interest" name="interest">
+              <option value="early-access">Early access to the app</option>
+              <option value="event">Event updates</option>
+              <option value="partnership">Partnership or collaboration</option>
+              <option value="licensing">Licensing inquiry</option>
+              <option value="general">General interest / Stay in touch</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="form-message">Message <span class="text-muted">(optional)</span></label>
+            <textarea id="form-message" name="message" placeholder="Tell us a bit about yourself or what you're looking for…"></textarea>
+          </div>
+
+          <div class="form-consent">
+            <input type="checkbox" id="form-consent" name="consent" required>
+            <label for="form-consent">I agree to VirWave collecting my email address to send me updates. I can unsubscribe at any time. See our <a href="/privacy/">Privacy Policy</a>.</label>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Submit</button>
+
+          <p id="form-error" style="color: var(--gray-600); font-size: var(--text-sm); margin-top: var(--sp-4); display: none;"></p>
+        </form>
+      </div>
+
+      <!-- Success state (hidden by default) -->
+      <div class="interest-form" id="form-success" style="display: none;">
+        <div class="form-success">
+          <h3>Thank you!</h3>
+          <p>We've received your information. We'll be in touch soon.</p>
+          <a href="/" class="btn btn-ghost-dark btn-sm" style="margin-top: var(--sp-4);">Back to home</a>
+        </div>
+      </div>
+
+      <!-- QR Code section for events -->
+      <div class="qr-section" data-section="interest-qr">
+        <h3>Scan to reach this page</h3>
+        <p class="text-muted" style="font-size: var(--text-sm);">Use this QR code at events or share it with others.</p>
+        <!-- 
+          Replace the src below with an actual QR code image pointing to 
+          https://virwave.com/interest/ (or your GitHub Pages URL).
+          You can generate one at any free QR code generator.
+        -->
+        <div style="width: 160px; height: 160px; background: var(--gray-100); border-radius: var(--radius); margin: var(--sp-4) auto; display: flex; align-items: center; justify-content: center; color: var(--gray-400); font-size: var(--text-sm);">
+          QR placeholder
+        </div>
+        <p class="text-muted" style="font-size: var(--text-xs);">virwave.com/interest</p>
+      </div>
+
+    </div>
+  </main>
+
+
+  <!-- ========== Footer ========== -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copy">&copy; 2026 VirWave OAM. All rights reserved.</p>
+      <ul class="footer-links">
+        <li><a href="/privacy/">Privacy Policy</a></li>
+        <li><a href="/terms/">Terms of Service</a></li>
+        <li data-nav="blog"><a href="/blog/">Blog</a></li>
+        <li><a href="/">Home</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/assets/js/main.js"></script>
+  <script>
+    /* ============================================================
+       Interest Form Handler
+       
+       Currently stores submissions to localStorage as a placeholder.
+       Replace the handleSubmit function body with your actual backend
+       integration (e.g., Supabase, Formspree, Google Forms, etc.)
+       ============================================================ */
+    (function () {
+      'use strict';
+
+      var form = document.getElementById('vw-interest-form');
+      var formContainer = document.getElementById('interest-form');
+      var successEl = document.getElementById('form-success');
+      var errorEl = document.getElementById('form-error');
+
+      if (!form) return;
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        errorEl.style.display = 'none';
+
+        // Basic validation
+        var email = form.email.value.trim();
+        var consent = form.consent.checked;
+
+        if (!email || !email.includes('@')) {
+          showError('Please enter a valid email address.');
+          return;
+        }
+        if (!consent) {
+          showError('Please agree to the data collection terms to continue.');
+          return;
+        }
+
+        // Collect data
+        var data = {
+          name: form.name.value.trim(),
+          email: email,
+          interest: form.interest.value,
+          message: form.message.value.trim(),
+          consent: true,
+          submittedAt: new Date().toISOString(),
+          source: new URLSearchParams(window.location.search).get('source') || 'website'
+        };
+
+        try {
+          // === PLACEHOLDER: Replace with actual backend call ===
+          // Example with Formspree:
+          //   await fetch('https://formspree.io/f/YOUR_ID', {
+          //     method: 'POST',
+          //     headers: { 'Content-Type': 'application/json' },
+          //     body: JSON.stringify(data)
+          //   });
+          
+          // For now, store in localStorage
+          var submissions = JSON.parse(localStorage.getItem('vw_interest') || '[]');
+          submissions.push(data);
+          localStorage.setItem('vw_interest', JSON.stringify(submissions));
+
+          // Also mailto fallback: open email with data
+          // (Comment out if you have a real backend)
+          var mailto = 'mailto:kate@virwave.com?subject=' + 
+            encodeURIComponent('VirWave Interest: ' + data.interest) +
+            '&body=' + encodeURIComponent(
+              'Name: ' + (data.name || 'Not provided') + '\n' +
+              'Email: ' + data.email + '\n' +
+              'Interest: ' + data.interest + '\n' +
+              'Message: ' + (data.message || 'None') + '\n' +
+              'Source: ' + data.source
+            );
+
+          // Show success
+          formContainer.style.display = 'none';
+          successEl.style.display = 'block';
+
+          // Optionally open mailto
+          // window.location.href = mailto;
+
+        } catch (err) {
+          showError('Something went wrong. Please try emailing us directly at kate@virwave.com.');
+        }
+      });
+
+      function showError(msg) {
+        errorEl.textContent = msg;
+        errorEl.style.display = 'block';
+      }
+    })();
+  </script>
+</body>
+</html>

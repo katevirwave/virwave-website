@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="base-path" content="/">
+
+  <title>Blog — VirWave</title>
+  <meta name="description" content="Thoughts on breathing, wellness, nervous system regulation, and building VirWave.">
+
+  <!-- OpenGraph -->
+  <meta property="og:title" content="Blog — VirWave">
+  <meta property="og:description" content="Thoughts on breathing, wellness, nervous system regulation, and building VirWave.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://virwave.com/blog/">
+
+  <!-- Favicon -->
+  <link rel="icon" href="/assets/favicon.png" type="image/png">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body>
+
+  <!-- ========== Navigation ========== -->
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo" aria-label="VirWave home">
+        <img src="/assets/logo_virwave.avif" alt="" width="32" height="32">
+        VirWave
+      </a>
+
+      <button id="nav-toggle" class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+
+      <ul id="nav-links" class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li data-nav="blog"><a href="/blog/">Blog</a></li>
+        <li data-nav="products"><a href="/products/">Products</a></li>
+        <li><a href="/#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <!-- ========== Blog Hero ========== -->
+  <header class="blog-hero">
+    <div class="container">
+      <h1>Blog</h1>
+      <p>Thoughts on breathing, wellness, and building VirWave.</p>
+    </div>
+  </header>
+
+
+  <!-- ========== Filter ========== -->
+  <div class="blog-filter" data-section="blog-filter">
+    <label for="blog-filter" class="sr-only">Filter by topic</label>
+    <select id="blog-filter">
+      <option value="">All topics</option>
+    </select>
+  </div>
+
+
+  <!-- ========== Post List ========== -->
+  <main class="blog-list container">
+    <div id="blog-list" class="loading">Loading posts</div>
+  </main>
+
+
+  <!-- ========== Footer ========== -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copy">&copy; 2026 VirWave OAM. All rights reserved.</p>
+      <ul class="footer-links">
+        <li><a href="/privacy/">Privacy Policy</a></li>
+        <li><a href="/terms/">Terms of Service</a></li>
+        <li><a href="/">Home</a></li>
+        <li><a href="/interest/">Sign Up</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/assets/js/markdown.js"></script>
+  <script src="/assets/js/blog.js"></script>
+  <script src="/assets/js/main.js"></script>
+</body>
+</html>
