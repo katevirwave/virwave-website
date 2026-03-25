@@ -178,9 +178,6 @@
     var hero = document.querySelector('.hero');
     if (!nav || !hero) return;
 
-    // Start transparent — nav items visible, background invisible
-    nav.classList.add('nav-immersive');
-
     var navObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         // Solidify nav when hero is less than 20% visible
