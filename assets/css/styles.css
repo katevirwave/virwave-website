@@ -1523,6 +1523,10 @@ button[type="submit"]:disabled {
 }
 
 /* --- Breathing Cadence Reveal ------------------------------ */
+.breathing-reveal-wrap {
+  padding: var(--sp-6) var(--sp-6);
+  background: var(--navy);
+}
 .breathing-reveal {
   text-align: center;
   font-size: var(--text-sm);

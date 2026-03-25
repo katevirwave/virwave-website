@@ -19,11 +19,11 @@
   var TOTAL = PHASE_DURATION * 4; // 16000ms
 
   var SHAPE = {
-    x: 0.60,          // center X (60% from left, asymmetric)
+    x: 0.58,          // center X (58% from left, asymmetric)
     y: 0.48,          // center Y
-    sizeRatio: 0.22,  // proportion of min(width, height)
-    strokeWidth: 2.5,
-    cornerRadius: 6,
+    sizeRatio: 0.38,  // proportion of min(width, height) — large, immersive
+    strokeWidth: 2,
+    cornerRadius: 8,
     color: { r: 10, g: 126, b: 164 },     // teal
     colorEnd: { r: 140, g: 235, b: 170 },  // mint (for gradient)
     baseOpacity: 0.12,     // dim guide outline
@@ -32,9 +32,9 @@
   };
 
   var AURA = {
-    spreadRatio: 1.8,  // aura radius = shape size * this
-    opacityMin: 0.10,
-    opacityMax: 0.22
+    spreadRatio: 2.2,  // aura radius = shape size * this — larger glow field
+    opacityMin: 0.12,
+    opacityMax: 0.25
   };
 
   var ORBS = [
