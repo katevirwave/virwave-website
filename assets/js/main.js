@@ -178,16 +178,16 @@
     var hero = document.querySelector('.hero');
     if (!nav || !hero) return;
 
-    // Only on homepage (has a hero section)
-    nav.classList.add('nav-hidden');
+    // Start transparent — nav items visible, background invisible
+    nav.classList.add('nav-immersive');
 
     var navObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
-        // Show nav when hero is less than 20% visible
+        // Solidify nav when hero is less than 20% visible
         if (entry.intersectionRatio < 0.2) {
-          nav.classList.remove('nav-hidden');
+          nav.classList.remove('nav-immersive');
         } else {
-          nav.classList.add('nav-hidden');
+          nav.classList.add('nav-immersive');
         }
       });
     }, { threshold: [0, 0.2, 0.5, 1] });
