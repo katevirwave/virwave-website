@@ -292,7 +292,8 @@
       'work-with-a-startup-networking-fair-ucl-hatchery-london-2026-03-25': {
         title: 'Work with a Startup \u2014 Networking Fair',
         sub: 'March 25, 2026 \u00B7 UCL Hatchery, London',
-        autoSelect: ['early-access', 'work-with-virwave']
+        autoSelect: ['work-with-virwave', 'early-access'],
+        pillOrder: ['work-with-virwave', 'early-access', 'partnership', 'licensing', 'event', 'general']
       }
     };
     var params = new URLSearchParams(window.location.search);
@@ -317,6 +318,19 @@
               }
             });
           });
+        }
+        // Reorder pills if event specifies a custom arrangement
+        if (info.pillOrder) {
+          var optionsContainer = document.getElementById('interest-options');
+          if (optionsContainer) {
+            var allOptions = Array.from(optionsContainer.querySelectorAll('.interest-option'));
+            info.pillOrder.forEach(function (val) {
+              allOptions.forEach(function (opt) {
+                var cb = opt.querySelector('input[name="interests"]');
+                if (cb && cb.value === val) optionsContainer.appendChild(opt);
+              });
+            });
+          }
         }
         // Update page header to be more personal
         var h1 = document.querySelector('.section-header h1');
