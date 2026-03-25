@@ -1,5 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -110,8 +186,33 @@
                 <input type="checkbox" name="interests" value="general">
                 <span>General interest / Stay in touch</span>
               </label>
+              <label class="interest-option">
+                <input type="checkbox" name="interests" value="work-with-virwave">
+                <span>Work with VirWave</span>
+              </label>
             </div>
             </fieldset>
+          </div>
+
+          <!-- Work with VirWave: extra fields (shown when that pill is selected) -->
+          <div id="work-opportunity-section" class="work-opportunity-section" style="display: none;" aria-live="polite">
+            <p class="work-opportunity-intro">Tell us about yourself so we can reach out about working together.</p>
+            <div class="form-group">
+              <label for="form-linkedin">LinkedIn profile URL</label>
+              <input type="url" id="form-linkedin" name="linkedin" placeholder="https://linkedin.com/in/your-name"
+                     maxlength="200" autocomplete="url" aria-describedby="form-linkedin-hint">
+              <span class="field-hint" id="form-linkedin-hint">Must be a linkedin.com/in/ URL.</span>
+              <span class="field-error" id="form-linkedin-error" role="alert"></span>
+            </div>
+            <div class="form-group">
+              <label for="form-resume">CV / R&eacute;sum&eacute; <span class="text-muted">(PDF only, max 5 MB)</span></label>
+              <input type="file" id="form-resume" name="resume" accept=".pdf,application/pdf"
+                     aria-describedby="form-resume-hint">
+              <span class="field-hint" id="form-resume-hint">PDF files only, max 5 MB. <span id="form-resume-size"></span></span>
+              <span class="field-error" id="form-resume-error" role="alert"></span>
+            </div>
+            <p class="form-privacy-note">Your CV is stored for recruitment evaluation only and will be deleted within 90 days or on request at <a href="mailto:kate@virwave.com">kate@virwave.com</a>.</p>
+            <span class="field-error" id="form-work-error" role="alert"></span>
           </div>
 
           <div class="form-group">
@@ -189,8 +290,9 @@
         sub: 'March 4, 2026 · UCL BaseKX, London · 6 pm'
       },
       'work-with-a-startup-networking-fair-ucl-hatchery-london-2026-03-25': {
-        title: 'Work with a Startup — Networking Fair',
-        sub: 'March 25, 2026 · UCL Hatchery, London'
+        title: 'Work with a Startup \u2014 Networking Fair',
+        sub: 'March 25, 2026 \u00B7 UCL Hatchery, London',
+        autoSelect: ['early-access', 'work-with-virwave']
       }
     };
     var params = new URLSearchParams(window.location.search);
@@ -204,11 +306,23 @@
         titleEl.textContent = info.title;
         if (subEl && info.sub) subEl.textContent = info.sub;
         banner.style.display = '';
+        // Auto-select interests defined by this event (bypasses URL param blocklist)
+        if (info.autoSelect) {
+          var allInterestBoxes = document.querySelectorAll('input[name="interests"]');
+          info.autoSelect.forEach(function (val) {
+            allInterestBoxes.forEach(function (cb) {
+              if (cb.value === val) {
+                cb.checked = true;
+                cb.closest('.interest-option').classList.add('selected');
+              }
+            });
+          });
+        }
         // Update page header to be more personal
         var h1 = document.querySelector('.section-header h1');
         var p = document.querySelector('.section-header p');
         if (h1) h1.textContent = 'Let\u2019s stay connected';
-        if (p) p.textContent = 'Drop your details and we\u2019ll keep you in the loop on VirWave — early access, events, and more.';
+        if (p) p.textContent = 'Drop your details and we\u2019ll keep you in the loop on VirWave \u2014 early access, events, and more.';
       }
     }
   })();
@@ -217,7 +331,7 @@
   <script>
     /* ============================================================
        Interest Form Handler — Validation & Supabase Integration
-       
+
        Features:
        • Real-time field validation on blur + input
        • Visual valid/invalid states with icons
@@ -227,7 +341,8 @@
        • Input sanitization (strip tags, control chars)
        • Rate-limit: 1 submit per 3 seconds
        • URL param tracking (?source=, ?event=, ?campaign=)
-       • Pre-checks interest via ?interest= param
+       • Pre-checks interest via ?interest= param (blocklist: work-with-virwave)
+       • Work with VirWave: LinkedIn + CV upload with at-least-one validation
        ============================================================ */
     (function () {
       'use strict';
@@ -253,6 +368,14 @@
       var consentError    = document.getElementById('form-consent-error');
       var consentFlag     = document.getElementById('consent-required-flag');
 
+      var linkedinInput   = document.getElementById('form-linkedin');
+      var resumeInput     = document.getElementById('form-resume');
+      var resumeSizeEl    = document.getElementById('form-resume-size');
+      var workSection     = document.getElementById('work-opportunity-section');
+      var workError       = document.getElementById('form-work-error');
+      var linkedinError   = document.getElementById('form-linkedin-error');
+      var resumeError     = document.getElementById('form-resume-error');
+
       var lastSubmitAt = 0;
       var touched = {};
 
@@ -261,6 +384,15 @@
         var found = false;
         interestBoxes.forEach(function (cb) {
           if (cb.value === 'early-access' && cb.checked) found = true;
+        });
+        return found;
+      }
+
+      /* --- Check whether work-with-virwave is selected ----- */
+      function isWorkWithVirwaveSelected() {
+        var found = false;
+        interestBoxes.forEach(function (cb) {
+          if (cb.value === 'work-with-virwave' && cb.checked) found = true;
         });
         return found;
       }
@@ -274,22 +406,32 @@
         if (touched['consent']) validateAll(false);
       }
 
+      /* --- Update work-opportunity section visibility ------- */
+      function updateWorkSection() {
+        if (!workSection) return;
+        workSection.style.display = isWorkWithVirwaveSelected() ? '' : 'none';
+      }
+
       /* --- Interest pill toggle (for :has() fallback) ------ */
       interestBoxes.forEach(function (cb) {
         cb.addEventListener('change', function () {
           cb.closest('.interest-option').classList.toggle('selected', cb.checked);
           updateConsentRequired();
+          updateWorkSection();
         });
       });
 
       /* --- Pre-check interest from URL param --------------- */
       var INTEREST_ALIASES = { 'waitlist': 'early-access' };
+      // work-with-virwave cannot be set via URL param (must be chosen deliberately)
+      var URL_INTEREST_BLOCKLIST = ['work-with-virwave'];
       var _initParams = new URLSearchParams(window.location.search);
       var presetInterest = _initParams.get('interest');
       if (presetInterest) {
         presetInterest.split(',').forEach(function (val) {
           var key = (val.trim() || '').toLowerCase();
           key = INTEREST_ALIASES[key] || key;
+          if (URL_INTEREST_BLOCKLIST.indexOf(key) !== -1) return;
           interestBoxes.forEach(function (cb) {
             if (cb.value === key) {
               cb.checked = true;
@@ -299,8 +441,10 @@
         });
       }
 
-      // Sync the required indicator after URL pre-selection
+      // Sync required indicators after URL pre-selection
       updateConsentRequired();
+      // Sync work-opportunity section (event banner may have already checked work-with-virwave)
+      updateWorkSection();
 
       /* --- Constants --------------------------------------- */
       var EMAIL_RE   = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -374,6 +518,38 @@
             return { valid: false, msg: 'Early access requires consent to receive release updates.' };
           }
           return { valid: true };
+        },
+
+        linkedin: function () {
+          if (!linkedinInput) return { valid: true };
+          var val = sanitize(linkedinInput.value).trim();
+          if (!val) return { valid: true, empty: true };
+          if (val.length > 200) return { valid: false, msg: 'LinkedIn URL too long.' };
+          var re = /^https:\/\/(www\.)?linkedin\.com\/in\/[a-zA-Z0-9_\-]{3,100}\/?$/;
+          if (!re.test(val)) return { valid: false, msg: 'Must be a linkedin.com/in/your-name URL.' };
+          try {
+            if (decodeURIComponent(val) !== val) return { valid: false, msg: 'URL cannot contain encoded characters.' };
+          } catch (e) { return { valid: false, msg: 'Invalid URL.' }; }
+          return { valid: true };
+        },
+
+        resume: function () {
+          if (!resumeInput) return { valid: true };
+          var file = resumeInput.files && resumeInput.files[0];
+          if (!file) return { valid: true, empty: true };
+          if (file.type !== 'application/pdf') return { valid: false, msg: 'PDF files only.' };
+          if (file.size > 5242880) return { valid: false, msg: 'File must be under 5 MB.' };
+          return { valid: true };
+        },
+
+        workOpportunity: function () {
+          if (!isWorkWithVirwaveSelected()) return { valid: true };
+          var hasLI = linkedinInput && sanitize(linkedinInput.value).trim().length > 0;
+          var hasCV = resumeInput && resumeInput.files && resumeInput.files.length > 0;
+          if (!hasLI && !hasCV) {
+            return { valid: false, msg: 'Please add your LinkedIn profile or upload your CV \u2014 at least one is required.' };
+          }
+          return { valid: true };
         }
       };
 
@@ -414,17 +590,28 @@
         var emailRes   = validators.email();
         var messageRes = validators.message();
         var consentRes = validators.consent();
+        var liRes      = validators.linkedin();
+        var rvRes      = validators.resume();
+        var workRes    = validators.workOpportunity();
 
         if (forceShow) {
           nameRes.forceShow = emailRes.forceShow = messageRes.forceShow = consentRes.forceShow = true;
+          liRes.forceShow = rvRes.forceShow = workRes.forceShow = true;
         }
 
         setFieldState(nameInput,    nameRes,    null);
         setFieldState(emailInput,   emailRes,   emailError);
         setFieldState(messageInput, messageRes, null);
         setConsentState(consentRes);
+        if (linkedinInput) setFieldState(linkedinInput, liRes, linkedinError);
+        if (resumeInput)   setFieldState(resumeInput,   rvRes, resumeError);
+        if (workError && (touched['workOpportunity'] || workRes.forceShow)) {
+          workError.textContent = workRes.valid ? '' : (workRes.msg || '');
+          workError.classList.toggle('visible', !workRes.valid);
+        }
 
-        return nameRes.valid && emailRes.valid && messageRes.valid && consentRes.valid;
+        return nameRes.valid && emailRes.valid && messageRes.valid && consentRes.valid &&
+               liRes.valid && rvRes.valid && workRes.valid;
       }
 
       /* --- Attach real-time listeners ---------------------- */
@@ -444,17 +631,55 @@
         });
       });
 
+      if (linkedinInput) {
+        linkedinInput.addEventListener('blur', function () {
+          touched['linkedin'] = true;
+          validateAll(false);
+        });
+        linkedinInput.addEventListener('input', function () {
+          if (touched['linkedin']) validateAll(false);
+        });
+      }
+
+      if (resumeInput) {
+        resumeInput.addEventListener('change', function () {
+          touched['resume'] = true;
+          var file = resumeInput.files && resumeInput.files[0];
+          if (resumeSizeEl && file) {
+            resumeSizeEl.textContent = '(' + (file.size / 1048576).toFixed(2) + ' MB)';
+          } else if (resumeSizeEl) {
+            resumeSizeEl.textContent = '';
+          }
+          validateAll(false);
+        });
+      }
+
       consentUpdates.addEventListener('change', function () {
         touched['consent'] = true;
         validateAll(false);
       });
+
+      /* --- Generate a CSPRNG UUID for resume object path --- */
+      function getResumeUUID() {
+        if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+          return crypto.randomUUID();
+        }
+        if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+          var bytes = crypto.getRandomValues(new Uint8Array(16));
+          bytes[6] = (bytes[6] & 0x0f) | 0x40;
+          bytes[8] = (bytes[8] & 0x3f) | 0x80;
+          var hex = Array.from(bytes).map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
+          return hex.substr(0, 8) + '-' + hex.substr(8, 4) + '-' + hex.substr(12, 4) + '-' + hex.substr(16, 4) + '-' + hex.substr(20, 12);
+        }
+        throw new Error('Secure random number generation not available.');
+      }
 
       /* --- Submit handler ---------------------------------- */
       form.addEventListener('submit', async function (e) {
         e.preventDefault();
         hideBanner();
 
-        ['name', 'email', 'message', 'consent'].forEach(function (k) { touched[k] = true; });
+        ['name', 'email', 'message', 'consent', 'linkedin', 'resume', 'workOpportunity'].forEach(function (k) { touched[k] = true; });
 
         var allValid = validateAll(true);
         if (!allValid) {
@@ -488,8 +713,28 @@
         // URL params for source tracking
         var params     = new URLSearchParams(window.location.search);
         var source     = sanitize(params.get('source')) || 'website';
-        var eventCode  = sanitize(params.get('event') || params.get('source')) || 'website';
+        var eventCode  = sanitize(params.get('event')) || 'website';
         var campaignId = sanitize(params.get('campaign')) || null;
+
+        // Upload CV if work-with-virwave is selected and a file was provided
+        var resumePath = null;
+        var resumeOriginalFilename = null;
+        if (isWorkWithVirwaveSelected() && resumeInput && resumeInput.files && resumeInput.files[0]) {
+          var resumeFile = resumeInput.files[0];
+          var uuid = getResumeUUID();
+          var storagePath = 'event-interest/' + uuid + '.pdf';
+          var uploadResult = await VWSupabase.uploadFile('resumes', storagePath, resumeFile);
+          if (!uploadResult.ok) {
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.textContent = 'Submit';
+            }
+            showBanner('CV upload failed. Please try again or email us at kate@virwave.com.');
+            return;
+          }
+          resumePath = storagePath;
+          resumeOriginalFilename = sanitize(resumeFile.name).substring(0, 255) || null;
+        }
 
         var row = {
           email: email,
@@ -503,7 +748,10 @@
           event_code: eventCode,
           campaign_id: campaignId,
           interest_type: interestType,
-          message: message
+          message: message,
+          linkedin_url: (linkedinInput && sanitize(linkedinInput.value).trim()) || null,
+          resume_storage_path: resumePath,
+          resume_original_filename: resumeOriginalFilename
         };
 
         var result = await VWSupabase.insert('event_interest', row);
@@ -512,6 +760,18 @@
           formContainer.style.display = 'none';
           successEl.style.display = 'block';
           return;
+        }
+
+        // Best-effort orphan cleanup: if upload succeeded but insert failed,
+        // try deleting the uploaded file so private storage doesn't accumulate garbage.
+        if (resumePath) {
+          VWSupabase.deleteFile('resumes', resumePath).then(function (cleanupResult) {
+            if (!cleanupResult.ok) {
+              console.warn('Resume cleanup failed:', cleanupResult.error);
+            }
+          }).catch(function (err) {
+            console.warn('Resume cleanup error:', err && err.message ? err.message : err);
+          });
         }
 
         if (result.error === 'duplicate') {

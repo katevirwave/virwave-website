@@ -1091,6 +1091,31 @@ button[type="submit"]:disabled {
 }
 
 /* --- Legal text -------------------------------------------- */
+  /* --- Work opportunity section ------------------------------ */
+  .work-opportunity-section {
+    border: 1px solid var(--teal);
+    border-radius: var(--radius-md);
+    padding: var(--sp-6);
+    margin-bottom: var(--sp-6);
+    background: rgba(0, 180, 160, 0.04);
+  }
+
+  .work-opportunity-intro {
+    font-size: var(--text-sm);
+    color: var(--text-muted, var(--gray-400));
+    margin-bottom: var(--sp-4);
+    margin-top: 0;
+  }
+
+  .form-privacy-note {
+    font-size: var(--text-xs);
+    color: var(--gray-400);
+    line-height: 1.5;
+    margin-top: var(--sp-2);
+    margin-bottom: var(--sp-2);
+  }
+
+  /* --- Legal text -------------------------------------------- */
 .form-legal-text {
   font-size: var(--text-xs);
   color: var(--gray-400);
