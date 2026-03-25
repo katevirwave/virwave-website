@@ -1,0 +1,97 @@
+{
+  "folders": [
+    {
+      "path": ".",
+    },
+    {
+      "name": "virwave_v3 (brand reference)",
+      "path": "../virwave_v3",
+    },
+    {
+      "name": "virwave_api (legacy reference)",
+      "path": "../virwave_api",
+    },
+  ],
+  "settings": {
+    // ── Visual Identity ──
+    // Navy chrome, mint accents — dark-first like the product.
+    // v3 workspace = teal chrome. This workspace = navy + mint. Instantly distinct.
+    "workbench.colorCustomizations": {
+      "titleBar.activeBackground": "#0D2137",
+      "titleBar.activeForeground": "#8CEBAA",
+      "titleBar.inactiveBackground": "#091826",
+      "titleBar.inactiveForeground": "#8CEBAA80",
+      "activityBar.background": "#0D2137",
+      "activityBar.foreground": "#8CEBAA",
+      "statusBar.background": "#8CEBAA",
+      "statusBar.foreground": "#0D2137",
+      "statusBar.debuggingBackground": "#0A7EA4",
+      "statusBar.debuggingForeground": "#F8F8F6",
+    },
+
+    // ── Terminal ──
+    "terminal.integrated.tabs.title": "${workspaceFolderName}",
+    "terminal.integrated.defaultProfile.osx": "zsh",
+
+    // ── HTML / CSS / Web ──
+    "html.format.wrapLineLength": 120,
+    "html.format.indentInnerHtml": true,
+    "css.lint.emptyRules": "warning",
+    "css.lint.duplicateProperties": "warning",
+    "emmet.includeLanguages": {
+      "html": "html",
+      "css": "css",
+    },
+    "emmet.triggerExpansionOnTab": true,
+
+    // ── File Associations ──
+    "files.associations": {
+      "_config.json": "json",
+      "_supabase.json": "json",
+      "posts.json": "json",
+    },
+
+    // ── Search & File Visibility ──
+    "search.exclude": {
+      "**/.git": true,
+      "**/node_modules": true,
+      "**/.venv": true,
+      "**/dist": true,
+      "**/build": true,
+      "**/__pycache__": true,
+      // Reference folders — heavy exclusions
+      "virwave_v3 (brand reference)/**/node_modules": true,
+      "virwave_v3 (brand reference)/**/.expo": true,
+      "virwave_v3 (brand reference)/**/android": true,
+      "virwave_v3 (brand reference)/**/ios": true,
+      "virwave_v3 (brand reference)/**/screenshots_prev_versions": true,
+      "virwave_api (legacy reference)/**/node_modules": true,
+      "virwave_api (legacy reference)/**/.serverless": true,
+    },
+    "files.exclude": {
+      "**/.DS_Store": true,
+      "**/.venv": true,
+    },
+    // Reference folders are read-only — agents can read for context but not edit
+    "files.readonlyInclude": {
+      "virwave_v3 (brand reference)/**": true,
+      "virwave_api (legacy reference)/**": true,
+    },
+
+    // ── Editor ──
+    "editor.linkedEditing": true,
+    "editor.colorDecorators": true,
+
+    // ── AI Agent Settings (VS Code 1.110+) ──
+    "chat.agent.thinking.phrases": {
+      "mode": "append",
+      "phrases": [
+        "Checking brand tokens…",
+        "Reviewing glass tiers…",
+        "Validating accessibility…",
+        "Checking GitHub Pages compatibility…",
+        "Matching app design system…",
+      ],
+    },
+  },
+}

@@ -10,6 +10,9 @@ Desktop.ini
 *.swo
 *~
 
+# Claude Code local settings (project settings are committed)
+.claude/settings.local.json
+
 # Node (not used, but just in case)
 node_modules/
 npm-debug.log*
