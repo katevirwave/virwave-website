@@ -228,6 +228,15 @@ h1, h2, h3, h4, h5, h6 {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255,255,255,0.06);
+  transition: opacity 350ms cubic-bezier(0.33, 1, 0.68, 1),
+              transform 350ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+/* Homepage: nav hidden until scroll */
+.site-nav.nav-hidden {
+  opacity: 0;
+  transform: translateY(-100%);
+  pointer-events: none;
 }
 
 .nav-inner {

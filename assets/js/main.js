@@ -172,6 +172,29 @@
     }
   }
 
+  /* --- Homepage immersive nav -------------------------------- */
+  function initImmersiveNav() {
+    var nav = document.querySelector('.site-nav');
+    var hero = document.querySelector('.hero');
+    if (!nav || !hero) return;
+
+    // Only on homepage (has a hero section)
+    nav.classList.add('nav-hidden');
+
+    var navObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        // Show nav when hero is less than 20% visible
+        if (entry.intersectionRatio < 0.2) {
+          nav.classList.remove('nav-hidden');
+        } else {
+          nav.classList.add('nav-hidden');
+        }
+      });
+    }, { threshold: [0, 0.2, 0.5, 1] });
+
+    navObserver.observe(hero);
+  }
+
   /* --- Init -------------------------------------------------- */
   async function init() {
     var config = await loadConfig();
@@ -179,6 +202,7 @@
     initNav();
     highlightCurrentPage();
     initSmoothScroll();
+    initImmersiveNav();
     initScrollReveal();
   }
 
