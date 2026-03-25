@@ -32,8 +32,8 @@
   --bg-surface:  #111D2C;
   --text:        rgba(248, 248, 246, 0.85);
   --text-muted:  rgba(248, 248, 246, 0.60);
-  --text-light:  rgba(248, 248, 246, 0.88);
-  --text-light-muted: rgba(248, 248, 246, 0.60);
+  --text-light:  var(--text);
+  --text-light-muted: var(--text-muted);
   --accent:      var(--teal);
   --accent-cta:  var(--mint);
   --border:      rgba(255, 255, 255, 0.08);
@@ -43,6 +43,11 @@
   --phase-hold:   #A78BFA;
   --phase-exhale: #8CEBAA;
   --phase-rest:   #94A3B8;
+
+  /* Semantic states (dark-mode appropriate) */
+  --error:       #FF453A;
+  --warning:     #FBBF24;
+  --success:     #4ADE80;
 
   /* Type scale */
   --font:        -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -77,7 +82,7 @@
   --shadow-sm:   0 1px 3px rgba(0,0,0,0.06);
   --shadow-md:   0 4px 12px rgba(0,0,0,0.08);
   --shadow-lg:   0 8px 30px rgba(0,0,0,0.12);
-  --transition:  0.2s ease;
+  --transition:  0.2s cubic-bezier(0.33, 1, 0.68, 1);
 }
 
 html { scroll-behavior: smooth; }
@@ -379,7 +384,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .hero h1 {
   font-size: clamp(2.25rem, 5vw, 3.5rem);
-  font-weight: 700;
+  font-weight: 600;
   color: var(--white-pure);
   margin-bottom: var(--sp-6);
   letter-spacing: -0.025em;
@@ -422,7 +427,7 @@ h1, h2, h3, h4, h5, h6 {
     rgba(10, 126, 164, 0.08) 0%,
     rgba(140, 235, 170, 0.03) 40%,
     transparent 70%);
-  animation: glow-pulse 16s ease infinite;
+  animation: glow-pulse 16s cubic-bezier(0.33, 1, 0.68, 1) infinite;
 }
 
 .breathing-ring-layer {
@@ -432,15 +437,15 @@ h1, h2, h3, h4, h5, h6 {
   border: 1.5px solid;
   opacity: var(--ring-opacity);
   animation: ring-scale 16s cubic-bezier(0.33, 1, 0.68, 1) infinite,
-             ring-color 16s ease infinite;
+             ring-color 16s cubic-bezier(0.33, 1, 0.68, 1) infinite;
   animation-delay: var(--ring-delay);
 }
 
 @keyframes ring-scale {
-  0%, 100% { transform: scale(0.975); }
-  25%      { transform: scale(1.015); }
-  50%      { transform: scale(1.01); }
-  75%      { transform: scale(0.975); }
+  0%, 100% { transform: scale(0.95); }
+  25%      { transform: scale(1.06); }
+  50%      { transform: scale(1.04); }
+  75%      { transform: scale(0.95); }
 }
 
 @keyframes ring-color {
@@ -518,8 +523,10 @@ h1, h2, h3, h4, h5, h6 {
 .section-dark .card {
   background: rgba(255,255,255,0.04);
 }
-.section-dark .card:hover {
-  background: rgba(255,255,255,0.07);
+@media (hover: hover) {
+  .section-dark .card:hover {
+    background: rgba(255,255,255,0.07);
+  }
 }
 
 .card-icon {
@@ -793,7 +800,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .product-badge-live {
   background: rgba(140, 235, 170, 0.15);
-  color: #2A9D5C;
+  color: var(--success);
 }
 
 /* --- Legal Pages ------------------------------------------- */
@@ -964,12 +971,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .char-count.warn {
-  color: #C27028;
+  color: var(--warning);
   font-weight: 500;
 }
 
 .char-count.limit {
-  color: #C0392B;
+  color: var(--error);
   font-weight: 600;
 }
 
@@ -977,7 +984,7 @@ h1, h2, h3, h4, h5, h6 {
 .field-error {
   display: none;
   font-size: var(--text-xs);
-  color: #C0392B;
+  color: var(--error);
   margin-top: var(--sp-1);
   line-height: 1.4;
 }
@@ -987,20 +994,20 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .form-error-banner {
-  color: #C0392B;
+  color: var(--error);
   font-size: var(--text-sm);
   margin-top: var(--sp-4);
   padding: var(--sp-3) var(--sp-4);
-  background: rgba(192, 57, 43, 0.06);
-  border: 1px solid rgba(192, 57, 43, 0.15);
+  background: rgba(255, 69, 58, 0.08);
+  border: 1px solid rgba(255, 69, 58, 0.18);
   border-radius: var(--radius);
 }
 
 /* Valid field (has value + passes validation) */
 .form-group input.field-valid,
 .form-group textarea.field-valid {
-  border-color: #2A9D5C;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%232A9D5C' viewBox='0 0 16 16'%3E%3Cpath d='M13.485 3.929a1 1 0 0 1 .086 1.406l-5.5 6.5a1 1 0 0 1-1.472.066l-3-3a1 1 0 1 1 1.414-1.414l2.214 2.214 4.852-5.686a1 1 0 0 1 1.406-.086Z'/%3E%3C/svg%3E");
+  border-color: var(--success);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%234ADE80' viewBox='0 0 16 16'%3E%3Cpath d='M13.485 3.929a1 1 0 0 1 .086 1.406l-5.5 6.5a1 1 0 0 1-1.472.066l-3-3a1 1 0 1 1 1.414-1.414l2.214 2.214 4.852-5.686a1 1 0 0 1 1.406-.086Z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   background-size: 16px;
@@ -1010,8 +1017,8 @@ h1, h2, h3, h4, h5, h6 {
 /* Invalid field (touched + fails validation) */
 .form-group input.field-invalid,
 .form-group textarea.field-invalid {
-  border-color: #C0392B;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23C0392B' viewBox='0 0 16 16'%3E%3Cpath d='M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm-.75 4a.75.75 0 0 1 1.5 0v3a.75.75 0 0 1-1.5 0V5Zm.75 6.25a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z'/%3E%3C/svg%3E");
+  border-color: var(--error);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23FF453A' viewBox='0 0 16 16'%3E%3Cpath d='M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm-.75 4a.75.75 0 0 1 1.5 0v3a.75.75 0 0 1-1.5 0V5Zm.75 6.25a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   background-size: 16px;
@@ -1020,20 +1027,20 @@ h1, h2, h3, h4, h5, h6 {
 
 .form-group input.field-invalid:focus,
 .form-group textarea.field-invalid:focus {
-  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.12);
+  box-shadow: 0 0 0 3px rgba(255, 69, 58, 0.15);
 }
 
 .form-group input.field-valid:focus,
 .form-group textarea.field-valid:focus {
-  box-shadow: 0 0 0 3px rgba(42, 157, 92, 0.12);
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.15);
 }
 
 /* Consent checkbox error */
 .form-consent.consent-error label {
-  color: #C0392B;
+  color: var(--error);
 }
 .form-consent.consent-error input[type="checkbox"] {
-  outline: 2px solid #C0392B;
+  outline: 2px solid var(--error);
   outline-offset: 1px;
 }
 
