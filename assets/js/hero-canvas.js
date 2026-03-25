@@ -56,8 +56,12 @@
   var startTime = 0;
 
   /* --- Easing ----------------------------------------------- */
-  function easeInOutCubic(t) {
-    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  // Matches the app's easings.loop = Easing.inOut(Easing.ease)
+  // Approximation of cubic-bezier(0.42, 0, 0.58, 1)
+  function easeInOut(t) {
+    return t < 0.5
+      ? 2 * t * t
+      : 1 - Math.pow(-2 * t + 2, 2) / 2;
   }
 
   /* --- Breathing cycle -------------------------------------- */
@@ -68,7 +72,7 @@
     // Ease within each quarter (each side of the box)
     var quarter = Math.floor(raw * 4);
     var quarterProgress = (raw * 4) - quarter;
-    var easedQuarter = easeInOutCubic(quarterProgress);
+    var easedQuarter = easeInOut(quarterProgress);
 
     return (quarter + easedQuarter) / 4;
   }
@@ -77,11 +81,11 @@
     var t = (elapsed % TOTAL) / TOTAL;
     // Aura pulses: brighter during inhale+hold (0-50%), dimmer during exhale+rest (50-100%)
     var pulse = t < 0.25
-      ? easeInOutCubic(t * 4)            // inhale: grow
+      ? easeInOut(t * 4)            // inhale: grow
       : t < 0.5
         ? 1                                // hold: peak
         : t < 0.75
-          ? 1 - easeInOutCubic((t - 0.5) * 4) // exhale: shrink
+          ? 1 - easeInOut((t - 0.5) * 4) // exhale: shrink
           : 0;                              // rest: dim
     return {
       opacity: AURA.opacityMin + (AURA.opacityMax - AURA.opacityMin) * pulse,

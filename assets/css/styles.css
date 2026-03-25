@@ -1436,12 +1436,16 @@ button[type="submit"]:disabled {
 .shape-draw {
   stroke-dasharray: 400;
   stroke-dashoffset: 400;
-  animation: draw-box 16s cubic-bezier(0.33, 1, 0.68, 1) infinite;
+  animation: draw-box 16s linear infinite;
 }
 
+/* Each side draws with its own ease-in-out (4s per side, 4 sides) */
 @keyframes draw-box {
-  0%   { stroke-dashoffset: 400; }
-  100% { stroke-dashoffset: 0; }
+  0%    { stroke-dashoffset: 400; animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1); }
+  25%   { stroke-dashoffset: 300; animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1); }
+  50%   { stroke-dashoffset: 200; animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1); }
+  75%   { stroke-dashoffset: 100; animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1); }
+  100%  { stroke-dashoffset: 0; }
 }
 
 .app-demo-labels {
