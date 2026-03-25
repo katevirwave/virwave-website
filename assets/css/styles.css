@@ -320,61 +320,43 @@ h1, h2, h3, h4, h5, h6 {
   min-height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
   background: linear-gradient(165deg, var(--navy-deep) 0%, var(--navy) 40%, var(--navy-warm) 65%, var(--navy) 100%);
   color: var(--white-pure);
   overflow: hidden;
   padding: var(--sp-24) var(--sp-6);
 }
 
-.hero::before {
-  content: '';
+#hero-canvas {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 60% 50% at 50% 45%, rgba(140, 235, 170, 0.06) 0%, transparent 70%);
+  width: 100%;
+  height: 100%;
   pointer-events: none;
+}
+
+.hero .container {
+  width: 100%;
 }
 
 .hero-content {
   position: relative;
-  max-width: 680px;
   z-index: 1;
+  max-width: 560px;
 }
 
-/* Hero ambient particles — matches VirWave app splash screen */
-.hero-particles {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
+/* Staggered text entrance */
+.hero-content > * {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: hero-entrance 350ms cubic-bezier(0.33, 1, 0.68, 1) forwards;
 }
+.hero-content > :nth-child(1) { animation-delay: 0ms; }
+.hero-content > :nth-child(2) { animation-delay: 150ms; }
+.hero-content > :nth-child(3) { animation-delay: 300ms; }
+.hero-content > :nth-child(4) { animation-delay: 450ms; }
 
-/* Outer span drifts on X axis */
-.particle {
-  position: absolute;
-  display: block;
-  animation: particle-x var(--dur-x) ease-in-out infinite alternate;
-}
-
-/* Inner span is the visible dot, drifts on Y axis */
-.particle > span {
-  display: block;
-  width: var(--size);
-  height: var(--size);
-  border-radius: 50%;
-  background: var(--white-pure);
-  opacity: var(--opacity);
-  animation: particle-y var(--dur-y) ease-in-out infinite alternate;
-}
-
-@keyframes particle-x {
-  from { transform: translateX(0); }
-  to   { transform: translateX(var(--dx)); }
-}
-@keyframes particle-y {
-  from { transform: translateY(0); }
-  to   { transform: translateY(var(--dy)); }
+@keyframes hero-entrance {
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .hero-eyebrow {
@@ -404,71 +386,13 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--text-light);
   margin-bottom: var(--sp-10);
   line-height: 1.6;
-  max-width: 520px;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 480px;
 }
 
 .hero-actions {
   display: flex;
   gap: var(--sp-4);
-  justify-content: center;
   flex-wrap: wrap;
-}
-
-/* --- Breathing Ring (hero) --------------------------------- */
-.breathing-ring {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 300px;
-  height: 300px;
-  pointer-events: none;
-}
-
-.breathing-ring-glow {
-  position: absolute;
-  inset: -40%;
-  border-radius: 50%;
-  background: radial-gradient(circle,
-    rgba(10, 126, 164, 0.08) 0%,
-    rgba(140, 235, 170, 0.03) 40%,
-    transparent 70%);
-  animation: glow-pulse 16s cubic-bezier(0.33, 1, 0.68, 1) infinite;
-}
-
-.breathing-ring-layer {
-  position: absolute;
-  inset: var(--ring-offset);
-  border-radius: 50%;
-  border: 1.5px solid;
-  opacity: var(--ring-opacity);
-  animation: ring-scale 16s cubic-bezier(0.33, 1, 0.68, 1) infinite,
-             ring-color 16s cubic-bezier(0.33, 1, 0.68, 1) infinite;
-  animation-delay: var(--ring-delay);
-}
-
-@keyframes ring-scale {
-  0%, 100% { transform: scale(0.95); }
-  25%      { transform: scale(1.06); }
-  50%      { transform: scale(1.04); }
-  75%      { transform: scale(0.95); }
-}
-
-@keyframes ring-color {
-  0%, 5%    { border-color: var(--phase-inhale); }
-  25%, 30%  { border-color: var(--phase-hold); }
-  50%, 55%  { border-color: var(--phase-exhale); }
-  75%, 80%  { border-color: var(--phase-rest); }
-  95%, 100% { border-color: var(--phase-inhale); }
-}
-
-@keyframes glow-pulse {
-  0%, 100% { opacity: 0.4; transform: scale(0.97); }
-  25%      { opacity: 1; transform: scale(1.02); }
-  50%      { opacity: 0.8; transform: scale(1.01); }
-  75%      { opacity: 0.3; transform: scale(0.97); }
 }
 
 /* --- Sections ---------------------------------------------- */
@@ -1278,7 +1202,9 @@ button[type="submit"]:disabled {
 @media (max-width: 768px) {
   .hero { min-height: 90vh; padding: var(--sp-20) var(--sp-4); }
   .hero h1 { font-size: var(--text-3xl); }
-  .breathing-ring { width: 200px; height: 200px; }
+  .hero-content { max-width: 100%; text-align: center; }
+  .hero-sub { margin-left: auto; margin-right: auto; }
+  .hero-actions { justify-content: center; }
   .section { padding: var(--sp-16) var(--sp-4); }
   .section-header { margin-bottom: var(--sp-10); }
   .section-header h2 { font-size: var(--text-2xl); }
@@ -1411,17 +1337,10 @@ button[type="submit"]:disabled {
     transform: none !important;
   }
 
-  /* Breathing ring: visible but static */
-  .breathing-ring-layer {
-    border-color: var(--phase-inhale) !important;
-    opacity: calc(var(--ring-opacity) * 0.5) !important;
-  }
-  .breathing-ring-glow {
-    opacity: 0.3 !important;
-  }
-
-  /* Particles: hidden in reduced motion */
-  .hero-particles {
-    display: none;
+  /* Hero entrance: instant appearance */
+  .hero-content > * {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
   }
 }

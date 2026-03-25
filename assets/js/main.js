@@ -122,6 +122,11 @@
     });
   }
 
+  /* --- Threshold array helper -------------------------------- */
+  function buildThresholdArray(steps) {
+    return Array.from({ length: steps + 1 }, function (_, i) { return i / steps; });
+  }
+
   /* --- Scroll Reveal ----------------------------------------- */
   function initScrollReveal() {
     // Skip if reduced motion is preferred
@@ -153,6 +158,18 @@
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
     targets.forEach(function (el) { observer.observe(el); });
+
+    // Hero canvas fade-out on scroll
+    var heroCanvas = document.getElementById('hero-canvas');
+    var hero = document.querySelector('.hero');
+    if (hero && heroCanvas) {
+      var heroObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          heroCanvas.style.opacity = entry.intersectionRatio;
+        });
+      }, { threshold: buildThresholdArray(20) });
+      heroObserver.observe(hero);
+    }
   }
 
   /* --- Init -------------------------------------------------- */
