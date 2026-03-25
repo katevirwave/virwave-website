@@ -1408,53 +1408,101 @@ button[type="submit"]:disabled {
 
 .app-demo-aura {
   position: absolute;
-  width: 200px;
-  height: 200px;
+  width: 220px;
+  height: 220px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(10,126,164,0.12) 0%, rgba(140,235,170,0.06) 40%, transparent 70%);
+  background: radial-gradient(circle,
+    rgba(10,126,164,0.25) 0%,
+    rgba(140,235,170,0.12) 35%,
+    rgba(167,139,250,0.06) 60%,
+    transparent 75%);
   animation: app-aura-breathe 16s cubic-bezier(0.33, 1, 0.68, 1) infinite;
 }
 
+/* Subtle ring around the aura */
+.app-demo-aura::after {
+  content: '';
+  position: absolute;
+  inset: -10%;
+  border-radius: 50%;
+  border: 1px solid rgba(10,126,164,0.15);
+  animation: app-aura-breathe 16s cubic-bezier(0.33, 1, 0.68, 1) infinite;
+  animation-delay: -0.5s;
+}
+
 @keyframes app-aura-breathe {
-  0%, 100% { transform: scale(0.97); opacity: 0.6; }
-  25%      { transform: scale(1.03); opacity: 1; }
-  50%      { transform: scale(1.02); opacity: 0.9; }
-  75%      { transform: scale(0.97); opacity: 0.6; }
+  0%, 100% { transform: scale(0.93); opacity: 0.5; }
+  25%      { transform: scale(1.06); opacity: 1; }
+  50%      { transform: scale(1.04); opacity: 0.85; }
+  75%      { transform: scale(0.93); opacity: 0.5; }
 }
 
 .app-demo-labels {
-  position: relative;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 1;
 }
 
 .app-demo-label {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
   font-size: var(--text-sm);
   font-weight: 300;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--white);
   opacity: 0;
-  animation: phase-label 16s ease infinite;
 }
-/* Inhale: 0-25% */
-[data-phase="inhale"].app-demo-label { animation-delay: 0s; }
-/* Hold: 25-50% */
-[data-phase="hold"].app-demo-label { animation-delay: 4s; }
-/* Exhale: 50-87.5% */
-[data-phase="exhale"].app-demo-label { animation-delay: 8s; }
-/* Rest: 87.5-100% */
-[data-phase="rest"].app-demo-label { animation-delay: 14s; }
 
-@keyframes phase-label {
-  0%   { opacity: 0; }
-  2%   { opacity: 1; }
-  23%  { opacity: 1; }
-  25%  { opacity: 0; }
-  100% { opacity: 0; }
+/* Per-phase keyframes — no overlap, matched to breathing cadence */
+/* Inhale: 0-25% of 16s = 0-4s */
+[data-phase="inhale"].app-demo-label {
+  animation: label-inhale 16s ease infinite;
+}
+/* Hold: 25-50% = 4-8s */
+[data-phase="hold"].app-demo-label {
+  animation: label-hold 16s ease infinite;
+}
+/* Exhale: 50-87.5% = 8-14s */
+[data-phase="exhale"].app-demo-label {
+  animation: label-exhale 16s ease infinite;
+}
+/* Rest: 87.5-100% = 14-16s */
+[data-phase="rest"].app-demo-label {
+  animation: label-rest 16s ease infinite;
+}
+
+@keyframes label-inhale {
+  0%    { opacity: 0; }
+  2%    { opacity: 1; }
+  22%   { opacity: 1; }
+  25%   { opacity: 0; }
+  100%  { opacity: 0; }
+}
+@keyframes label-hold {
+  0%    { opacity: 0; }
+  25%   { opacity: 0; }
+  27%   { opacity: 1; }
+  47%   { opacity: 1; }
+  50%   { opacity: 0; }
+  100%  { opacity: 0; }
+}
+@keyframes label-exhale {
+  0%    { opacity: 0; }
+  50%   { opacity: 0; }
+  52%   { opacity: 1; }
+  85%   { opacity: 1; }
+  87.5% { opacity: 0; }
+  100%  { opacity: 0; }
+}
+@keyframes label-rest {
+  0%    { opacity: 0; }
+  87.5% { opacity: 0; }
+  89%   { opacity: 1; }
+  97%   { opacity: 1; }
+  100%  { opacity: 0; }
 }
 
 /* Glow behind phone */
@@ -1592,8 +1640,9 @@ button[type="submit"]:disabled {
   }
 
   /* Phone mockup: static */
-  .app-demo-aura { animation: none !important; opacity: 0.6 !important; }
-  .app-demo-label { animation: none !important; }
+  .app-demo-aura,
+  .app-demo-aura::after { animation: none !important; opacity: 0.6 !important; }
+  .app-demo-label { animation: none !important; opacity: 0 !important; }
   [data-phase="inhale"].app-demo-label { opacity: 1 !important; }
 
   /* Hero entrance: instant appearance */

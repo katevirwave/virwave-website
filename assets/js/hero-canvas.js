@@ -28,17 +28,17 @@
     x: 0.62,        // 62% from left (asymmetric)
     y: 0.45,        // 45% from top
     radius: 0.28,   // proportion of canvas width
-    scaleMin: 0.97,
-    scaleMax: 1.03,
-    opacityMin: 0.08,
-    opacityMax: 0.15,
+    scaleMin: 0.95,
+    scaleMax: 1.05,
+    opacityMin: 0.15,
+    opacityMax: 0.28,
     colorInner: { r: 10, g: 126, b: 164 },   // teal
     colorMid:   { r: 140, g: 235, b: 170 },   // mint
   };
 
   var ORBS = [
-    { x: 0.3, y: 0.35, radius: 0.35, color: { r: 96, g: 165, b: 250 }, opacity: 0.05, dx: 0.08, dy: 0.05, durX: 45000, durY: 52000 },  // phase-blue
-    { x: 0.75, y: 0.6, radius: 0.3, color: { r: 167, g: 139, b: 250 }, opacity: 0.04, dx: 0.06, dy: 0.07, durX: 55000, durY: 48000 }   // phase-violet
+    { x: 0.3, y: 0.35, radius: 0.35, color: { r: 96, g: 165, b: 250 }, opacity: 0.10, dx: 0.08, dy: 0.05, durX: 45000, durY: 52000 },  // phase-blue
+    { x: 0.75, y: 0.6, radius: 0.3, color: { r: 167, g: 139, b: 250 }, opacity: 0.08, dx: 0.06, dy: 0.07, durX: 55000, durY: 48000 }   // phase-violet
   ];
 
   var PARTICLE_COUNT_DESKTOP = 8;
