@@ -158,6 +158,19 @@
       <div class="phone-frame">
         <div class="phone-screen">
           <div class="app-demo-aura"></div>
+          <!-- Breathing box shape — progressive stroke drawing like the app -->
+          <svg class="app-demo-shape" viewBox="0 0 200 200" fill="none" aria-hidden="true">
+            <!-- Base outline (dim guide, always visible) -->
+            <rect x="50" y="50" width="100" height="100" rx="6" stroke="rgba(10,126,164,0.15)" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- Animated drawing stroke -->
+            <rect x="50" y="50" width="100" height="100" rx="6" stroke="url(#shape-gradient)" stroke-width="2.5" stroke-linecap="round" class="shape-draw" pathLength="400"/>
+            <defs>
+              <linearGradient id="shape-gradient" x1="50" y1="50" x2="150" y2="150" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#0A7EA4"/>
+                <stop offset="100%" stop-color="#8CEBAA"/>
+              </linearGradient>
+            </defs>
+          </svg>
           <div class="app-demo-labels" aria-hidden="true">
             <span class="app-demo-label" data-phase="inhale">Inhale</span>
             <span class="app-demo-label" data-phase="hold">Hold</span>

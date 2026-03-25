@@ -1408,33 +1408,40 @@ button[type="submit"]:disabled {
 
 .app-demo-aura {
   position: absolute;
-  width: 220px;
-  height: 220px;
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
   background: radial-gradient(circle,
-    rgba(10,126,164,0.25) 0%,
-    rgba(140,235,170,0.12) 35%,
-    rgba(167,139,250,0.06) 60%,
-    transparent 75%);
+    rgba(10,126,164,0.18) 0%,
+    rgba(140,235,170,0.08) 40%,
+    transparent 70%);
   animation: app-aura-breathe 16s cubic-bezier(0.33, 1, 0.68, 1) infinite;
-}
-
-/* Subtle ring around the aura */
-.app-demo-aura::after {
-  content: '';
-  position: absolute;
-  inset: -10%;
-  border-radius: 50%;
-  border: 1px solid rgba(10,126,164,0.15);
-  animation: app-aura-breathe 16s cubic-bezier(0.33, 1, 0.68, 1) infinite;
-  animation-delay: -0.5s;
 }
 
 @keyframes app-aura-breathe {
-  0%, 100% { transform: scale(0.93); opacity: 0.5; }
+  0%, 100% { transform: scale(0.94); opacity: 0.4; }
   25%      { transform: scale(1.06); opacity: 1; }
   50%      { transform: scale(1.04); opacity: 0.85; }
-  75%      { transform: scale(0.93); opacity: 0.5; }
+  75%      { transform: scale(0.94); opacity: 0.4; }
+}
+
+/* SVG breathing shape — progressive stroke drawing */
+.app-demo-shape {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  z-index: 1;
+}
+
+.shape-draw {
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+  animation: draw-box 16s cubic-bezier(0.33, 1, 0.68, 1) infinite;
+}
+
+@keyframes draw-box {
+  0%   { stroke-dashoffset: 400; }
+  100% { stroke-dashoffset: 0; }
 }
 
 .app-demo-labels {
@@ -1640,8 +1647,8 @@ button[type="submit"]:disabled {
   }
 
   /* Phone mockup: static */
-  .app-demo-aura,
-  .app-demo-aura::after { animation: none !important; opacity: 0.6 !important; }
+  .app-demo-aura { animation: none !important; opacity: 0.5 !important; }
+  .shape-draw { animation: none !important; stroke-dashoffset: 200 !important; }
   .app-demo-label { animation: none !important; opacity: 0 !important; }
   [data-phase="inhale"].app-demo-label { opacity: 1 !important; }
 
