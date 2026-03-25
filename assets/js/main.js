@@ -122,6 +122,39 @@
     });
   }
 
+  /* --- Scroll Reveal ----------------------------------------- */
+  function initScrollReveal() {
+    // Skip if reduced motion is preferred
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var targets = document.querySelectorAll(
+      '.section-header, .card, .step, .blog-card, .contact-buttons'
+    );
+    if (!targets.length) return;
+
+    targets.forEach(function (el) { el.classList.add('reveal'); });
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          // Stagger cards within a grid
+          var parent = entry.target.parentElement;
+          var siblings = parent ? parent.querySelectorAll('.reveal') : [];
+          var index = Array.prototype.indexOf.call(siblings, entry.target);
+          var delay = index > 0 ? index * 100 : 0;
+
+          setTimeout(function () {
+            entry.target.classList.add('revealed');
+          }, delay);
+
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    targets.forEach(function (el) { observer.observe(el); });
+  }
+
   /* --- Init -------------------------------------------------- */
   async function init() {
     var config = await loadConfig();
@@ -129,6 +162,7 @@
     initNav();
     highlightCurrentPage();
     initSmoothScroll();
+    initScrollReveal();
   }
 
   if (document.readyState === 'loading') {
