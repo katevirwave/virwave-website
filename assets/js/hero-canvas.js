@@ -49,6 +49,10 @@
   var PERF_BUDGET_MS = 20;
   var PERF_FAIL_THRESHOLD = 3;
 
+  // Luminous tail constants (from app's useLuminousTail.ts)
+  var TAIL_PEAK = 0.65;        // snap-to opacity when cycle wraps
+  var TAIL_DURATION = 2500;    // 2.5s decay
+
   /* --- State ------------------------------------------------ */
   var canvas, ctx;
   var particles = [];
@@ -56,10 +60,30 @@
   var lastFrameTime = 0;
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var startTime = 0;
+  var prevCycleProgress = 0;
+  var tail = { opacity: 0, startTime: 0, active: false };
 
   /* --- Easing ----------------------------------------------- */
+  // Cubic bezier solver for exact easing curves
+  function cubicBezier(x1, y1, x2, y2) {
+    return function (t) {
+      var ax = 3 * x1 - 3 * x2 + 1, bx = 3 * x2 - 6 * x1, cx = 3 * x1;
+      var ay = 3 * y1 - 3 * y2 + 1, by = 3 * y2 - 6 * y1, cy = 3 * y1;
+      var ct = t;
+      for (var i = 0; i < 8; i++) {
+        var x = ((ax * ct + bx) * ct + cx) * ct - t;
+        var dx = (3 * ax * ct + 2 * bx) * ct + cx;
+        if (Math.abs(dx) < 1e-6) break;
+        ct -= x / dx;
+      }
+      return ((ay * ct + by) * ct + cy) * ct;
+    };
+  }
+
+  // App's tailDecay easing: sharp initial drop, long phosphorescent linger
+  var tailDecay = cubicBezier(0.16, 1, 0.3, 1);
+
   // Matches the app's easings.loop = Easing.inOut(Easing.ease)
-  // Approximation of cubic-bezier(0.42, 0, 0.58, 1)
   function easeInOut(t) {
     return t < 0.5
       ? 2 * t * t
@@ -197,18 +221,46 @@
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
-    // Layer 1: Base outline (very dim guide)
+    // Detect cycle wrap (cycleProgress drops > 0.5 = wrap, not normal progress)
+    if (prevCycleProgress - cycleProgress > 0.5) {
+      tail.opacity = TAIL_PEAK;
+      tail.startTime = elapsed;
+      tail.active = true;
+    }
+    prevCycleProgress = cycleProgress;
+
+    // Update tail decay
+    if (tail.active) {
+      var tailElapsed = elapsed - tail.startTime;
+      if (tailElapsed >= TAIL_DURATION) {
+        tail.active = false;
+        tail.opacity = 0;
+      } else {
+        var decayProgress = tailDecay(tailElapsed / TAIL_DURATION);
+        tail.opacity = TAIL_PEAK * (1 - decayProgress);
+      }
+    }
+
+    // Layer 1: Base outline (very dim guide, always visible)
     ctx.setLineDash([]);
     ctx.lineWidth = strokeW;
     ctx.globalAlpha = SHAPE.baseOpacity;
     ctx.strokeStyle = 'rgba(' + SHAPE.color.r + ',' + SHAPE.color.g + ',' + SHAPE.color.b + ',1)';
     ctx.stroke(boxPath);
 
-    // Layer 2: Luminous tail (fades at cycle reset)
-    var cycleFraction = (elapsed % TOTAL) / TOTAL;
-    var tailFade = cycleFraction < 0.1 ? 1 - (cycleFraction / 0.1) : 0;
-    if (tailFade > 0) {
-      ctx.globalAlpha = SHAPE.tailOpacity * tailFade;
+    // Layer 2: Luminous tail (ghost of completed shape — phosphorescent decay)
+    if (tail.opacity > 0.005) {
+      // Tail glow (wide, soft)
+      ctx.setLineDash([]);
+      ctx.lineWidth = strokeW * 5;
+      ctx.globalAlpha = tail.opacity * 0.15;
+      ctx.strokeStyle = 'rgba(' + SHAPE.glowColor.r + ',' + SHAPE.glowColor.g + ',' + SHAPE.glowColor.b + ',1)';
+      ctx.stroke(boxPath);
+
+      // Tail stroke (sharp)
+      ctx.lineWidth = strokeW;
+      ctx.globalAlpha = tail.opacity * SHAPE.strokeOpacity;
+      ctx.strokeStyle = 'rgba(' + SHAPE.color.r + ',' + SHAPE.color.g + ',' + SHAPE.color.b + ',1)';
       ctx.stroke(boxPath);
     }
 
