@@ -1234,8 +1234,11 @@ button[type="submit"]:disabled {
 .footer-links a {
   color: var(--text-light-muted);
   font-size: var(--text-sm);
+  transition: color 0.2s cubic-bezier(0.33, 1, 0.68, 1);
 }
-.footer-links a:hover { color: var(--white-pure); }
+.footer-links a:hover {
+  color: var(--teal-light);
+}
 
 .footer-copy {
   font-size: var(--text-sm);
@@ -1248,6 +1251,7 @@ button[type="submit"]:disabled {
 @media (max-width: 768px) {
   .hero { min-height: 90vh; padding: var(--sp-20) var(--sp-4); }
   .hero h1 { font-size: var(--text-3xl); }
+  .breathing-ring { width: 200px; height: 200px; }
   .section { padding: var(--sp-16) var(--sp-4); }
   .section-header { margin-bottom: var(--sp-10); }
   .section-header h2 { font-size: var(--text-2xl); }
