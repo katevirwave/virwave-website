@@ -1055,24 +1055,26 @@ button[type="submit"]:disabled {
   border: 0;
 }
 
+/* Focus ring — teal, distinct from selection border */
 .interest-option:focus-within {
-  outline: 2px solid var(--teal);
-  outline-offset: 2px;
+  box-shadow: 0 0 0 2px rgba(10, 126, 164, 0.35);
+  outline: none;
 }
 
-.interest-option:has(input:checked) {
-  background: rgba(10, 126, 164, 0.08);
-  border-color: var(--teal);
-  color: var(--teal);
-  font-weight: 500;
-}
-
-/* Fallback for browsers without :has() — JS adds this class */
+/* Selected pill — teal tint with subtle glow */
+.interest-option:has(input:checked),
 .interest-option.selected {
   background: rgba(10, 126, 164, 0.08);
   border-color: var(--teal);
   color: var(--teal);
   font-weight: 500;
+  box-shadow: 0 0 12px rgba(10, 126, 164, 0.08);
+}
+
+/* Focus + selected — compose ring with glow */
+.interest-option:has(input:checked):focus-within,
+.interest-option.selected:focus-within {
+  box-shadow: 0 0 0 2px rgba(10, 126, 164, 0.35), 0 0 12px rgba(10, 126, 164, 0.08);
 }
 
 /* --- Fieldset reset ---------------------------------------- */
