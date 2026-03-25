@@ -1120,8 +1120,9 @@ button[type="submit"]:disabled {
 }
 
 .interest-option:hover {
-  border-color: var(--teal);
-  color: var(--teal-light);
+  border-color: rgba(10, 126, 164, 0.4);
+  background: rgba(10, 126, 164, 0.06);
+  color: var(--text-light);
 }
 
 .interest-option input[type="checkbox"] {
@@ -1136,24 +1137,26 @@ button[type="submit"]:disabled {
   border: 0;
 }
 
+/* Focus ring — teal, distinct from selection border */
 .interest-option:focus-within {
-  box-shadow: 0 0 0 2px rgba(248, 248, 246, 0.2);
+  box-shadow: 0 0 0 2px rgba(10, 126, 164, 0.35);
   outline: none;
 }
 
-.interest-option:has(input:checked) {
-  background: rgba(10, 126, 164, 0.15);
+/* Selected pill — teal glass with subtle glow */
+.interest-option:has(input:checked),
+.interest-option.selected {
+  background: rgba(10, 126, 164, 0.12);
   border-color: var(--teal);
-  color: var(--teal-light);
+  color: var(--white);
   font-weight: 500;
+  box-shadow: 0 0 16px rgba(10, 126, 164, 0.12);
 }
 
-/* Fallback for browsers without :has() — JS adds this class */
-.interest-option.selected {
-  background: rgba(10, 126, 164, 0.15);
-  border-color: var(--teal);
-  color: var(--teal-light);
-  font-weight: 500;
+/* Focus + selected — compose ring with glow */
+.interest-option:has(input:checked):focus-within,
+.interest-option.selected:focus-within {
+  box-shadow: 0 0 0 2px rgba(10, 126, 164, 0.35), 0 0 16px rgba(10, 126, 164, 0.12);
 }
 
 /* --- Fieldset reset ---------------------------------------- */
