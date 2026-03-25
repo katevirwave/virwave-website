@@ -19,22 +19,24 @@
   var TOTAL = PHASE_DURATION * 4; // 16000ms
 
   var SHAPE = {
-    x: 0.58,          // center X (58% from left, asymmetric)
-    y: 0.48,          // center Y
-    sizeRatio: 0.38,  // proportion of min(width, height) — large, immersive
-    strokeWidth: 2,
-    cornerRadius: 8,
+    x: 0.64,          // center X — pushed right, creates tension with left-aligned text
+    y: 0.44,          // center Y — slightly above center, more dynamic
+    sizeRatio: 0.40,  // large, immersive
+    tilt: -2.5,       // degrees — slight rotation, not grid-aligned = provocative
+    cornerRadius: 10,
     color: { r: 10, g: 126, b: 164 },     // teal
     colorEnd: { r: 140, g: 235, b: 170 },  // mint (for gradient)
-    baseOpacity: 0.12,     // dim guide outline
-    strokeOpacity: 0.85,   // active drawing line
-    tailOpacity: 0.25       // luminous tail after full cycle
+    baseOpacity: 0.06,     // very dim guide (let active stroke dominate)
+    strokeOpacity: 0.9,    // active drawing line — vivid
+    tailOpacity: 0.20,     // luminous tail after full cycle
+    glowColor: { r: 10, g: 126, b: 164 },
+    glowOpacity: 0.4       // glow behind the stroke
   };
 
   var AURA = {
-    spreadRatio: 2.2,  // aura radius = shape size * this — larger glow field
-    opacityMin: 0.12,
-    opacityMax: 0.25
+    spreadRatio: 2.5,  // large glow field — fills the right side
+    opacityMin: 0.10,
+    opacityMax: 0.28
   };
 
   var ORBS = [
@@ -178,35 +180,50 @@
     var cy = SHAPE.y * canvas.height;
     var side = Math.min(canvas.width, canvas.height) * SHAPE.sizeRatio;
     var r = SHAPE.cornerRadius;
-    var perimeter = (side - 2 * r) * 4 + 2 * Math.PI * r; // rounded rect perimeter
+    var perimeter = (side - 2 * r) * 4 + 2 * Math.PI * r;
+
+    // Viewport-scaled stroke width: thicker on larger screens
+    var strokeW = Math.max(1.5, Math.min(canvas.width, canvas.height) * 0.003);
 
     var boxPath = buildBoxPath(cx, cy, side, r);
     var cycleProgress = getCycleProgress(elapsed);
 
+    // Apply tilt rotation around shape center
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(SHAPE.tilt * Math.PI / 180);
+    ctx.translate(-cx, -cy);
+
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    ctx.lineWidth = SHAPE.strokeWidth;
 
-    // Layer 1: Base outline (always visible, dim guide)
+    // Layer 1: Base outline (very dim guide)
     ctx.setLineDash([]);
+    ctx.lineWidth = strokeW;
     ctx.globalAlpha = SHAPE.baseOpacity;
     ctx.strokeStyle = 'rgba(' + SHAPE.color.r + ',' + SHAPE.color.g + ',' + SHAPE.color.b + ',1)';
     ctx.stroke(boxPath);
 
-    // Layer 2: Luminous tail (full outline at low opacity, fades between cycles)
+    // Layer 2: Luminous tail (fades at cycle reset)
     var cycleFraction = (elapsed % TOTAL) / TOTAL;
-    var tailFade = cycleFraction < 0.1 ? 1 - (cycleFraction / 0.1) : 0; // fades in first 10% of new cycle
+    var tailFade = cycleFraction < 0.1 ? 1 - (cycleFraction / 0.1) : 0;
     if (tailFade > 0) {
       ctx.globalAlpha = SHAPE.tailOpacity * tailFade;
       ctx.stroke(boxPath);
     }
 
-    // Layer 3: Animated progress line (the drawing stroke)
+    // Layer 3: Glow behind the active stroke (soft, wide)
     ctx.setLineDash([perimeter]);
     ctx.lineDashOffset = perimeter * (1 - cycleProgress);
+    ctx.lineWidth = strokeW * 6;
+    ctx.globalAlpha = SHAPE.glowOpacity * 0.15;
+    ctx.strokeStyle = 'rgba(' + SHAPE.glowColor.r + ',' + SHAPE.glowColor.g + ',' + SHAPE.glowColor.b + ',1)';
+    ctx.stroke(boxPath);
+
+    // Layer 4: Animated progress line (the drawing stroke — vivid)
+    ctx.lineWidth = strokeW;
     ctx.globalAlpha = SHAPE.strokeOpacity;
 
-    // Gradient stroke: teal → mint
     var grad = ctx.createLinearGradient(cx - side / 2, cy - side / 2, cx + side / 2, cy + side / 2);
     grad.addColorStop(0, 'rgba(' + SHAPE.color.r + ',' + SHAPE.color.g + ',' + SHAPE.color.b + ',1)');
     grad.addColorStop(1, 'rgba(' + SHAPE.colorEnd.r + ',' + SHAPE.colorEnd.g + ',' + SHAPE.colorEnd.b + ',1)');
@@ -216,6 +233,7 @@
     // Reset
     ctx.setLineDash([]);
     ctx.globalAlpha = 1;
+    ctx.restore();
   }
 
   function drawParticles(elapsed) {
@@ -285,14 +303,20 @@
 
     ctx.globalCompositeOperation = 'source-over';
 
-    // Draw the box at 50% progress (half drawn)
+    // Draw the box at 50% progress (half drawn) with tilt
     var side = shapeSize;
     var boxPath = buildBoxPath(cx, cy, side, SHAPE.cornerRadius);
     var perimeter = (side - 2 * SHAPE.cornerRadius) * 4 + 2 * Math.PI * SHAPE.cornerRadius;
+    var strokeW = Math.max(1.5, Math.min(canvas.width, canvas.height) * 0.003);
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(SHAPE.tilt * Math.PI / 180);
+    ctx.translate(-cx, -cy);
 
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    ctx.lineWidth = SHAPE.strokeWidth;
+    ctx.lineWidth = strokeW;
     ctx.setLineDash([]);
     ctx.globalAlpha = SHAPE.baseOpacity;
     ctx.strokeStyle = 'rgba(' + SHAPE.color.r + ',' + SHAPE.color.g + ',' + SHAPE.color.b + ',1)';
@@ -304,6 +328,7 @@
     ctx.stroke(boxPath);
     ctx.setLineDash([]);
     ctx.globalAlpha = 1;
+    ctx.restore();
   }
 
   /* --- Resize handler --------------------------------------- */
