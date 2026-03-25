@@ -133,7 +133,7 @@
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     var targets = document.querySelectorAll(
-      '.section-header, .card, .step, .blog-card, .contact-buttons'
+      '.section-header, .card, .card-horizontal, .card-research, .timeline-step, .phone-frame, .trust-strip, .founder-quote blockquote, .breathing-reveal, .blog-card, .contact-buttons'
     );
     if (!targets.length) return;
 
