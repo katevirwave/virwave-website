@@ -953,10 +953,9 @@ h1, h2, h3, h4, h5, h6 {
   left: 50%;
   transform: translateX(-50%);
   width: 120px;
-  height: 120px;
-  border-radius: 50% 50% 46% 46%;
-  background: radial-gradient(ellipse at 45% 35%, rgba(167,139,250,0.12) 0%, rgba(167,139,250,0.04) 70%, transparent 100%);
-  border: 1px solid rgba(167,139,250,0.18);
+  height: 110px;
+  border-radius: 50% 50% 44% 44%;
+  background: radial-gradient(ellipse at 45% 40%, rgba(167,139,250,0.14) 0%, rgba(167,139,250,0.05) 60%, transparent 100%);
 }
 .plushy-figure .plushy-ear {
   position: absolute;
@@ -969,16 +968,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 .plushy-figure .plushy-ear-l { left: 20px; transform: rotate(-12deg); }
 .plushy-figure .plushy-ear-r { right: 20px; transform: rotate(12deg); }
-.plushy-eye {
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(167,139,250,0.30);
-  top: 35%;
-}
-.plushy-eye-l { left: 35%; }
-.plushy-eye-r { right: 35%; }
 
 /* --- Stories: text lines (large) --- */
 .stories-lines-lg {
