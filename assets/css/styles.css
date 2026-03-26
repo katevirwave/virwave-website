@@ -858,9 +858,11 @@ h1, h2, h3, h4, h5, h6 {
   .product-card--mint:hover { border-color: rgba(140, 235, 170, 0.25); box-shadow: 0 0 20px rgba(140, 235, 170, 0.10); }
   .product-card--teal:hover { border-color: rgba(10, 126, 164, 0.30); box-shadow: 0 0 20px rgba(10, 126, 164, 0.10); }
   .product-card--grey:hover { border-color: rgba(148, 163, 184, 0.25); box-shadow: 0 0 20px rgba(148, 163, 184, 0.08); }
-  /* Remove lift from product cards */
-  .product-card:hover { transform: none; }
-  .products-grid > :nth-child(even):hover { transform: translateY(var(--sp-12)); }
+  /* Override base .card:hover lift — product cards don't lift */
+  .card.product-card:hover { transform: none; }
+  .products-grid > :nth-child(even).product-card:hover { transform: translateY(var(--sp-12)); }
+  /* Prevent hover shadow overlap in staggered grid */
+  .products-grid .product-card:hover { position: relative; z-index: 2; }
 }
 
 /* --- Board Game: scattered tiles --- */
