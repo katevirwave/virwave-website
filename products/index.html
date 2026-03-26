@@ -10,7 +10,7 @@
 
   <!-- OpenGraph -->
   <meta property="og:title" content="Products — VirWave">
-  <meta property="og:description" content="Explore VirWave products: the app, board game, stories, and more.">
+  <meta property="og:description" content="Tools for emotional regulation — apps, objects, stories, and more.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://virwave.com/products/">
 
@@ -50,8 +50,8 @@
   </nav>
 
 
-  <!-- ========== Products Hero ========== -->
-  <header class="products-hero">
+  <!-- ========== Products Intro ========== -->
+  <header class="products-intro">
     <div class="container">
       <p class="section-eyebrow">Products</p>
       <h1>Everything we're making</h1>
@@ -59,108 +59,138 @@
     </div>
   </header>
 
-  <div class="section-divider"></div>
 
-  <!-- ========== Product Gallery ========== -->
-  <main id="main-content" class="products-gallery">
-    <div class="container">
+  <!-- ========== Product Editorial ========== -->
+  <main id="main-content" class="products-editorial">
 
-      <!-- Flagship: VirWave App -->
-      <div class="product-flagship" data-section="product-app">
-        <div class="product-flagship-text">
+    <!-- ===== App (Flagship) ===== -->
+    <section class="product-spread product-spread--app" data-section="product-app">
+      <div class="container product-spread__inner">
+        <div class="product-spread__text reveal">
           <p class="section-eyebrow">Flagship</p>
-          <h2>VirWave App</h2>
+          <h2 class="product-spread__name product-spread__name--hero">VirWave App</h2>
           <p>Breathwork, journaling, and real human connection in one place. Pick your shapes, set your rhythm, reflect in private, and stay close to the people who matter. iOS and Android.</p>
-          <div class="product-flagship-actions">
-            <span class="product-badge product-badge-live">Early Access</span>
-            <a href="/interest/?interest=early-access" class="btn btn-primary btn-sm">Join Waitlist</a>
+          <div class="app-status" aria-label="Status: Early Access">
+            <span class="app-status__dot" aria-hidden="true"></span>
+            Early Access
+          </div>
+          <div class="product-spread__actions">
+            <a href="/interest/?interest=early-access" class="btn btn-primary">Join Waitlist</a>
           </div>
         </div>
-        <div class="product-flagship-visual">
-          <div class="product-app-shape" aria-hidden="true"></div>
+        <div class="product-spread__visual reveal">
+          <div class="app-breathing-circle" aria-hidden="true"></div>
         </div>
       </div>
+    </section>
 
-      <!-- Grid: remaining products -->
-      <div class="products-grid">
-
-        <!-- Board Game -->
-        <div class="card product-card product-card--blue" data-section="product-boardgame">
-          <div class="product-motif product-tiles-cluster" aria-hidden="true">
-            <div class="product-tile" style="top:10px; left:8px; transform: rotate(-8deg)"></div>
-            <div class="product-tile" style="top:4px; left:52px; transform: rotate(4deg)"></div>
-            <div class="product-tile" style="top:40px; left:28px; transform: rotate(-2deg)"></div>
-            <div class="product-tile" style="top:32px; left:80px; transform: rotate(12deg)"></div>
-          </div>
-          <h3>Board Game</h3>
+    <!-- ===== Board Game ===== -->
+    <section class="product-spread product-spread--boardgame product-spread--upcoming product-spread--reversed" data-section="product-boardgame">
+      <div class="container product-spread__inner">
+        <div class="product-spread__text reveal">
+          <p class="section-eyebrow">Tabletop</p>
+          <h2 class="product-spread__name">Board Game</h2>
           <p>Regulation as a group activity — out loud, with your hands, around a table. For families, classrooms, and anyone who wants to get steady together.</p>
-          <span class="product-badge product-badge-soon">Coming Soon</span>
+          <p class="product-horizon">On the horizon</p>
         </div>
+        <div class="product-spread__visual reveal">
+          <div class="boardgame-tiles" aria-hidden="true">
+            <div class="boardgame-tile" style="top:0; left:40px; transform:rotate(-8deg)"></div>
+            <div class="boardgame-tile" style="top:10px; left:140px; transform:rotate(5deg)"></div>
+            <div class="boardgame-tile" style="top:80px; left:20px; transform:rotate(-3deg)"></div>
+            <div class="boardgame-tile" style="top:70px; left:120px; transform:rotate(10deg)"></div>
+            <div class="boardgame-tile" style="top:140px; left:80px; transform:rotate(-5deg)"></div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        <!-- Plushy -->
-        <div class="card product-card product-card--violet" data-section="product-plushy">
-          <div class="product-motif" aria-hidden="true">
-            <div class="product-plushy-shape">
-              <div class="plushy-body"></div>
-              <div class="plushy-ear plushy-ear-l"></div>
-              <div class="plushy-ear plushy-ear-r"></div>
+    <!-- ===== Plushy ===== -->
+    <section class="product-spread product-spread--plushy product-spread--upcoming" data-section="product-plushy">
+      <div class="container product-spread__inner">
+        <div class="product-spread__text reveal">
+          <p class="section-eyebrow">Tactile</p>
+          <h2 class="product-spread__name">VirWave Plushy</h2>
+          <p>Something soft to hold when you need to get steady. Tactile, sensory-safe, and designed for the moments when a screen isn't what you need.</p>
+          <p class="product-horizon">On the horizon</p>
+        </div>
+        <div class="product-spread__visual reveal">
+          <div class="plushy-figure" aria-hidden="true">
+            <div class="plushy-ear plushy-ear-l"></div>
+            <div class="plushy-ear plushy-ear-r"></div>
+            <div class="plushy-body">
+              <div class="plushy-eye plushy-eye-l"></div>
+              <div class="plushy-eye plushy-eye-r"></div>
             </div>
           </div>
-          <h3>VirWave Plushy</h3>
-          <p>Something soft to hold when you need to get steady. Tactile, sensory-safe, and designed for the moments when a screen isn't what you need.</p>
-          <span class="product-badge product-badge-soon">Coming Soon</span>
         </div>
+      </div>
+    </section>
 
-        <!-- Stories -->
-        <div class="card product-card product-card--mint" data-section="product-stories">
-          <div class="product-motif product-stories-lines" aria-hidden="true">
-            <div class="product-stories-line"></div>
-            <div class="product-stories-line"></div>
-            <div class="product-stories-line"></div>
-          </div>
-          <h3>Stories</h3>
+    <!-- ===== Stories ===== -->
+    <section class="product-spread product-spread--stories product-spread--upcoming product-spread--reversed" data-section="product-stories">
+      <div class="container product-spread__inner">
+        <div class="product-spread__text reveal">
+          <p class="section-eyebrow">Narrative</p>
+          <h2 class="product-spread__name">Stories</h2>
           <p>Short fiction where regulation is woven into the narrative. You read, you breathe, you feel it — then you're ready to show up.</p>
           <p class="product-whisper">Stories that breathe with you.</p>
-          <span class="product-badge product-badge-soon">Coming Soon</span>
+          <p class="product-horizon">On the horizon</p>
         </div>
-
-        <!-- Partnerships -->
-        <div class="card product-card product-card--teal" data-section="product-partnerships">
-          <div class="product-motif" aria-hidden="true">
-            <svg class="product-venn" width="100" height="64" viewBox="0 0 100 64" fill="none">
-              <clipPath id="venn-clip"><circle cx="32" cy="32" r="28"/></clipPath>
-              <circle cx="68" cy="32" r="28" fill="rgba(10,126,164,0.08)" clip-path="url(#venn-clip)"/>
-              <circle cx="32" cy="32" r="28" stroke="rgba(10,126,164,0.25)" stroke-width="1"/>
-              <circle cx="68" cy="32" r="28" stroke="rgba(10,126,164,0.25)" stroke-width="1"/>
-            </svg>
+        <div class="product-spread__visual reveal">
+          <div class="stories-lines-lg" aria-hidden="true">
+            <div class="stories-line-lg"></div>
+            <div class="stories-line-lg"></div>
+            <div class="stories-line-lg"></div>
+            <div class="stories-line-lg"></div>
+            <div class="stories-line-lg"></div>
           </div>
-          <h3>Partnerships</h3>
-          <p>For therapists, educators, schools, and organisations who want to put regulation tools in more hands. We build with you, not just for you.</p>
-          <a href="/interest/?interest=partnership" class="btn btn-ghost btn-sm" style="margin-top: var(--sp-4);">Start a conversation</a>
         </div>
-
-        <!-- Licensing -->
-        <div class="card product-card product-card--grey" data-section="product-licensing">
-          <div class="product-motif" aria-hidden="true">
-            <svg class="product-brackets" width="88" height="48" viewBox="0 0 88 48" fill="none">
-              <path d="M24 4 L4 24 L24 44" stroke="rgba(148,163,184,0.30)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M64 4 L84 24 L64 44" stroke="rgba(148,163,184,0.30)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <h3>Licensing</h3>
-          <p>Use VirWave's breathing engine, shapes, or content in your own product. White-label, SDK, or custom integration.</p>
-          <a href="/interest/?interest=licensing" class="btn btn-ghost btn-sm" style="margin-top: var(--sp-4);">Get in touch</a>
-        </div>
-
       </div>
+    </section>
 
-      <!-- Footer CTA -->
-      <div class="products-footer-cta">
+    <!-- ===== B2B: Partnerships + Licensing ===== -->
+    <section class="product-spread product-spread--b2b" data-section="product-b2b">
+      <div class="container">
+        <div class="product-spread__text product-spread__text--centered reveal">
+          <p class="section-eyebrow">For Organisations</p>
+          <h2 class="product-spread__name">Build with us</h2>
+        </div>
+        <div class="b2b-pair">
+          <div class="b2b-item reveal" data-section="product-partnerships">
+            <div class="b2b-item__visual" aria-hidden="true">
+              <svg class="product-venn-lg" width="140" height="90" viewBox="0 0 140 90" fill="none">
+                <circle cx="48" cy="45" r="38" stroke="rgba(10,126,164,0.22)" stroke-width="1" fill="none"/>
+                <circle cx="92" cy="45" r="38" stroke="rgba(10,126,164,0.22)" stroke-width="1" fill="none"/>
+              </svg>
+            </div>
+            <h3>Partnerships</h3>
+            <p>For therapists, educators, schools, and organisations who want to put regulation tools in more hands. We build with you, not just for you.</p>
+            <a href="/interest/?interest=partnership" class="btn btn-ghost btn-sm">Start a conversation</a>
+          </div>
+          <div class="b2b-item reveal" data-section="product-licensing">
+            <div class="b2b-item__visual" aria-hidden="true">
+              <svg class="product-brackets-lg" width="140" height="70" viewBox="0 0 140 70" fill="none">
+                <path d="M36 6 L6 35 L36 64" stroke="rgba(148,163,184,0.25)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M104 6 L134 35 L104 64" stroke="rgba(148,163,184,0.25)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3>Licensing</h3>
+            <p>Use VirWave's breathing engine, shapes, or content in your own product. White-label, SDK, or custom integration.</p>
+            <a href="/interest/?interest=licensing" class="btn btn-ghost btn-sm">Get in touch</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Closing CTA ===== -->
+    <div class="products-closing reveal">
+      <div class="container">
         <p>Have something else in mind?</p>
-        <a href="/interest/?interest=general" class="btn btn-ghost btn-sm">Let's talk</a>
+        <a href="/interest/?interest=general" class="btn btn-ghost">Let's talk</a>
       </div>
-
     </div>
+
   </main>
 
 

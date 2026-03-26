@@ -133,7 +133,7 @@
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     var targets = document.querySelectorAll(
-      '.section-header, .card, .card-horizontal, .card-research, .timeline-step, .phone-frame, .trust-strip, .founder-quote blockquote, .breathing-reveal, .blog-card, .contact-buttons, .product-flagship, .product-card, .products-footer-cta'
+      '.section-header, .card, .card-horizontal, .card-research, .timeline-step, .phone-frame, .trust-strip, .founder-quote blockquote, .breathing-reveal, .blog-card, .contact-buttons, .product-spread__text, .product-spread__visual, .b2b-item, .products-closing'
     );
     if (!targets.length) return;
 
