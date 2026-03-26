@@ -211,7 +211,7 @@
               <span class="field-hint" id="form-resume-hint">PDF files only, max 5 MB. <span id="form-resume-size"></span></span>
               <span class="field-error" id="form-resume-error" role="alert"></span>
             </div>
-            <p class="form-privacy-note">Your CV is stored for recruitment evaluation only and will be deleted within 90 days or on request at <a href="mailto:info@virwave.com">info@virwave.com</a>.</p>
+            <p class="form-privacy-note">Your CV is stored for recruitment evaluation only. To request deletion, email <a href="mailto:info@virwave.com">info@virwave.com</a>.</p>
             <span class="field-error" id="form-work-error" role="alert"></span>
           </div>
 
@@ -794,7 +794,7 @@
           var h3 = successEl.querySelector('h3');
           if (h3) h3.textContent = 'You\u2019re already on the list!';
           var p = successEl.querySelector('p');
-          if (p) p.textContent = 'Looks like you\u2019ve already signed up with this email. If your interests have changed, drop us a note at kate@virwave.com.';
+          if (p) p.textContent = 'Looks like you\u2019ve already signed up with this email. If your interests have changed, drop us a note at info@virwave.com.';
           return;
         }
 
@@ -803,7 +803,7 @@
           submitBtn.textContent = 'Submit';
         }
 
-        showBanner('Something went wrong. Please try emailing us directly at kate@virwave.com.');
+        showBanner('Something went wrong. Please try emailing us directly at info@virwave.com.');
         console.error('Supabase insert error:', result.error);
       });
 

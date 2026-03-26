@@ -128,6 +128,37 @@ assets/qr/
 The `.png` and `.webp` files are gitignored (generated artifacts).
 The `manifest.json` is tracked in git.
 
+---
+
+## capture-screenshot.sh + screenshot.mjs — Visual QA Screenshot Capture
+
+Captures screenshots of the local website using a headless browser (Puppeteer) for
+agent-driven visual QA. Automatically starts a dev server, installs Puppeteer
+(to `.debug/`, not the project), captures at configurable viewports, and downscales
+to max 800px wide JPEG for agent consumption.
+
+See [VISUAL_QA.md](./VISUAL_QA.md) for full documentation, workflows, and options.
+
+### Quick usage
+
+```bash
+# Capture homepage at all viewports (desktop, tablet, mobile):
+bash scripts/capture-screenshot.sh --all-viewports
+
+# Capture a specific page:
+bash scripts/capture-screenshot.sh --url /interest/
+
+# Mobile viewport:
+bash scripts/capture-screenshot.sh --url /products/ --width 375 --height 812
+
+# Clean up:
+bash scripts/capture-screenshot.sh --cleanup
+```
+
+Screenshots save to `.debug/screenshots/*.review.jpg` (gitignored).
+
+---
+
 ### Brand specification
 
 | Element | Value |

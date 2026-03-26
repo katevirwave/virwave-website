@@ -37,3 +37,6 @@ __pycache__/
 # Generated QR codes (images are build artifacts; manifest is tracked)
 assets/qr/*.png
 assets/qr/*.webp
+
+# Debug artifacts (screenshots, puppeteer cache, etc.)
+.debug/
