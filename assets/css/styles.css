@@ -956,6 +956,18 @@ h1, h2, h3, h4, h5, h6 {
   height: 110px;
   border-radius: 50% 50% 44% 44%;
   background: radial-gradient(ellipse at 45% 40%, rgba(167,139,250,0.14) 0%, rgba(167,139,250,0.05) 60%, transparent 100%);
+  border: 1px solid rgba(167,139,250,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.plushy-screen {
+  width: 36px;
+  height: 28px;
+  border-radius: 6px;
+  background: radial-gradient(circle, rgba(140,235,170,0.15) 0%, rgba(10,126,164,0.08) 70%, transparent 100%);
+  border: 1px solid rgba(167,139,250,0.15);
+  margin-top: -6px;
 }
 .plushy-figure .plushy-ear {
   position: absolute;
