@@ -858,9 +858,9 @@ h1, h2, h3, h4, h5, h6 {
   .product-card--mint:hover { border-color: rgba(140, 235, 170, 0.25); box-shadow: 0 0 20px rgba(140, 235, 170, 0.10); }
   .product-card--teal:hover { border-color: rgba(10, 126, 164, 0.30); box-shadow: 0 0 20px rgba(10, 126, 164, 0.10); }
   .product-card--grey:hover { border-color: rgba(148, 163, 184, 0.25); box-shadow: 0 0 20px rgba(148, 163, 184, 0.08); }
-  /* Override base .card:hover lift — product cards don't lift */
-  .card.product-card:hover { transform: none; }
-  .products-grid > :nth-child(even).product-card:hover { transform: translateY(var(--sp-12)); }
+  /* Override base .card:hover lift — product cards scale subtly instead */
+  .card.product-card:hover { transform: scale(1.02); }
+  .products-grid > :nth-child(even).product-card:hover { transform: translateY(var(--sp-12)) scale(1.02); }
   /* Prevent hover shadow overlap in staggered grid */
   .products-grid .product-card:hover { position: relative; z-index: 2; }
 }
@@ -887,22 +887,46 @@ h1, h2, h3, h4, h5, h6 {
   .product-card--blue:hover .product-tile:nth-child(4) { transform: rotate(14deg) translate(-2px, 1px); }
 }
 
-/* --- Plushy: organic blob --- */
-.product-plushy-blob {
-  width: 130px;
-  height: 100px;
-  border-radius: 42% 58% 62% 38% / 45% 55% 50% 50%;
-  background: radial-gradient(ellipse at 40% 40%,
-    rgba(167, 139, 250, 0.12) 0%,
-    rgba(167, 139, 250, 0.04) 60%,
-    transparent 100%);
-  border: 1px solid rgba(167, 139, 250, 0.18);
-  transition: border-radius 500ms cubic-bezier(0.33, 1, 0.68, 1);
+/* --- Plushy: soft rounded character silhouette --- */
+.product-plushy-shape {
+  position: relative;
+  width: 100px;
+  height: 90px;
 }
+.plushy-body {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 72px;
+  height: 68px;
+  border-radius: 50% 50% 46% 46%;
+  background: radial-gradient(ellipse at 45% 35%,
+    rgba(167, 139, 250, 0.14) 0%,
+    rgba(167, 139, 250, 0.05) 70%,
+    transparent 100%);
+  border: 1px solid rgba(167, 139, 250, 0.20);
+  transition: transform 500ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+.plushy-ear {
+  position: absolute;
+  width: 24px;
+  height: 28px;
+  border-radius: 50% 50% 40% 40%;
+  background: rgba(167, 139, 250, 0.08);
+  border: 1px solid rgba(167, 139, 250, 0.15);
+  top: 0;
+  transition: transform 500ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+.plushy-ear-l { left: 16px; transform: rotate(-12deg); }
+.plushy-ear-r { right: 16px; transform: rotate(12deg); }
+
 @media (hover: hover) {
-  .product-card--violet:hover .product-plushy-blob {
-    border-radius: 48% 52% 56% 44% / 50% 48% 52% 48%;
+  .product-card--violet:hover .plushy-body {
+    transform: translateX(-50%) scale(1.04);
   }
+  .product-card--violet:hover .plushy-ear-l { transform: rotate(-18deg) translateY(-2px); }
+  .product-card--violet:hover .plushy-ear-r { transform: rotate(18deg) translateY(-2px); }
 }
 
 /* --- Stories: text lines --- */
