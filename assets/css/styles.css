@@ -784,7 +784,7 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 0 30px rgba(140, 235, 170, 0.08);
   }
 }
-.product-flagship-text { flex: 1 1 55%; }
+.product-flagship-text { flex: 1 1 55%; text-align: left; }
 .product-flagship-text h2 { font-size: var(--text-2xl); margin-bottom: var(--sp-3); }
 .product-flagship-text p { color: var(--text); font-size: var(--text-lg); margin-bottom: var(--sp-6); }
 .product-flagship-actions { display: flex; align-items: center; gap: var(--sp-4); flex-wrap: wrap; }
