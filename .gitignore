@@ -44,3 +44,5 @@ assets/qr/*.webp
 # Supabase CLI transient state (migrations are tracked; .temp is not)
 supabase/.temp/
 supabase/.branches/
+# Stub files for remote-only virwave_v3 migrations (sync scaffolding, not real SQL)
+supabase/migrations/*_stub.sql
