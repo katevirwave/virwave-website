@@ -31,6 +31,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://virwave.com/events/</loc>
+    <lastmod>2026-04-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://virwave.com/interest/</loc>
     <lastmod>2026-03-04</lastmod>
     <changefreq>monthly</changefreq>

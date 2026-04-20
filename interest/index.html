@@ -119,6 +119,7 @@
       <ul id="nav-links" class="nav-links">
         <li><a href="/">Home</a></li>
         <li data-nav="blog"><a href="/blog/">Blog</a></li>
+        <li data-nav="events"><a href="/events/">Events</a></li>
         <li data-nav="products"><a href="/products/">Products</a></li>
         <li><a href="/#contact">Contact</a></li>
       </ul>
@@ -284,6 +285,9 @@
   <script>
   (function () {
     'use strict';
+    // EVENT_MAP — keep in sync with /events/events.json (public mirror).
+    // Until the Next.js app in Phase 1 moves this into Supabase, the two
+    // must stay byte-for-byte compatible on `code`, `autoSelect`, and `pillOrder`.
     var EVENT_MAP = {
       'founders-under-pressure-ucl-basekx-london-2026-03-04': {
         title: 'Founders under Pressure',

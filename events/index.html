@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="base-path" content="/">
+
+  <title>Events — VirWave</title>
+  <meta name="description" content="VirWave Events match a roomful of strangers in real time. Ten questions on the way in, tables or live pairs on the way through — for hosts running singles nights, founder dinners, and networking rooms.">
+
+  <!-- OpenGraph -->
+  <meta property="og:title" content="Events — VirWave">
+  <meta property="og:description" content="VirWave Events match a roomful of strangers in real time. Ten questions on the way in, tables or live pairs on the way through.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://virwave.com/events/">
+
+  <!-- Favicon -->
+  <link rel="icon" href="/assets/favicon.png" type="image/png">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/assets/css/styles.css">
+
+  <!--
+    URL RESERVATIONS — do not create static pages at:
+      /events/host
+      /events/host/signup
+      /events/admin
+      /events/<slug>/join
+    These paths are reserved for the Next.js app described in
+    02 - VirWave/VirWave_Events_BuildPlan_April2026.md (Phases 1 and 3).
+  -->
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <!-- ========== Navigation ========== -->
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo" aria-label="VirWave home">
+        <img src="/assets/logo_virwave.avif" alt="" width="32" height="32">
+        VirWave
+      </a>
+
+      <button id="nav-toggle" class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+
+      <ul id="nav-links" class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li data-nav="blog"><a href="/blog/">Blog</a></li>
+        <li data-nav="events"><a href="/events/" aria-current="page">Events</a></li>
+        <li data-nav="products"><a href="/products/">Products</a></li>
+        <li><a href="/#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <main id="main-content">
+
+    <!-- ========== Hero ========== -->
+    <section class="hero events-hero" data-section="events-hero">
+      <div class="container">
+        <div class="hero-content">
+          <p class="hero-eyebrow">VirWave Events</p>
+          <h1>The room <em class="events-hero-emph">knows</em> before you walk in.</h1>
+          <p class="hero-sub">VirWave Events match a roomful of strangers in real time. Ten questions on the way in; table assignments or live pair suggestions on the way through.</p>
+          <div class="hero-actions">
+            <a href="/interest/?interest=partnership,event" class="btn btn-primary btn-lg">Bring it to your event</a>
+            <a href="#how-it-works" class="btn btn-ghost btn-lg">How it works</a>
+          </div>
+          <div class="events-hero-orb" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+
+    <div class="section-divider"></div>
+
+
+    <!-- ========== Two Rooms, One Engine ========== -->
+    <section class="section section-dark" data-section="events-rooms">
+      <div class="container container-narrow">
+        <div class="section-header">
+          <p class="section-eyebrow">Two rooms, one engine</p>
+          <h2>Tables, or pairs.</h2>
+          <p>Each event runs on the same match: pairwise agreement on what matters, and archetype-family compatibility. The mode changes how the host uses it.</p>
+        </div>
+
+        <div class="events-rooms-grid">
+          <article class="events-room-card">
+            <span class="events-chip">Live &middot; In-room</span>
+            <h3>Tables mode</h3>
+            <p>For dinners, seated singles nights, and curated rooms of 12 to 30. The engine clusters the room into tables that fit. The host taps once. Phones light up with seats.</p>
+          </article>
+
+          <article class="events-room-card">
+            <span class="events-chip">Live &middot; In-room</span>
+            <h3>Pairs mode</h3>
+            <p>For mixers, networking evenings, and rooms of 30 to 60. Live pair rankings refresh as people arrive. The host walks the room making introductions. Phones nudge: <em>find Sarah &mdash; you two should talk</em>.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ========== How It Works ========== -->
+    <section class="section" id="how-it-works" data-section="events-how">
+      <div class="container container-narrow">
+        <div class="section-header section-header-left">
+          <p class="section-eyebrow">How it works</p>
+          <h2>Ten questions. One evening. No leaderboards.</h2>
+          <p>A partner-facing description of what happens at the door. The participant flow itself lives in the VirWave app.</p>
+        </div>
+
+        <div class="timeline">
+          <div class="timeline-step" data-phase="inhale">
+            <div class="timeline-number" aria-hidden="true">1</div>
+            <div class="timeline-content">
+              <h3>Scan</h3>
+              <p>Walk in, scan a QR code, type your first name and email, and verify with a six-digit code.</p>
+            </div>
+          </div>
+          <div class="timeline-step" data-phase="hold">
+            <div class="timeline-number" aria-hidden="true">2</div>
+            <div class="timeline-content">
+              <h3>Answer</h3>
+              <p>Five or ten questions, one per screen, two to four minutes. Big tap targets. No labels, no diagnoses.</p>
+            </div>
+          </div>
+          <div class="timeline-step" data-phase="exhale">
+            <div class="timeline-number" aria-hidden="true">3</div>
+            <div class="timeline-content">
+              <h3>Sit, or talk</h3>
+              <p>When the room is ready, the host pushes assignments. Your phone tells you where to sit, or who to find.</p>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-muted" style="margin-top: var(--sp-10); font-style: italic; line-height: 1.7;">Your email becomes your VirWave account. Tonight's answers add to your portrait &mdash; or stay separate if you prefer. The choice is one tap on the sign-in screen.</p>
+      </div>
+    </section>
+
+
+    <!-- ========== Aggregate, never individual ========== -->
+    <section class="section section-dark" data-section="events-privacy">
+      <div class="container container-narrow">
+        <div class="section-header">
+          <p class="section-eyebrow">Aggregate, never individual</p>
+          <h2>What the host sees, and what they don't.</h2>
+        </div>
+
+        <div class="events-privacy-card">
+          <p>The host sees who's in the room, what families they fall into, and which pairs are strongest. The host never sees a single answer anyone gave. Other attendees see your first name and your family &mdash; never your answers, never your scores. Your portrait is yours.</p>
+          <ul class="events-privacy-bullets">
+            <li>Hosts see aggregates.</li>
+            <li>Attendees see names, not answers.</li>
+            <li>Numbers reveal only above an 85 match &mdash; and only to you.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ========== Where you'll find us ========== -->
+    <section class="section" data-section="events-where">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-eyebrow">Where you'll find us</p>
+          <h2>Past and upcoming rooms.</h2>
+          <p>Events where VirWave has run or is running. If a venue or crew you love isn't here yet, tell us.</p>
+        </div>
+
+        <h3 class="section-eyebrow" style="color: var(--text); text-align: center; margin-bottom: var(--sp-4);">Upcoming</h3>
+        <div id="events-upcoming" class="events-grid" aria-label="Upcoming events"></div>
+        <div id="events-upcoming-empty" class="events-empty" hidden>
+          <p>No upcoming events on the calendar.</p>
+          <p>Tell us where you'd like to see one.</p>
+          <a href="/interest/?interest=event" class="btn btn-ghost-dark btn-sm">Suggest an event</a>
+        </div>
+
+        <div id="events-archive" style="margin-top: var(--sp-16);">
+          <h3 class="section-eyebrow" style="color: var(--text-muted); text-align: center; margin-bottom: var(--sp-4);">Archive</h3>
+          <div id="events-past" class="events-grid" aria-label="Past events"></div>
+          <div class="events-archive-toggle">
+            <button id="events-show-all" type="button" class="btn btn-ghost-dark btn-sm" hidden>Show all past events</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ========== FAQ ========== -->
+    <section class="section section-dark" data-section="events-faq">
+      <div class="container container-narrow">
+        <div class="section-header">
+          <p class="section-eyebrow">FAQ</p>
+          <h2>The usual questions.</h2>
+        </div>
+
+        <div class="events-faq">
+          <details>
+            <summary>What if I just want to talk to people, not be matched?</summary>
+            <p>Scanning is opt-in. If you skip it, you're just at the event. People who scan get a small list of who's worth finding; people who don't still get to chat like normal.</p>
+          </details>
+          <details>
+            <summary>What happens to my answers after the event?</summary>
+            <p>By default your answers fold into your VirWave portrait, so the app knows a little more about you next time. If you'd rather keep the evening separate, there's an opt-out on the sign-in screen &mdash; and any answers kept separate are deleted seven days after the event.</p>
+          </details>
+          <details>
+            <summary>What if I'm already a VirWave user?</summary>
+            <p>Use the same email. The room recognises you, and tonight's answers add to your existing portrait. You won't need to redo anything you've already answered in the app.</p>
+          </details>
+          <details>
+            <summary>What does the host actually see about me?</summary>
+            <p>Your first name, the family you fall into, and how the pairs in the room rank. They don't see your answers, your individual scores, or anything about your VirWave portrait beyond this event.</p>
+          </details>
+          <details>
+            <summary>How do you decide who's compatible?</summary>
+            <p>Two layers. The first is pairwise agreement on things that matter in a room together &mdash; values, communication style, and how you handle stress. The second is archetype family: some families find easy ground with each other, others find interesting ground. The match uses both.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ========== Partner CTA ========== -->
+    <section class="section" data-section="events-partner">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-eyebrow">For hosts</p>
+          <h2>Bring it to your event.</h2>
+        </div>
+
+        <div class="events-cta-card">
+          <p>Hosting a singles night, a founders' dinner, or a networking room? VirWave Events runs as the engine in the background &mdash; your event, our matching.</p>
+          <a href="/interest/?interest=partnership,event" class="btn btn-primary btn-lg">Talk to us</a>
+          <p class="events-cta-card__footnote">Free for partner hosts during the pilot. Hand-picked partners only &mdash; we're learning alongside you.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ========== Footer ========== -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copy">&copy; 2026 VirWave OAM. All rights reserved.</p>
+      <nav aria-label="Footer">
+      <ul class="footer-links">
+        <li><a href="/privacy/">Privacy Policy</a></li>
+        <li><a href="/terms/">Terms of Service</a></li>
+        <li data-nav="events"><a href="/events/">Events</a></li>
+        <li data-nav="blog"><a href="/blog/">Blog</a></li>
+        <li><a href="/interest/">Get in Touch</a></li>
+      </ul>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/assets/js/events.js"></script>
+  <script src="/assets/js/main.js"></script>
+</body>
+</html>
