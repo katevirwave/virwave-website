@@ -40,3 +40,7 @@ assets/qr/*.webp
 
 # Debug artifacts (screenshots, puppeteer cache, etc.)
 .debug/
+
+# Supabase CLI transient state (migrations are tracked; .temp is not)
+supabase/.temp/
+supabase/.branches/
