@@ -2243,39 +2243,6 @@ button[type="submit"]:disabled {
   line-height: 1.08;
 }
 
-.archetypes-hero-constellation {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-  overflow: hidden;
-}
-.constellation-shape {
-  position: absolute;
-  left: var(--c-x);
-  top: var(--c-y);
-  width: 44px;
-  height: 44px;
-  opacity: 0;
-  color: var(--c-color);
-  filter: drop-shadow(0 0 18px color-mix(in oklab, var(--c-color) 55%, transparent));
-  animation:
-    constellation-fade 1400ms var(--ease-calm) forwards,
-    constellation-drift 14s var(--ease-calm) infinite alternate;
-  animation-delay: calc(var(--c-delay, 0s) * 0.15 + 600ms), var(--c-delay, 0s);
-  will-change: transform, opacity;
-}
-@media (max-width: 720px) {
-  .constellation-shape { width: 28px; height: 28px; }
-}
-@keyframes constellation-fade {
-  to { opacity: 0.55; }
-}
-@keyframes constellation-drift {
-  0%   { transform: translate3d(0, 0, 0) rotate(0deg); }
-  100% { transform: translate3d(10px, -14px, 0) rotate(8deg); }
-}
-
 /* Intro */
 .archetypes-intro {
   padding-top: var(--sp-16);
