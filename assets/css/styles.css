@@ -2697,15 +2697,15 @@ button[type="submit"]:disabled {
 }
 .realms-overview-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: var(--sp-5);
 }
 .realm-card {
   --realm-color: var(--teal);
   display: flex;
   flex-direction: column;
-  gap: var(--sp-5);
-  padding: var(--sp-6) var(--sp-5);
+  gap: var(--sp-4);
+  padding: var(--sp-5) var(--sp-4);
   border-radius: var(--radius-lg);
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -2714,6 +2714,7 @@ button[type="submit"]:disabled {
   position: relative;
   isolation: isolate;
   overflow: hidden;
+  min-width: 0;
 }
 .realm-card::before {
   content: "";
@@ -2785,6 +2786,13 @@ button[type="submit"]:disabled {
   gap: var(--sp-3);
   padding: var(--sp-3);
   user-select: none;
+  min-width: 0;
+}
+.archetype-summary-meta { min-width: 0; }
+.archetype-summary-tag {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .archetype-summary::-webkit-details-marker { display: none; }
 
@@ -2864,16 +2872,9 @@ button[type="submit"]:disabled {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-@media (max-width: 1024px) {
-  .realms-overview-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--sp-5);
-  }
-}
-@media (max-width: 560px) {
-  .realms-overview-grid {
-    grid-template-columns: 1fr;
-  }
+@media (max-width: 480px) {
+  .realms-overview-grid { grid-template-columns: 1fr; }
+  .archetype-summary-tag { white-space: normal; }
 }
 
 @media (prefers-reduced-motion: reduce) {
