@@ -4138,6 +4138,20 @@ button[type="submit"]:disabled {
   transform: scale(1.02);
 }
 
+/* The Edge: charcoal identity + mandatory white halo (per ARCHETYPE_SHAPE_TRUTH.md) */
+.constellation-shape[data-archetype="the-edge"] {
+  color: rgba(255, 255, 255, 0.85);
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.65));
+}
+.constellation-shape[data-archetype="the-edge"]:hover,
+.constellation-shape[data-archetype="the-edge"]:focus-visible {
+  filter: drop-shadow(0 0 22px rgba(255, 255, 255, 0.9));
+}
+.archetype-drop[data-archetype="the-edge"] .archetype-summary-shape {
+  color: rgba(255, 255, 255, 0.85);
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.5));
+}
+
 /* Reduced motion: no scale, no border transition */
 @media (prefers-reduced-motion: reduce) {
   .realm-card {
