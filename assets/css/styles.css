@@ -2430,7 +2430,8 @@ button[type="submit"]:disabled {
   position: relative;
   min-height: 100vh;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: flex-end;
   overflow: hidden;
   padding: calc(var(--sp-24) + var(--sp-8)) 0 var(--sp-16);
   background: var(--navy-deep);
@@ -2441,7 +2442,7 @@ button[type="submit"]:disabled {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 60% 45% at 20% 18%, rgba(10, 126, 164, 0.28), transparent 60%),
+    radial-gradient(ellipse 60% 45% at 50% 18%, rgba(10, 126, 164, 0.28), transparent 60%),
     radial-gradient(ellipse 55% 40% at 82% 82%, rgba(196, 150, 10, 0.16), transparent 62%);
   z-index: 0;
   pointer-events: none;
@@ -2456,16 +2457,18 @@ button[type="submit"]:disabled {
   position: relative;
   z-index: 2;
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
   align-items: center;
+  text-align: center;
   width: 100%;
+  gap: var(--sp-6);
 }
 
 .world-hero-text {
   position: relative;
-  max-width: 620px;
-  margin-left: auto;
-  text-align: left;
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
 }
 .world-hero-eyebrow {
   color: color-mix(in oklab, var(--mint) 40%, var(--white));
@@ -2474,18 +2477,19 @@ button[type="submit"]:disabled {
   font-weight: 600;
 }
 .world-hero-heading {
-  font-size: clamp(2.4rem, 4.4vw + 1rem, 4.5rem);
-  line-height: 1.04;
+  font-size: clamp(2.2rem, 3.6vw + 1rem, 3.75rem);
+  line-height: 1.08;
   letter-spacing: -0.028em;
-  margin: var(--sp-5) 0 var(--sp-6);
-  max-width: 16ch;
+  margin: var(--sp-3) 0 var(--sp-5);
+  max-width: 20ch;
   color: var(--white);
   font-weight: 600;
   text-wrap: balance;
 }
 .world-hero-sub {
-  max-width: 520px;
-  font-size: var(--text-lg);
+  max-width: 560px;
+  margin: 0 auto;
+  font-size: var(--text-base);
   line-height: 1.6;
   color: color-mix(in oklab, var(--text-muted) 80%, var(--white));
 }
@@ -2498,12 +2502,57 @@ button[type="submit"]:disabled {
   padding-bottom: 1px;
 }
 
-/* Constellation: stacked → spiral → circle → park top-left → spin */
+/* Info card — swaps content on shape hover */
+.constellation-info {
+  --chip-color: var(--teal);
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 280px;
+  max-width: 420px;
+  padding: var(--sp-3) var(--sp-5);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid color-mix(in oklab, var(--chip-color) 25%, rgba(255, 255, 255, 0.12));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  text-align: center;
+  opacity: 0;
+  transform: translateY(6px);
+  animation: constellation-info-in 500ms var(--ease-calm) 4.4s forwards;
+  transition: border-color 220ms var(--ease-calm), background 220ms var(--ease-calm);
+}
+@keyframes constellation-info-in {
+  to { opacity: 1; transform: translateY(0); }
+}
+.constellation-info.is-active {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: color-mix(in oklab, var(--chip-color) 55%, rgba(255, 255, 255, 0.2));
+}
+.constellation-info-name {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--white);
+  letter-spacing: -0.01em;
+  transition: color 180ms var(--ease-calm);
+}
+.constellation-info.is-active .constellation-info-name {
+  color: color-mix(in oklab, var(--chip-color) 25%, var(--white));
+}
+.constellation-info-tag {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* Constellation: stacked → spiral → circle → park top-center → spin */
 .shape-constellation {
   --ring-radius: 220px;
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: 3;
   pointer-events: none;
 }
 
@@ -2519,7 +2568,7 @@ button[type="submit"]:disabled {
 
 @keyframes constellation-park {
   from { transform: translate(-50%, -50%) scale(1); }
-  to   { transform: translate(calc(-50% - 30vw), calc(-50% - 26vh)) scale(0.55); }
+  to   { transform: translate(-50%, calc(-50% - 18vh)) scale(0.75); }
 }
 
 .constellation-spinner {
@@ -2528,6 +2577,11 @@ button[type="submit"]:disabled {
   height: 0;
   animation: constellation-spin 52s linear 4.8s infinite;
   transform-origin: 0 0;
+}
+
+.shape-constellation:has(.constellation-shape:hover) .constellation-spinner,
+.shape-constellation:has(.constellation-shape:focus-visible) .constellation-spinner {
+  animation-play-state: paused;
 }
 
 @keyframes constellation-spin {
@@ -2547,14 +2601,24 @@ button[type="submit"]:disabled {
   justify-content: center;
   color: var(--chip-color, var(--teal));
   background: none;
+  border: 0;
   border-radius: 0;
   box-shadow: none;
+  padding: 0;
   transform: translate(0, 0) scale(0.7);
   opacity: 0;
   animation: shape-journey 2.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   animation-delay: calc(var(--i) * 70ms);
   will-change: transform, opacity;
   filter: drop-shadow(0 0 10px color-mix(in oklab, var(--chip-color, var(--teal)) 55%, transparent));
+  cursor: pointer;
+  pointer-events: auto;
+  transition: filter 220ms var(--ease-calm);
+}
+.shape-constellation .constellation-shape:hover,
+.shape-constellation .constellation-shape:focus-visible {
+  filter: drop-shadow(0 0 18px color-mix(in oklab, var(--chip-color, var(--teal)) 90%, transparent));
+  outline: none;
 }
 
 .shape-constellation .constellation-shape svg {
@@ -2614,8 +2678,9 @@ button[type="submit"]:disabled {
   }
   @keyframes constellation-park {
     from { transform: translate(-50%, -50%) scale(1); }
-    to   { transform: translate(calc(-50% - 28vw), calc(-50% - 30vh)) scale(0.6); }
+    to   { transform: translate(-50%, calc(-50% - 20vh)) scale(0.78); }
   }
+  .constellation-info { min-width: 260px; }
 }
 
 /* --- Realms Overview (4-column cards with archetype dropdowns) --- */
@@ -3104,9 +3169,10 @@ button[type="submit"]:disabled {
   .world-hero::before { animation: none !important; }
   .constellation-position {
     animation: none !important;
-    transform: translate(calc(-50% - 30vw), calc(-50% - 26vh)) scale(0.55) !important;
+    transform: translate(-50%, calc(-50% - 18vh)) scale(0.75) !important;
   }
   .constellation-spinner { animation: none !important; }
+  .constellation-info { animation: none !important; opacity: 1 !important; transform: none !important; }
   .shape-constellation .constellation-shape {
     animation: none !important;
     opacity: 1 !important;
