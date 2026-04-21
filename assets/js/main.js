@@ -133,7 +133,7 @@
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     var targets = document.querySelectorAll(
-      '.section-header, .card, .card-horizontal, .card-research, .timeline-step, .phone-frame, .trust-strip, .founder-quote blockquote, .breathing-reveal, .blog-card, .contact-buttons, .product-spread__text, .product-spread__visual, .b2b-item, .products-closing, .event-card, .events-room-card, .events-privacy-card, .events-cta-card, .realm, .archetype-card, .archetypes-cta'
+      '.section-header, .card, .card-horizontal, .card-research, .timeline-step, .phone-frame, .trust-strip, .founder-quote blockquote, .breathing-reveal, .blog-card, .contact-buttons, .product-spread__text, .product-spread__visual, .b2b-item, .products-closing, .event-card, .events-room-card, .events-privacy-card, .events-cta-card, .realm, .archetype-card, .archetypes-cta, .realm-card'
     );
     if (!targets.length) return;
 
@@ -158,6 +158,13 @@
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
     targets.forEach(function (el) { observer.observe(el); });
+
+    // Also observe any elements that already have .reveal in HTML (e.g. legal page headings)
+    document.querySelectorAll('.reveal').forEach(function (el) {
+      if (!el.classList.contains('revealed')) {
+        observer.observe(el);
+      }
+    });
 
     // Hero canvas fade-out on scroll
     var heroCanvas = document.getElementById('hero-canvas');

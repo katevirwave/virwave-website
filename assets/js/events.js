@@ -69,6 +69,7 @@
         upcomingSlice.forEach(function (ev) {
           upcomingMount.appendChild(buildCard(ev, 'upcoming'));
         });
+        staggerCards(upcomingMount.querySelectorAll('.event-card'), 0);
       }
     }
 
@@ -87,19 +88,62 @@
       visible.forEach(function (ev) {
         pastMount.appendChild(buildCard(ev, 'past'));
       });
+      staggerCards(pastMount.querySelectorAll('.event-card'), 0);
 
       if (collapsed && showAllBtn) {
         showAllBtn.hidden = false;
         showAllBtn.addEventListener('click', function () {
+          var offset = pastMount.querySelectorAll('.event-card').length;
           pastList.slice(ARCHIVE_COLLAPSE_AT).forEach(function (ev) {
             pastMount.appendChild(buildCard(ev, 'past'));
           });
+          staggerCards(pastMount.querySelectorAll('.event-card:not(.stagger-enter)'), 0);
           showAllBtn.hidden = true;
         });
       } else if (showAllBtn) {
         showAllBtn.hidden = true;
       }
     }
+
+    initTimelineDraw();
+  }
+
+  /* Stagger-reveal a NodeList of .event-card elements */
+  function staggerCards(cards, baseOffset) {
+    if (!cards || !cards.length) return;
+    var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    Array.prototype.forEach.call(cards, function (card, i) {
+      card.classList.add('stagger-enter');
+      card.style.setProperty('--stagger-delay', (baseOffset + i * 60) + 'ms');
+      if (reducedMotion) {
+        card.classList.add('stagger-visible');
+      } else {
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            card.classList.add('stagger-visible');
+          });
+        });
+      }
+    });
+  }
+
+  /* Animate the timeline connector line when section enters view */
+  function initTimelineDraw() {
+    var timeline = document.querySelector('.timeline');
+    if (!timeline) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      timeline.classList.add('timeline-drawn');
+      return;
+    }
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          timeline.classList.add('timeline-drawn');
+          observer.unobserve(timeline);
+        }
+      });
+    }, { threshold: 0.2 });
+    observer.observe(timeline);
   }
 
   function parseLimit(mount) {

@@ -125,7 +125,28 @@
       container.innerHTML = '<div class="card-grid card-grid-3">' +
         filtered.map(renderCard).join('') +
         '</div>';
+
+      staggerBlogCards(container.querySelectorAll('.blog-card'));
     }
+  }
+
+  /* Stagger-reveal blog cards after DOM insertion */
+  function staggerBlogCards(cards) {
+    if (!cards || !cards.length) return;
+    var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    Array.prototype.forEach.call(cards, function (card, i) {
+      card.classList.add('stagger-enter');
+      card.style.setProperty('--stagger-delay', (i * 80) + 'ms');
+      if (reducedMotion) {
+        card.classList.add('stagger-visible');
+      } else {
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            card.classList.add('stagger-visible');
+          });
+        });
+      }
+    });
   }
 
   /* --- Single post page -------------------------------------- */

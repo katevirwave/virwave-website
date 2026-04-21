@@ -2698,14 +2698,14 @@ button[type="submit"]:disabled {
 .realms-overview-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: var(--sp-5);
+  gap: var(--sp-6);
 }
 .realm-card {
   --realm-color: var(--teal);
   display: flex;
   flex-direction: column;
-  gap: var(--sp-4);
-  padding: var(--sp-5) var(--sp-4);
+  gap: var(--sp-6);
+  padding: var(--sp-6);
   border-radius: var(--radius-lg);
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -2759,7 +2759,7 @@ button[type="submit"]:disabled {
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--sp-2);
+  gap: var(--sp-3);
 }
 
 .archetype-drop {
@@ -2784,7 +2784,7 @@ button[type="submit"]:disabled {
   display: flex;
   align-items: center;
   gap: var(--sp-3);
-  padding: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
   user-select: none;
   min-width: 0;
 }
@@ -2843,7 +2843,7 @@ button[type="submit"]:disabled {
 }
 
 .archetype-drop-body {
-  padding: 0 var(--sp-3) var(--sp-4);
+  padding: 0 var(--sp-4) var(--sp-4) calc(var(--sp-4) + 28px + var(--sp-3));
   color: var(--text-muted);
   font-size: var(--text-sm);
   line-height: 1.6;
@@ -3716,3 +3716,609 @@ button[type="submit"]:disabled {
   .events-cta-card { padding: var(--sp-8) var(--sp-6); }
 }
 
+/* === INTEREST + LEGAL ANIMATION ENHANCEMENTS === */
+
+/* --- Interest page: form field entrance stagger ------------ */
+@keyframes field-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-page .form-group,
+.form-page .interest-fieldset,
+.form-page .form-consent,
+.form-page .form-legal-text,
+.form-page [type="submit"].btn,
+.form-page .section-header {
+  opacity: 0;
+  animation: field-enter 350ms cubic-bezier(0.33, 1, 0.68, 1) forwards;
+}
+
+/* Stagger delays */
+.form-page .section-header              { animation-delay: 60ms; }
+.form-page .form-group:nth-child(1)     { animation-delay: 120ms; }
+.form-page .form-group:nth-child(2)     { animation-delay: 180ms; }
+.form-page .form-group:nth-child(3)     { animation-delay: 240ms; }
+.form-page .form-group:nth-child(4)     { animation-delay: 300ms; }
+.form-page .form-group:nth-child(5)     { animation-delay: 360ms; }
+.form-page .form-group:nth-child(n+6)   { animation-delay: 420ms; }
+.form-page .form-consent:nth-of-type(1) { animation-delay: 480ms; }
+.form-page .form-consent:nth-of-type(2) { animation-delay: 540ms; }
+.form-page .form-legal-text             { animation-delay: 600ms; }
+.form-page [type="submit"].btn          { animation-delay: 660ms; }
+
+/* --- Interest page: success state animation ---------------- */
+@keyframes success-pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes checkmark-draw {
+  from { stroke-dashoffset: 100; }
+  to   { stroke-dashoffset: 0; }
+}
+
+#form-success.success-visible .form-success {
+  animation: success-pop-in 350ms cubic-bezier(0.33, 1, 0.68, 1) forwards;
+}
+
+#form-success.success-visible .success-icon svg path,
+#form-success.success-visible .success-icon svg polyline {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: checkmark-draw 400ms cubic-bezier(0.33, 1, 0.68, 1) forwards;
+}
+
+#form-success.success-visible .success-icon svg polyline {
+  animation-delay: 120ms;
+}
+
+#form-success.success-visible .form-success h3,
+#form-success.success-visible .form-success p,
+#form-success.success-visible .form-success a {
+  opacity: 0;
+  animation: field-enter 300ms cubic-bezier(0.33, 1, 0.68, 1) 200ms forwards;
+}
+
+/* --- Interest page: pill selection micro-animation --------- */
+@keyframes pill-select {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.04); }
+  100% { transform: scale(1.02); }
+}
+
+.interest-option {
+  transition: border-color 200ms cubic-bezier(0.33, 1, 0.68, 1),
+              background   200ms cubic-bezier(0.33, 1, 0.68, 1),
+              box-shadow   200ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.interest-option:has(input:checked),
+.interest-option.selected {
+  animation: pill-select 200ms cubic-bezier(0.33, 1, 0.68, 1) forwards;
+  border-color: var(--mint);
+  box-shadow: 0 0 0 1px var(--mint), 0 0 12px rgba(140, 235, 170, 0.15);
+}
+
+/* --- Interest page: event banner slide-in ------------------ */
+@keyframes banner-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.event-banner.banner-visible {
+  animation: banner-slide-down 350ms cubic-bezier(0.33, 1, 0.68, 1) forwards;
+}
+
+/* --- Legal pages: section heading scroll reveals ----------- */
+.legal-page h2.reveal,
+.legal-page h3.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 350ms cubic-bezier(0.33, 1, 0.68, 1),
+              transform 350ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.legal-page h2.reveal.revealed,
+.legal-page h3.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --- Legal pages: hr fade + scaleX reveal ------------------ */
+.legal-page hr.reveal {
+  opacity: 0;
+  transform: scaleX(0.6);
+  transform-origin: left center;
+  transition: opacity 400ms cubic-bezier(0.33, 1, 0.68, 1),
+              transform 400ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.legal-page hr.reveal.revealed {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+/* --- Legal pages: animated link underlines ----------------- */
+.legal-page a {
+  position: relative;
+  text-decoration: none;
+  color: var(--teal);
+}
+
+.legal-page a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 0;
+  height: 1px;
+  background: var(--teal);
+  transition: width 200ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.legal-page a:hover::after,
+.legal-page a:focus-visible::after {
+  width: 100%;
+}
+
+/* Suppress underline sweep on nav/footer links */
+.site-nav a::after,
+.site-footer a::after {
+  display: none;
+}
+
+/* --- Reduced-motion overrides ------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .form-page .form-group,
+  .form-page .interest-fieldset,
+  .form-page .form-consent,
+  .form-page .form-legal-text,
+  .form-page [type="submit"].btn,
+  .form-page .section-header {
+    opacity: 1 !important;
+    animation: none !important;
+  }
+
+  #form-success.success-visible .form-success,
+  #form-success.success-visible .success-icon svg path,
+  #form-success.success-visible .success-icon svg polyline,
+  #form-success.success-visible .form-success h3,
+  #form-success.success-visible .form-success p,
+  #form-success.success-visible .form-success a {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+
+  .interest-option.selected {
+    animation: none !important;
+  }
+
+  .event-banner.banner-visible {
+    animation: none !important;
+  }
+
+  .legal-page h2.reveal,
+  .legal-page h3.reveal,
+  .legal-page hr.reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .legal-page a::after {
+    transition: none !important;
+  }
+}
+
+/* === EVENTS + BLOG ANIMATION ENHANCEMENTS === */
+
+/* --- Event card stagger on load ----------------------------- */
+/*
+   Cards loaded from the data feed start hidden and are revealed
+   by events.js after insertion. Each card gets --stagger-i set
+   via JS to control per-card delay.
+*/
+.event-card.stagger-enter {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 350ms cubic-bezier(0.33, 1, 0.68, 1),
+              transform 350ms cubic-bezier(0.33, 1, 0.68, 1);
+  transition-delay: var(--stagger-delay, 0ms);
+}
+.event-card.stagger-enter.stagger-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --- Room card hover depth ---------------------------------- */
+@media (hover: hover) {
+  .events-room-card {
+    transition: transform 350ms cubic-bezier(0.33, 1, 0.68, 1),
+                box-shadow 350ms cubic-bezier(0.33, 1, 0.68, 1),
+                border-color 350ms cubic-bezier(0.33, 1, 0.68, 1);
+  }
+  .events-room-card:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(10, 126, 164, 0.18),
+                0 4px 16px rgba(0, 0, 0, 0.25);
+    border-color: rgba(10, 126, 164, 0.35);
+  }
+}
+
+/* --- Timeline connector line draw --------------------------- */
+/*
+   The .timeline already has border-left as its connector.
+   We layer a pseudo-element over it that draws down from 0 as
+   the section scrolls into view.
+*/
+.timeline {
+  overflow: visible;
+}
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -2px;          /* sit on top of border-left */
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--teal), var(--mint));
+  transform-origin: top center;
+  transform: scaleY(0);
+  transition: transform 700ms cubic-bezier(0.33, 1, 0.68, 1);
+  transition-delay: 200ms;
+  border-radius: 2px;
+}
+.timeline.timeline-drawn::before {
+  transform: scaleY(1);
+}
+/* Mobile: border-left is removed, so hide the overlay too */
+@media (max-width: 768px) {
+  .timeline::before { display: none; }
+}
+
+/* --- FAQ chevron rotation ----------------------------------- */
+/*
+   Override the existing + / − character swap with a rotating
+   chevron (▾). A single character that rotates 180deg on open
+   is smoother and more recognisable than a character swap.
+*/
+.events-faq summary::after {
+  content: "\25BE";        /* ▾ downward-pointing small triangle */
+  display: inline-block;   /* needed for transform */
+  font-size: var(--text-base);
+  font-weight: 400;
+  color: var(--mint);
+  line-height: 1;
+  transition: transform 200ms cubic-bezier(0.33, 1, 0.68, 1),
+              color 200ms cubic-bezier(0.33, 1, 0.68, 1);
+  flex-shrink: 0;
+}
+.events-faq details[open] summary::after {
+  content: "\25BE";        /* keep the same character — only rotate */
+  transform: rotate(180deg);
+  color: var(--teal);
+}
+
+/* --- Blog card stagger on load ------------------------------ */
+.blog-card.stagger-enter {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 350ms cubic-bezier(0.33, 1, 0.68, 1),
+              transform 350ms cubic-bezier(0.33, 1, 0.68, 1);
+  transition-delay: var(--stagger-delay, 0ms);
+}
+.blog-card.stagger-enter.stagger-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --- Blog filter focus / hover glow ------------------------- */
+.blog-filter select {
+  transition: transform 200ms cubic-bezier(0.33, 1, 0.68, 1),
+              border-color 200ms cubic-bezier(0.33, 1, 0.68, 1),
+              box-shadow 200ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+.blog-filter select:hover,
+.blog-filter select:focus {
+  transform: scale(1.02);
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(10, 126, 164, 0.18);
+  outline: none;
+}
+.blog-filter select:focus-visible {
+  /* Preserve accessible focus indicator, add glow on top */
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px rgba(10, 126, 164, 0.14);
+}
+
+/* --- Tag badge hover --------------------------------------- */
+.tag {
+  transition: transform 200ms cubic-bezier(0.33, 1, 0.68, 1),
+              background 200ms cubic-bezier(0.33, 1, 0.68, 1),
+              color 200ms cubic-bezier(0.33, 1, 0.68, 1);
+  cursor: default;
+}
+@media (hover: hover) {
+  .tag:hover {
+    transform: scale(1.05);
+    background: rgba(10, 126, 164, 0.28);
+    color: var(--mint);
+  }
+}
+
+/* --- Reduced motion: disable all new animations ------------- */
+@media (prefers-reduced-motion: reduce) {
+  /* Event + blog card stagger: instant appearance */
+  .event-card.stagger-enter,
+  .blog-card.stagger-enter {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  /* Room card hover depth: no transform */
+  .events-room-card {
+    transition: none !important;
+  }
+  .events-room-card:hover {
+    transform: none !important;
+  }
+
+  /* Timeline draw: show immediately */
+  .timeline::before {
+    transform: scaleY(1) !important;
+    transition: none !important;
+  }
+
+  /* FAQ chevron: no rotation */
+  .events-faq summary::after {
+    transition: none !important;
+    transform: none !important;
+  }
+  .events-faq details[open] summary::after {
+    transform: none !important;
+  }
+
+  /* Blog filter: no scale */
+  .blog-filter select {
+    transition: none !important;
+  }
+  .blog-filter select:hover,
+  .blog-filter select:focus {
+    transform: none !important;
+  }
+
+  /* Tags: no scale */
+  .tag {
+    transition: none !important;
+  }
+  .tag:hover {
+    transform: none !important;
+  }
+}
+
+/* === ARCHETYPES SPACING + ANIMATION ENHANCEMENTS === */
+
+/* Realm card: subtle border glow on hover */
+.realm-card {
+  transition: border-color 350ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+.realm-card:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+/* Archetype drop item: subtle scale on hover */
+.archetype-drop {
+  transition: background 220ms cubic-bezier(0.33, 1, 0.68, 1),
+              border-color 220ms cubic-bezier(0.33, 1, 0.68, 1),
+              transform 200ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+.archetype-drop:hover {
+  transform: scale(1.02);
+}
+
+/* Reduced motion: no scale, no border transition */
+@media (prefers-reduced-motion: reduce) {
+  .realm-card {
+    transition: none !important;
+  }
+  .archetype-drop {
+    transition: none !important;
+    transform: none !important;
+  }
+  .archetype-drop:hover {
+    transform: none !important;
+  }
+}
+
+
+
+/* === PRODUCTS ANIMATION ENHANCEMENTS === */
+
+/* -------------------------------------------------------
+   1. BOARDGAME TILES — cascade entrance from four corners
+   ------------------------------------------------------- */
+
+/* Pre-reveal: tiles hidden and offset to their entry direction */
+.boardgame-tile--tl {
+  opacity: 0;
+  transform: rotate(var(--tile-rotate, 0deg)) translate(-28px, -28px);
+}
+.boardgame-tile--tr {
+  opacity: 0;
+  transform: rotate(var(--tile-rotate, 0deg)) translate(28px, -28px);
+}
+.boardgame-tile--bl {
+  opacity: 0;
+  transform: rotate(var(--tile-rotate, 0deg)) translate(-28px, 28px);
+}
+.boardgame-tile--br {
+  opacity: 0;
+  transform: rotate(var(--tile-rotate, 0deg)) translate(28px, 28px);
+}
+
+/* Post-reveal: land at their rotated resting position */
+.product-spread__visual.revealed .boardgame-tile--tl,
+.product-spread__visual.revealed .boardgame-tile--tr,
+.product-spread__visual.revealed .boardgame-tile--bl,
+.product-spread__visual.revealed .boardgame-tile--br {
+  opacity: 1;
+  transform: rotate(var(--tile-rotate, 0deg)) translate(0, 0);
+  transition: opacity 350ms cubic-bezier(0.33, 1, 0.68, 1),
+              transform 350ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+/* Stagger each tile by 80ms using nth-child */
+.product-spread__visual.revealed .boardgame-tile:nth-child(1) { transition-delay: 0ms; }
+.product-spread__visual.revealed .boardgame-tile:nth-child(2) { transition-delay: 80ms; }
+.product-spread__visual.revealed .boardgame-tile:nth-child(3) { transition-delay: 160ms; }
+.product-spread__visual.revealed .boardgame-tile:nth-child(4) { transition-delay: 240ms; }
+.product-spread__visual.revealed .boardgame-tile:nth-child(5) { transition-delay: 320ms; }
+
+
+/* -------------------------------------------------------
+   2. STORIES LINES — draw in left-to-right on scroll reveal
+   ------------------------------------------------------- */
+
+/* Pre-reveal: lines collapsed to zero width */
+.stories-lines-lg--animated .stories-line-lg {
+  width: 0 !important;
+  transition: width 600ms cubic-bezier(0.33, 1, 0.68, 1),
+              opacity 400ms cubic-bezier(0.33, 1, 0.68, 1);
+  opacity: 0;
+}
+
+/* Post-reveal: restore each line to its natural width with stagger */
+.product-spread__visual.revealed .stories-lines-lg--animated .stories-line-lg:nth-child(1) {
+  width: 100% !important;
+  opacity: 0.22;
+  transition-delay: 0ms;
+}
+.product-spread__visual.revealed .stories-lines-lg--animated .stories-line-lg:nth-child(2) {
+  width: 85% !important;
+  opacity: 0.17;
+  transition-delay: 80ms;
+}
+.product-spread__visual.revealed .stories-lines-lg--animated .stories-line-lg:nth-child(3) {
+  width: 92% !important;
+  opacity: 0.12;
+  transition-delay: 160ms;
+}
+.product-spread__visual.revealed .stories-lines-lg--animated .stories-line-lg:nth-child(4) {
+  width: 60% !important;
+  opacity: 0.08;
+  transition-delay: 240ms;
+}
+.product-spread__visual.revealed .stories-lines-lg--animated .stories-line-lg:nth-child(5) {
+  width: 35% !important;
+  opacity: 0.04;
+  transition-delay: 320ms;
+}
+
+
+/* -------------------------------------------------------
+   3. APP BREATHING RING — hover glow pulse
+   ------------------------------------------------------- */
+
+.product-spread__visual--glow {
+  transition: filter 350ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+.product-spread__visual--glow:hover .app-breathing-circle {
+  box-shadow:
+    0 0 48px rgba(10, 126, 164, 0.40),
+    0 0 96px rgba(140, 235, 170, 0.20),
+    0 0 160px rgba(140, 235, 170, 0.08);
+  transition: box-shadow 350ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+.product-spread__visual--glow .app-breathing-circle {
+  transition: box-shadow 350ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+
+/* -------------------------------------------------------
+   4. PRODUCT HEADING UNDERLINE SWEEP
+   ------------------------------------------------------- */
+
+.product-heading-sweep {
+  position: relative;
+  display: inline-block;
+}
+.product-heading-sweep::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  height: 2px;
+  width: 0;
+  border-radius: 1px;
+  background: var(--mint);
+  transition: width 500ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+/* Trigger sweep when the parent .reveal becomes .revealed */
+.reveal.revealed .product-heading-sweep::after {
+  width: 100%;
+}
+
+
+/* -------------------------------------------------------
+   REDUCED MOTION: degrade all products animations gracefully
+   ------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  /* Boardgame tiles: instant appearance, no translate */
+  .boardgame-tile--tl,
+  .boardgame-tile--tr,
+  .boardgame-tile--bl,
+  .boardgame-tile--br {
+    opacity: 1 !important;
+    transform: rotate(var(--tile-rotate, 0deg)) translate(0, 0) !important;
+    transition: none !important;
+  }
+
+  /* Stories lines: instant full width, no draw-in */
+  .stories-lines-lg--animated .stories-line-lg {
+    transition: none !important;
+  }
+  .stories-lines-lg--animated .stories-line-lg:nth-child(1) { width: 100% !important; opacity: 0.22; }
+  .stories-lines-lg--animated .stories-line-lg:nth-child(2) { width: 85%  !important; opacity: 0.17; }
+  .stories-lines-lg--animated .stories-line-lg:nth-child(3) { width: 92%  !important; opacity: 0.12; }
+  .stories-lines-lg--animated .stories-line-lg:nth-child(4) { width: 60%  !important; opacity: 0.08; }
+  .stories-lines-lg--animated .stories-line-lg:nth-child(5) { width: 35%  !important; opacity: 0.04; }
+
+  /* App glow: no hover transition */
+  .product-spread__visual--glow .app-breathing-circle,
+  .product-spread__visual--glow:hover .app-breathing-circle {
+    box-shadow: 0 0 80px rgba(140,235,170,0.06), 0 0 160px rgba(140,235,170,0.03);
+    transition: none !important;
+  }
+
+  /* Heading underline: instant full width, no sweep */
+  .product-heading-sweep::after {
+    transition: none !important;
+  }
+  .reveal.revealed .product-heading-sweep::after {
+    width: 100%;
+  }
+}

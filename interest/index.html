@@ -312,6 +312,7 @@
         titleEl.textContent = info.title;
         if (subEl && info.sub) subEl.textContent = info.sub;
         banner.style.display = '';
+        banner.classList.add('banner-visible');
         // Auto-select interests defined by this event (bypasses URL param blocklist)
         if (info.autoSelect) {
           var allInterestBoxes = document.querySelectorAll('input[name="interests"]');
@@ -778,6 +779,7 @@
         if (result.ok) {
           formContainer.style.display = 'none';
           successEl.style.display = 'block';
+          successEl.classList.add('success-visible');
           return;
         }
 
@@ -796,6 +798,7 @@
         if (result.error === 'duplicate') {
           formContainer.style.display = 'none';
           successEl.style.display = 'block';
+          successEl.classList.add('success-visible');
           var h3 = successEl.querySelector('h3');
           if (h3) h3.textContent = 'You\u2019re already on the list!';
           var p = successEl.querySelector('p');
