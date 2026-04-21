@@ -2458,157 +2458,207 @@ button[type="submit"]:disabled {
    WORLD PAGE (/archetypes/) — gallery hero + varied realms
    ========================================================= */
 
-/* --- Hero: Endless shape gallery --------------------------- */
+/* --- Hero: 3D wheel of archetypes -------------------------- */
 .world-hero {
   position: relative;
+  min-height: 100vh;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   overflow: hidden;
   padding: calc(var(--sp-24) + var(--sp-8)) 0 var(--sp-16);
+  background: var(--navy-deep);
+  isolation: isolate;
+}
+.world-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
   background:
-    radial-gradient(ellipse at 20% 10%, rgba(10, 126, 164, 0.22), transparent 55%),
-    radial-gradient(ellipse at 80% 90%, rgba(196, 150, 10, 0.12), transparent 55%),
-    var(--navy-deep);
-}
-
-.world-hero-marquee {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-4);
+    radial-gradient(ellipse 60% 45% at 20% 18%, rgba(10, 126, 164, 0.28), transparent 60%),
+    radial-gradient(ellipse 55% 40% at 82% 82%, rgba(196, 150, 10, 0.16), transparent 62%);
+  z-index: 0;
   pointer-events: none;
-  mask-image: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(0, 0, 0, 0.85) 10%,
-    rgba(0, 0, 0, 0.95) 90%,
-    transparent 100%
-  );
-  -webkit-mask-image: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(0, 0, 0, 0.85) 10%,
-    rgba(0, 0, 0, 0.95) 90%,
-    transparent 100%
-  );
+  animation: hero-glow-drift 22s var(--ease-calm) infinite alternate;
+}
+@keyframes hero-glow-drift {
+  from { opacity: 0.85; transform: translate3d(-1%, 0, 0) scale(1); }
+  to   { opacity: 1;    transform: translate3d( 1%, -1%, 0) scale(1.04); }
 }
 
-.world-hero-marquee-top {
-  margin-bottom: var(--sp-12);
-}
-
-.world-hero-marquee-bottom {
-  margin-top: var(--sp-12);
-  opacity: 0.85;
-}
-
-.marquee-row {
-  position: relative;
+/* Wheel stage — positioned so only a corner arc is visible */
+.world-hero-wheel {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
   overflow: hidden;
-  width: 100%;
-  display: flex;
+  perspective: 1800px;
+  perspective-origin: 75% 35%;
 }
-
-.marquee-track {
-  display: flex;
-  gap: var(--sp-6);
-  flex-shrink: 0;
-  white-space: nowrap;
-  animation-name: marquee-scroll;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-duration: 80s;
+.wheel-stage {
+  position: absolute;
+  /* Anchor wheel to bottom-right; only top-left corner/arc visible */
+  right: -26vw;
+  bottom: -60vh;
+  width: 140vh;
+  height: 140vh;
+  min-width: 1100px;
+  min-height: 1100px;
+  transform-style: preserve-3d;
+}
+.wheel-ring {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  animation: wheel-spin 60s linear infinite;
   will-change: transform;
-  padding-right: var(--sp-6);
+}
+@keyframes wheel-spin {
+  from { transform: rotateX(72deg) rotateZ(0deg); }
+  to   { transform: rotateX(72deg) rotateZ(-360deg); }
 }
 
-.marquee-row-a .marquee-track { animation-duration: 90s; }
-.marquee-row-b .marquee-track {
-  animation-duration: 110s;
-  animation-direction: reverse;
-}
-.marquee-row-c .marquee-track { animation-duration: 140s; }
-
-@keyframes marquee-scroll {
-  from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(-50%, 0, 0); }
-}
-
-.shape-chip {
-  display: inline-flex;
+.wheel-shape {
+  --count: 12;
+  --radius: 48%;
+  --angle: calc(360deg / var(--count) * var(--i));
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(84px, 10vw, 140px);
+  height: clamp(84px, 10vw, 140px);
+  margin-left: calc(clamp(84px, 10vw, 140px) / -2);
+  margin-top: calc(clamp(84px, 10vw, 140px) / -2);
+  transform-style: preserve-3d;
+  transform:
+    rotateZ(var(--angle))
+    translateX(var(--radius))
+    rotateZ(calc(var(--angle) * -1))
+    rotateX(-72deg);
+  display: flex;
   align-items: center;
-  gap: var(--sp-3);
-  padding: var(--sp-3) var(--sp-5);
-  border-radius: 999px;
-  background: color-mix(in oklab, var(--chip-color, var(--teal)) 10%, rgba(255, 255, 255, 0.04));
-  border: 1px solid color-mix(in oklab, var(--chip-color, var(--teal)) 35%, rgba(255, 255, 255, 0.1));
+  justify-content: center;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    color-mix(in oklab, var(--chip-color, var(--teal)) 35%, rgba(255, 255, 255, 0.08)),
+    color-mix(in oklab, var(--chip-color, var(--teal)) 15%, transparent) 70%
+  );
+  border: 1px solid color-mix(in oklab, var(--chip-color, var(--teal)) 50%, rgba(255, 255, 255, 0.15));
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  box-shadow: 0 0 28px color-mix(in oklab, var(--chip-color, var(--teal)) 22%, transparent);
-  color: var(--white);
-  font-size: var(--text-sm);
-  letter-spacing: 0.02em;
-  flex-shrink: 0;
+  box-shadow:
+    0 0 40px color-mix(in oklab, var(--chip-color, var(--teal)) 40%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
-.shape-chip img {
-  width: 32px;
-  height: 32px;
-  filter: drop-shadow(0 0 10px color-mix(in oklab, var(--chip-color, var(--teal)) 60%, transparent));
-}
-.shape-chip em {
-  font-style: normal;
-  font-weight: 500;
-  color: color-mix(in oklab, var(--chip-color, var(--teal)) 25%, var(--white));
-  opacity: 0.92;
-}
-.shape-chip.chip-ghost {
-  padding: var(--sp-2);
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  opacity: 0.45;
-}
-.shape-chip.chip-ghost img {
-  width: 48px;
-  height: 48px;
-  filter: drop-shadow(0 0 18px color-mix(in oklab, var(--chip-color, var(--teal)) 55%, transparent));
+.wheel-shape img {
+  width: 52%;
+  height: 52%;
+  filter: drop-shadow(0 0 14px color-mix(in oklab, var(--chip-color, var(--teal)) 70%, transparent));
 }
 
+/* Subtle ring guide behind shapes — suggests the rim */
+.world-hero-wheel::after {
+  content: "";
+  position: absolute;
+  right: -26vw;
+  bottom: -60vh;
+  width: 140vh;
+  height: 140vh;
+  min-width: 1100px;
+  min-height: 1100px;
+  border-radius: 50%;
+  border: 1px dashed color-mix(in oklab, var(--teal) 30%, transparent);
+  opacity: 0.18;
+  transform: perspective(1800px) rotateX(72deg);
+  transform-origin: center;
+  pointer-events: none;
+}
+
+/* Text overlay — sits over the visible corner of the wheel */
 .world-hero-overlay {
   position: relative;
-  z-index: 2;
+  z-index: 3;
   width: 100%;
 }
+.world-hero-overlay > .container {
+  position: relative;
+}
+.world-hero-overlay > .container::before {
+  content: "";
+  position: absolute;
+  left: -15%;
+  top: -20%;
+  width: 90%;
+  height: 140%;
+  background: radial-gradient(
+    ellipse 60% 55% at 35% 50%,
+    color-mix(in oklab, var(--navy-deep) 85%, transparent),
+    transparent 75%
+  );
+  filter: blur(40px);
+  opacity: 0.9;
+  pointer-events: none;
+  z-index: -1;
+}
 .world-hero-eyebrow {
-  color: color-mix(in oklab, var(--teal) 30%, var(--white));
-  opacity: 0.85;
+  color: color-mix(in oklab, var(--mint) 40%, var(--white));
+  opacity: 0.92;
+  letter-spacing: 0.14em;
+  font-weight: 600;
 }
 .world-hero-heading {
-  font-size: clamp(2.4rem, 5vw + 1rem, 4.5rem);
-  line-height: 1.05;
-  letter-spacing: -0.025em;
-  margin: var(--sp-4) 0 var(--sp-5);
-  max-width: 900px;
+  font-size: clamp(2.6rem, 6vw + 1rem, 5.25rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  margin: var(--sp-5) 0 var(--sp-6);
+  max-width: 18ch;
   color: var(--white);
+  font-weight: 600;
+  text-wrap: balance;
 }
 .world-hero-sub {
-  max-width: 620px;
+  max-width: 560px;
   font-size: var(--text-lg);
-  line-height: 1.55;
-  color: var(--text-muted);
+  line-height: 1.6;
+  color: color-mix(in oklab, var(--text-muted) 80%, var(--white));
 }
 .world-hero-sub em {
   font-style: normal;
   color: var(--mint);
   font-weight: 500;
   opacity: 0.95;
+  border-bottom: 1px dashed color-mix(in oklab, var(--mint) 40%, transparent);
+  padding-bottom: 1px;
+}
+
+@media (max-width: 900px) {
+  .wheel-stage {
+    right: -40vw;
+    bottom: -45vh;
+    width: 120vh;
+    height: 120vh;
+  }
+  .world-hero-wheel::after {
+    right: -40vw;
+    bottom: -45vh;
+    width: 120vh;
+    height: 120vh;
+  }
 }
 
 @media (max-width: 720px) {
-  .world-hero { min-height: 80vh; }
-  .shape-chip { padding: var(--sp-2) var(--sp-4); font-size: var(--text-xs); }
-  .shape-chip img { width: 24px; height: 24px; }
-  .shape-chip.chip-ghost img { width: 36px; height: 36px; }
+  .world-hero { min-height: 90vh; padding-top: var(--sp-20); }
+  .world-hero-heading { font-size: clamp(2.2rem, 8vw + 0.5rem, 3rem); }
+  .wheel-stage {
+    right: -50vw;
+    bottom: -35vh;
+    width: 110vh;
+    height: 110vh;
+    min-width: 700px;
+    min-height: 700px;
+  }
+  .world-hero-wheel::after { display: none; }
 }
 
 /* --- Intro: "In the world of VirWave..." ------------------- */
@@ -2899,7 +2949,8 @@ button[type="submit"]:disabled {
 
 /* --- Reduced motion for world page ------------------------- */
 @media (prefers-reduced-motion: reduce) {
-  .marquee-track { animation: none !important; }
+  .wheel-ring { animation: none !important; transform: rotateX(72deg) rotateZ(-20deg) !important; }
+  .world-hero::before { animation: none !important; }
   .archetype-orbit-grid::before { animation: none !important; }
   .wave-item-a, .wave-item-b, .wave-item-c { transform: none !important; }
   .archetype-orbit-left, .archetype-orbit-right { transform: none !important; }
