@@ -127,17 +127,80 @@
     return Array.from({ length: steps + 1 }, function (_, i) { return i / steps; });
   }
 
+  /* --- Timeline: scroll-driven line draw --------------------- */
+  function initTimelineScroll() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var timeline = document.querySelector('[data-section="how-it-works"] .timeline');
+    if (!timeline) return;
+
+    var numbers = Array.prototype.slice.call(timeline.querySelectorAll('.timeline-number'));
+    var steps = Array.prototype.slice.call(timeline.querySelectorAll('.timeline-step'));
+    var viewportH = window.innerHeight;
+    var ticking = false;
+
+    // Hide steps until the line reaches them
+    steps.forEach(function (s) { s.classList.add('reveal-left'); });
+
+    function update() {
+      var rect = timeline.getBoundingClientRect();
+
+      // 0 when timeline top is at viewport bottom; 1 when timeline bottom reaches 55% of viewport
+      var consumed = viewportH - rect.top;
+      var total = rect.height + viewportH * 0.45;
+      var progress = Math.max(0, Math.min(1, consumed / total));
+
+      timeline.style.setProperty('--timeline-progress', progress.toFixed(4));
+
+      // Light up each dot AND slide in its step when the line reaches it
+      numbers.forEach(function (num, i) {
+        var numTop = num.getBoundingClientRect().top - rect.top + num.offsetHeight / 2;
+        var threshold = numTop / rect.height;
+        if (progress >= threshold) {
+          num.classList.add('timeline-number--lit');
+          if (steps[i]) steps[i].classList.add('revealed');
+        } else {
+          num.classList.remove('timeline-number--lit');
+          if (steps[i]) steps[i].classList.remove('revealed');
+        }
+      });
+
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
+    }, { passive: true });
+
+    window.addEventListener('resize', function () {
+      viewportH = window.innerHeight;
+      update();
+    });
+
+    update();
+  }
+
   /* --- Scroll Reveal ----------------------------------------- */
   function initScrollReveal() {
     // Skip if reduced motion is preferred
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     var targets = document.querySelectorAll(
-      '.section-header, .card, .card-horizontal, .card-research, .timeline-step, .phone-frame, .trust-strip, .founder-quote blockquote, .breathing-reveal, .blog-card, .contact-buttons, .product-spread__text, .product-spread__visual, .b2b-item, .products-closing, .event-card, .events-room-card, .events-privacy-card, .events-cta-card, .realm, .archetype-card, .archetypes-cta, .realm-card'
+      '.section-header, .card, .card-horizontal, .card-research, .phone-frame, .trust-strip, .founder-quote blockquote, .breathing-reveal, .blog-card, .contact-buttons, .product-spread__text, .product-spread__visual, .b2b-item, .products-closing, .event-card, .events-room-card, .events-privacy-card, .events-cta-card, .realm, .archetype-card, .archetypes-cta, .realm-card'
     );
     if (!targets.length) return;
 
     targets.forEach(function (el) { el.classList.add('reveal'); });
+
+    // Assign directional slide classes to specific elements
+    document.querySelectorAll('.section-header-left, .product-spread__text, .b2b-item:nth-child(odd)').forEach(function (el) {
+      el.classList.remove('reveal');
+      el.classList.add('reveal-left');
+    });
+    document.querySelectorAll('.product-spread__visual, .b2b-item:nth-child(even)').forEach(function (el) {
+      el.classList.remove('reveal');
+      el.classList.add('reveal-right');
+    });
 
     var observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
@@ -158,6 +221,13 @@
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
     targets.forEach(function (el) { observer.observe(el); });
+
+    // Also observe directional-slide elements
+    document.querySelectorAll('.reveal-left, .reveal-right').forEach(function (el) {
+      if (!el.classList.contains('revealed')) {
+        observer.observe(el);
+      }
+    });
 
     // Also observe any elements that already have .reveal in HTML (e.g. legal page headings)
     document.querySelectorAll('.reveal').forEach(function (el) {
@@ -371,6 +441,156 @@
     document.querySelectorAll('.realm').forEach(function (r) { observer.observe(r); });
   }
 
+  /* --- Site-wide white pixel particles + shooting stars ------ */
+  function initSiteParticles() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var canvas = document.createElement('canvas');
+    canvas.setAttribute('aria-hidden', 'true');
+    canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:50;';
+    document.body.appendChild(canvas);
+
+    var ctx = canvas.getContext('2d');
+    var W, H;
+    var particles = [];
+    var stars = [];       // shooting stars
+    var STAR_COUNT = 5;
+
+    function resize() {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+
+    function spawnParticle() {
+      return {
+        x: Math.random() * W,
+        y: H + 2,
+        size: Math.random() < 0.5 ? 1 : Math.random() < 0.8 ? 2 : 3,
+        vy: -(0.10 + Math.random() * 0.20),
+        vx: (Math.random() - 0.5) * 0.07,
+        alpha: 0,
+        peak: 0.35 + Math.random() * 0.45,
+        phase: 0,
+        fadeSpeed: 0.004 + Math.random() * 0.004
+      };
+    }
+
+    function spawnStar() {
+      // Shoot from a random point in the top-left quadrant diagonally down-right
+      var angle = (25 + Math.random() * 25) * Math.PI / 180; // 25-50 degrees from horizontal
+      var speed = 6 + Math.random() * 6;
+      return {
+        x: Math.random() * W * 0.6,
+        y: Math.random() * H * 0.5,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        length: 60 + Math.random() * 100,
+        alpha: 0,
+        phase: 0,         // 0=appear, 1=streak, 2=fade
+        life: 0,
+        delay: Math.random() * 12000 + 3000  // stagger initial appearance
+      };
+    }
+
+    resize();
+    var COUNT = 350;
+    for (var i = 0; i < COUNT; i++) {
+      var p = spawnParticle();
+      p.y = Math.random() * H;
+      p.alpha = p.peak * (0.3 + Math.random() * 0.7);
+      particles.push(p);
+    }
+    for (var s = 0; s < STAR_COUNT; s++) {
+      stars.push(spawnStar());
+    }
+
+    window.addEventListener('resize', resize);
+
+    var lastTs = 0;
+    function frame(ts) {
+      var dt = Math.min(ts - lastTs, 50);
+      lastTs = ts;
+
+      ctx.clearRect(0, 0, W, H);
+
+      // --- particles ---
+      for (var i = 0; i < particles.length; i++) {
+        var p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.phase === 0) {
+          p.alpha = Math.min(p.alpha + p.fadeSpeed, p.peak);
+          if (p.alpha >= p.peak) p.phase = 1;
+        } else {
+          p.alpha -= p.fadeSpeed * 0.5;
+        }
+        if (p.alpha <= 0 || p.y < -4) {
+          particles[i] = spawnParticle();
+          continue;
+        }
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(Math.round(p.x), Math.round(p.y), p.size, p.size);
+      }
+
+      // --- shooting stars ---
+      for (var j = 0; j < stars.length; j++) {
+        var st = stars[j];
+        st.delay -= dt;
+        if (st.delay > 0) continue;
+
+        st.life += dt;
+        st.x += st.vx;
+        st.y += st.vy;
+
+        var progress = st.life / 900; // total streak lifetime ~900ms
+        if (progress < 0.15) {
+          st.alpha = progress / 0.15;       // quick fade-in
+        } else if (progress < 0.75) {
+          st.alpha = 1;                      // full brightness streak
+        } else {
+          st.alpha = 1 - (progress - 0.75) / 0.25; // fade out
+        }
+        st.alpha = Math.max(0, Math.min(1, st.alpha)) * 0.85;
+
+        if (progress >= 1 || st.x > W + st.length || st.y > H + st.length) {
+          // respawn after 8-20s pause
+          stars[j] = spawnStar();
+          stars[j].delay = 8000 + Math.random() * 12000;
+          continue;
+        }
+
+        // Draw tail (gradient line) then bright head dot
+        var tailLen = st.length * Math.min(progress / 0.4, 1);
+        var angle = Math.atan2(st.vy, st.vx);
+        var tx = st.x - Math.cos(angle) * tailLen;
+        var ty = st.y - Math.sin(angle) * tailLen;
+
+        var grad = ctx.createLinearGradient(tx, ty, st.x, st.y);
+        grad.addColorStop(0, 'rgba(255,255,255,0)');
+        grad.addColorStop(1, 'rgba(255,255,255,' + st.alpha.toFixed(3) + ')');
+
+        ctx.beginPath();
+        ctx.moveTo(tx, ty);
+        ctx.lineTo(st.x, st.y);
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 1.5;
+        ctx.globalAlpha = 1;
+        ctx.stroke();
+
+        // Bright head
+        ctx.globalAlpha = st.alpha;
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(Math.round(st.x) - 1, Math.round(st.y) - 1, 2, 2);
+      }
+
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(frame);
+    }
+
+    requestAnimationFrame(frame);
+  }
+
   /* --- Init -------------------------------------------------- */
   async function init() {
     var config = await loadConfig();
@@ -380,11 +600,13 @@
     initSmoothScroll();
     initImmersiveNav();
     splitHeadingWords();
+    initTimelineScroll();
     initScrollReveal();
     initMagnetic();
     initParallax();
     initArchetypeToggle();
     initRealmTint();
+    initSiteParticles();
   }
 
   if (document.readyState === 'loading') {

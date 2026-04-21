@@ -427,7 +427,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* --- Sections ---------------------------------------------- */
 .section {
-  padding: var(--sp-24) var(--sp-6);
+  padding: var(--sp-16) var(--sp-6);
   background: var(--navy);
   color: var(--white);
 }
@@ -451,7 +451,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .section-header {
   text-align: center;
-  margin-bottom: var(--sp-16);
+  margin-bottom: var(--sp-10);
 }
 .section-header h2 {
   font-size: var(--text-3xl);
@@ -1542,8 +1542,8 @@ button[type="submit"]:disabled {
   .hero-content { max-width: 100%; text-align: center; }
   .hero-sub { margin-left: auto; margin-right: auto; }
   .hero-actions { justify-content: center; }
-  .section { padding: var(--sp-16) var(--sp-4); }
-  .section-header { margin-bottom: var(--sp-10); }
+  .section { padding: var(--sp-10) var(--sp-4); }
+  .section-header { margin-bottom: var(--sp-6); }
   .section-header h2 { font-size: var(--text-2xl); }
   .footer-inner { flex-direction: column; text-align: center; }
   .footer-links { justify-content: center; }
@@ -1771,10 +1771,11 @@ button[type="submit"]:disabled {
 }
 
 .shape-draw {
-  stroke-dasharray: 400;
-  stroke-dashoffset: 400;
-  animation: draw-box 16s linear infinite;
+  /* animation controlled by shape class below */
 }
+.draw-box      { animation: draw-box      16s linear infinite; }
+.draw-circle   { animation: draw-circle   16s linear infinite; }
+.draw-triangle { animation: draw-triangle 16s linear infinite; }
 
 /* Each side draws with its own ease-in-out (4s per side, 4 sides) */
 @keyframes draw-box {
@@ -1782,6 +1783,20 @@ button[type="submit"]:disabled {
   25%   { stroke-dashoffset: 300; animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1); }
   50%   { stroke-dashoffset: 200; animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1); }
   75%   { stroke-dashoffset: 100; animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1); }
+  100%  { stroke-dashoffset: 0; }
+}
+@keyframes draw-circle {
+  0%    { stroke-dashoffset: 503; animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1); }
+  25%   { stroke-dashoffset: 377; animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1); }
+  50%   { stroke-dashoffset: 251; animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1); }
+  75%   { stroke-dashoffset: 126; animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1); }
+  100%  { stroke-dashoffset: 0; }
+}
+@keyframes draw-triangle {
+  0%    { stroke-dashoffset: 420; animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1); }
+  25%   { stroke-dashoffset: 315; animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1); }
+  50%   { stroke-dashoffset: 210; animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1); }
+  75%   { stroke-dashoffset: 105; animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1); }
   100%  { stroke-dashoffset: 0; }
 }
 
@@ -1796,6 +1811,9 @@ button[type="submit"]:disabled {
 
 .app-demo-label {
   position: absolute;
+  bottom: 22%;
+  left: 0; right: 0;
+  text-align: center;
   font-size: var(--text-sm);
   font-weight: 300;
   letter-spacing: 0.12em;
@@ -1857,6 +1875,125 @@ button[type="submit"]:disabled {
 [data-section="app-preview"] {
   position: relative;
   background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(10,126,164,0.04) 0%, var(--navy) 70%);
+}
+
+/* --- Phone status bar (inside phone mockup) ---------------- */
+.phone-status-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--sp-5);
+  z-index: 10;
+  background: linear-gradient(to bottom, rgba(9,24,38,0.7), transparent);
+}
+.phone-status-bar-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.45);
+}
+.phone-status-chips {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: center;
+}
+.phone-shape-chip {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--teal);
+  background: rgba(10,126,164,0.14);
+  border: 1px solid rgba(10,126,164,0.28);
+  border-radius: 999px;
+  padding: 2px 8px;
+  transition: color 300ms, background 300ms, border-color 300ms;
+}
+.phone-rhythm-chip {
+  font-size: 10px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.35);
+  background: rgba(255,255,255,0.06);
+  border-radius: 999px;
+  padding: 2px 7px;
+}
+.phone-session-hint {
+  position: absolute;
+  bottom: var(--sp-6);
+  left: 0; right: 0;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.22);
+  z-index: 10;
+}
+
+/* --- Shape picker (below phone) ---------------------------- */
+.shape-picker {
+  display: flex;
+  gap: var(--sp-3);
+  justify-content: center;
+  margin-top: var(--sp-8);
+  flex-wrap: wrap;
+}
+.shape-picker-btn {
+  padding: var(--sp-2) var(--sp-5);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 200ms cubic-bezier(0.33,1,0.68,1),
+              border-color 200ms cubic-bezier(0.33,1,0.68,1),
+              color 200ms cubic-bezier(0.33,1,0.68,1),
+              box-shadow 200ms cubic-bezier(0.33,1,0.68,1);
+}
+.shape-picker-btn:hover {
+  background: rgba(255,255,255,0.10);
+  border-color: rgba(255,255,255,0.18);
+  color: var(--white);
+}
+.shape-picker-btn.is-active {
+  background: rgba(10,126,164,0.18);
+  border-color: var(--teal);
+  color: var(--white);
+  box-shadow: 0 0 14px rgba(10,126,164,0.28);
+}
+
+/* --- App preview section layout ---------------------------- */
+.app-preview-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+}
+.app-preview-hint {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: var(--sp-4);
+}
+
+/* --- Phone frame responsive & small variant ---------------- */
+.phone-frame-sm {
+  width: 200px;
+  height: 433px;
+  border-radius: 30px;
+}
+.phone-frame-sm .app-demo-aura  { width: 120px; height: 120px; }
+.phone-frame-sm .app-demo-shape { width: 140px; height: 140px; }
+.phone-frame-sm .app-demo-label { font-size: 9px; bottom: 18%; }
+.phone-frame-sm .phone-status-bar { height: 38px; }
+.phone-frame-sm .phone-session-hint { font-size: 9px; }
+
+@media (max-width: 400px) {
+  .phone-frame { width: 240px; height: 520px; border-radius: 32px; }
 }
 
 /* --- Breathing Cadence Reveal ------------------------------ */
@@ -2428,12 +2565,12 @@ button[type="submit"]:disabled {
 /* --- Hero: Shape Constellation ----------------------------- */
 .world-hero {
   position: relative;
-  min-height: 100vh;
+  min-height: 82vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   overflow: hidden;
-  padding: calc(var(--sp-24) + var(--sp-8)) 0 var(--sp-16);
+  padding: calc(var(--sp-16) + var(--sp-8)) 0 var(--sp-10);
   background: var(--navy-deep);
   isolation: isolate;
 }
@@ -2463,7 +2600,7 @@ button[type="submit"]:disabled {
   width: 100%;
   gap: var(--sp-6);
   margin-top: auto;
-  padding-top: clamp(340px, 46vh, 520px);
+  padding-top: clamp(200px, 32vh, 360px);
 }
 
 .world-hero-text {
@@ -2683,7 +2820,7 @@ button[type="submit"]:disabled {
     to   { transform: translate(-50%, calc(-50% - 20vh)) scale(0.72); }
   }
   .constellation-info { min-width: 260px; }
-  .world-hero-inner { padding-top: clamp(280px, 42vh, 420px); }
+  .world-hero-inner { padding-top: clamp(180px, 30vh, 300px); }
 }
 
 /* --- Realms Overview (4-column cards with archetype dropdowns) --- */
@@ -2885,8 +3022,8 @@ button[type="submit"]:disabled {
 /* --- Intro: "In the world of VirWave..." ------------------- */
 .world-intro {
   background: linear-gradient(180deg, var(--navy-deep) 0%, var(--navy) 100%);
-  padding-top: var(--sp-20);
-  padding-bottom: var(--sp-20);
+  padding-top: var(--sp-10);
+  padding-bottom: var(--sp-10);
 }
 .world-intro-inner {
   text-align: center;
@@ -3213,13 +3350,32 @@ button[type="submit"]:disabled {
 /* --- Scroll Reveal ----------------------------------------- */
 .reveal {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 350ms cubic-bezier(0.33, 1, 0.68, 1),
-              transform 350ms cubic-bezier(0.33, 1, 0.68, 1);
+  transform: translateY(24px);
+  transition: opacity 450ms cubic-bezier(0.33, 1, 0.68, 1),
+              transform 450ms cubic-bezier(0.33, 1, 0.68, 1);
 }
 .reveal.revealed {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Directional slide variants */
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-36px);
+  transition: opacity 500ms cubic-bezier(0.33, 1, 0.68, 1),
+              transform 500ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+.reveal-right {
+  opacity: 0;
+  transform: translateX(36px);
+  transition: opacity 500ms cubic-bezier(0.33, 1, 0.68, 1),
+              transform 500ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+.reveal-left.revealed,
+.reveal-right.revealed {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 /* --- Section Transitions ----------------------------------- */
@@ -3255,7 +3411,9 @@ button[type="submit"]:disabled {
   }
 
   /* Scroll reveals: instant appearance */
-  .reveal {
+  .reveal,
+  .reveal-left,
+  .reveal-right {
     opacity: 1 !important;
     transform: none !important;
   }
@@ -3983,13 +4141,15 @@ button[type="submit"]:disabled {
   height: 100%;
   background: linear-gradient(to bottom, var(--teal), var(--mint));
   transform-origin: top center;
-  transform: scaleY(0);
-  transition: transform 700ms cubic-bezier(0.33, 1, 0.68, 1);
-  transition-delay: 200ms;
+  transform: scaleY(var(--timeline-progress, 0));
   border-radius: 2px;
+  will-change: transform;
 }
-.timeline.timeline-drawn::before {
-  transform: scaleY(1);
+
+/* Dot glow when line reaches it */
+.timeline-number--lit {
+  box-shadow: 0 0 18px rgba(10, 126, 164, 0.5), 0 0 6px rgba(140, 235, 170, 0.35);
+  transition: box-shadow 350ms cubic-bezier(0.33, 1, 0.68, 1);
 }
 /* Mobile: border-left is removed, so hide the overlay too */
 @media (max-width: 768px) {
@@ -4088,6 +4248,9 @@ button[type="submit"]:disabled {
   /* Timeline draw: show immediately */
   .timeline::before {
     transform: scaleY(1) !important;
+  }
+  .timeline-number--lit {
+    box-shadow: none !important;
     transition: none !important;
   }
 

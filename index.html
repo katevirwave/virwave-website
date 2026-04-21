@@ -292,13 +292,62 @@
   </section>
 
 
-  <!-- ========== App Preview (hidden until production screenshots) ========== -->
-  <section class="section" data-section="app-preview" data-visibility="hidden">
+  <!-- ========== App Preview ========== -->
+  <section class="section section-dark" data-section="app-preview">
     <div class="container">
       <div class="section-header">
-        <p class="section-eyebrow">The Experience</p>
-        <h2>Designed to feel like nothing else</h2>
-        <p>A breathing experience that's as beautiful as it is effective.</p>
+        <p class="section-eyebrow">See It In Action</p>
+        <h2>The breathing engine, live.</h2>
+        <p>The same animation that runs in your pocket — running right here.</p>
+      </div>
+      <div class="app-preview-inner">
+        <!-- Phone mockup -->
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <!-- Status bar -->
+            <div class="phone-status-bar" aria-hidden="true">
+              <span class="phone-status-bar-label">VirWave</span>
+              <div class="phone-status-chips">
+                <span class="phone-shape-chip">Box</span>
+                <span class="phone-rhythm-chip">4·4·4·4</span>
+              </div>
+            </div>
+            <!-- Aura glow -->
+            <div class="app-demo-aura" aria-hidden="true"></div>
+            <!-- Breathing shape (SVG with teal→mint gradient) -->
+            <svg class="app-demo-shape" viewBox="0 0 200 200" aria-label="Animated breathing shape" role="img">
+              <defs>
+                <linearGradient id="shapeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%"   stop-color="#0A7EA4"/>
+                  <stop offset="100%" stop-color="#8CEBAA"/>
+                </linearGradient>
+              </defs>
+              <path class="shape-draw draw-box"
+                    d="M40,40 L160,40 L160,160 L40,160 Z"
+                    stroke-dasharray="400"
+                    fill="none"
+                    stroke="url(#shapeGrad)"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"/>
+            </svg>
+            <!-- Phase labels -->
+            <div class="app-demo-labels" aria-live="polite" aria-atomic="true">
+              <span class="app-demo-label" data-phase="inhale">Inhale</span>
+              <span class="app-demo-label" data-phase="hold">Hold</span>
+              <span class="app-demo-label" data-phase="exhale">Exhale</span>
+              <span class="app-demo-label" data-phase="rest">Rest</span>
+            </div>
+            <p class="phone-session-hint" aria-hidden="true">Box breathing &middot; 16s cycle</p>
+          </div>
+        </div>
+        <!-- Shape picker -->
+        <div class="shape-picker" role="group" aria-label="Choose breathing shape">
+          <button class="shape-picker-btn is-active" data-shape="box"      type="button">Box</button>
+          <button class="shape-picker-btn"           data-shape="circle"   type="button">Circle</button>
+          <button class="shape-picker-btn"           data-shape="triangle" type="button">Triangle</button>
+        </div>
+        <p class="app-preview-hint">Pick a shape. Watch it breathe. This is what the app feels like.</p>
       </div>
     </div>
   </section>
@@ -465,6 +514,7 @@
   <script src="/assets/js/blog.js"></script>
   <script src="/assets/js/events.js"></script>
   <script src="/assets/js/hero-canvas.js"></script>
+  <script src="/assets/js/app-demo.js"></script>
   <script src="/assets/js/main.js"></script>
 </body>
 </html>
