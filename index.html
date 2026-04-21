@@ -43,6 +43,7 @@
 
       <ul id="nav-links" class="nav-links">
         <li><a href="/" aria-current="page">Home</a></li>
+        <li><a href="/archetypes/">Archetypes</a></li>
         <li data-nav="blog"><a href="/blog/">Blog</a></li>
         <li data-nav="events"><a href="/events/">Events</a></li>
         <li data-nav="products"><a href="/products/">Products</a></li>
@@ -56,14 +57,18 @@
   <main id="main-content">
   <section class="hero" data-section="hero">
     <canvas id="hero-canvas" aria-hidden="true"></canvas>
+    <div class="blob-layer" aria-hidden="true">
+      <div class="blob blob-hero-a parallax-layer" data-parallax-speed="0.06"></div>
+      <div class="blob blob-hero-b parallax-layer" data-parallax-speed="0.10"></div>
+    </div>
     <div class="container">
       <div class="hero-content">
         <p class="hero-eyebrow">Breathe first. Then move.</p>
-        <h1>Regulate yourself.<br>Rise for others.</h1>
+        <h1 class="hero-heading" data-split-words>Regulate yourself.<br>Rise for others.</h1>
         <p class="hero-sub">Breath won't fix your circumstances — but it can give you enough steadiness to act.</p>
         <div class="hero-actions">
-          <a href="/interest/?interest=early-access" class="btn btn-primary btn-lg">Join Waitlist</a>
-          <a href="/interest/?interest=partnership" class="btn btn-ghost btn-lg">Partnerships</a>
+          <a href="/interest/?interest=early-access" class="btn btn-primary btn-lg" data-magnetic>Join Waitlist</a>
+          <a href="/interest/?interest=partnership" class="btn btn-ghost btn-lg" data-magnetic>Partnerships</a>
         </div>
       </div>
     </div>
@@ -102,6 +107,145 @@
             <p>Follow the fluid visual guide. Inhale, hold, exhale, rest. Let the shape lead and your nervous system settle.</p>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ========== Archetypes & Realms ========== -->
+  <section class="section section-dark section-archetypes" id="archetypes" data-section="archetypes">
+    <div class="blob-layer" aria-hidden="true">
+      <div class="blob blob-archetypes parallax-layer" data-parallax-speed="0.05"></div>
+    </div>
+    <div class="container">
+      <div class="section-header">
+        <p class="section-eyebrow">Identity</p>
+        <h2>Find your shape.</h2>
+        <p>Everyone carries a shape. VirWave helps you see yours — and meet people whose shapes move with yours.</p>
+      </div>
+
+      <div class="realms">
+
+        <!-- Realm: Sukadam (Grounded) -->
+        <article class="realm" data-realm="grounded" style="--realm-color: var(--realm-grounded);">
+          <header class="realm-header parallax-layer" data-parallax-speed="0.08">
+            <span class="realm-eyebrow">Grounded</span>
+            <h3 class="realm-name">Sukadam</h3>
+            <p class="realm-feeling">People who hold things steady.</p>
+          </header>
+          <div class="archetype-grid">
+            <button class="archetype-card" type="button" data-archetype="the-root" data-magnetic aria-expanded="false" style="--archetype-color: #7A5230;">
+              <span class="archetype-shape" aria-hidden="true"><img src="/assets/img/shapes/box.svg" alt="" width="48" height="48"></span>
+              <h4 class="archetype-name">The Root</h4>
+              <p class="archetype-tagline">I hold what matters.</p>
+              <p class="archetype-desc">You are the person others return to. Not because you demand it, but because something in you stays constant when everything else moves. Your stability is a gift.</p>
+            </button>
+            <button class="archetype-card" type="button" data-archetype="the-keeper" data-magnetic aria-expanded="false" style="--archetype-color: #4A7A4A;">
+              <span class="archetype-shape" aria-hidden="true"><img src="/assets/img/shapes/pentagon.svg" alt="" width="48" height="48"></span>
+              <h4 class="archetype-name">The Keeper</h4>
+              <p class="archetype-tagline">I stay when others leave.</p>
+              <p class="archetype-desc">You protect what matters: people, values, and places. You notice what others take for granted. Your loyalty is not passive; it is an active choice you make quietly every day.</p>
+            </button>
+            <button class="archetype-card" type="button" data-archetype="the-architect" data-magnetic aria-expanded="false" style="--archetype-color: #8A8A8A;">
+              <span class="archetype-shape" aria-hidden="true"><img src="/assets/img/shapes/hexagon.svg" alt="" width="48" height="48"></span>
+              <h4 class="archetype-name">The Architect</h4>
+              <p class="archetype-tagline">I build what lasts.</p>
+              <p class="archetype-desc">You see systems where others see chaos. You build slowly, deliberately, and well. What you create outlasts the moment it was made for.</p>
+            </button>
+          </div>
+        </article>
+
+        <!-- Realm: Opowatha (Flowing) -->
+        <article class="realm" data-realm="flowing" style="--realm-color: var(--realm-flowing);">
+          <header class="realm-header parallax-layer" data-parallax-speed="0.08">
+            <span class="realm-eyebrow">Flowing</span>
+            <h3 class="realm-name">Opowatha</h3>
+            <p class="realm-feeling">People who move with feeling.</p>
+          </header>
+          <div class="archetype-grid">
+            <button class="archetype-card" type="button" data-archetype="the-mirror" data-magnetic aria-expanded="false" style="--archetype-color: #C4506A;">
+              <span class="archetype-shape" aria-hidden="true"><img src="/assets/img/shapes/circle.svg" alt="" width="48" height="48"></span>
+              <h4 class="archetype-name">The Mirror</h4>
+              <p class="archetype-tagline">I feel what you feel.</p>
+              <p class="archetype-desc">You absorb the emotional landscape of a room before anyone has spoken. You reflect back what others most need to see. Your empathy is not a softness. It is a precision instrument.</p>
+            </button>
+            <button class="archetype-card" type="button" data-archetype="the-river" data-magnetic aria-expanded="false" style="--archetype-color: #6B4FA0;">
+              <span class="archetype-shape" aria-hidden="true"><img src="/assets/img/shapes/oval.svg" alt="" width="48" height="48"></span>
+              <h4 class="archetype-name">The River</h4>
+              <p class="archetype-tagline">I go deep before I go fast.</p>
+              <p class="archetype-desc">You are unhurried in ways that confuse people at first. Then they realize: your depth is the point. You find meaning in events before you react to them.</p>
+            </button>
+            <button class="archetype-card" type="button" data-archetype="the-tide" data-magnetic aria-expanded="false" style="--archetype-color: #2A9A94;">
+              <span class="archetype-shape" aria-hidden="true"><img src="/assets/img/shapes/wave.svg" alt="" width="48" height="48"></span>
+              <h4 class="archetype-name">The Tide</h4>
+              <p class="archetype-tagline">I move with what's true.</p>
+              <p class="archetype-desc">You read rooms, relationships, and moments before anyone names what is happening. You are rhythmic. You know when to push and when to pull back. Emotional truth is your navigation system.</p>
+            </button>
+          </div>
+        </article>
+
+        <!-- Realm: Kithkin (Signaling) -->
+        <article class="realm" data-realm="signaling" style="--realm-color: var(--realm-signaling);">
+          <header class="realm-header parallax-layer" data-parallax-speed="0.08">
+            <span class="realm-eyebrow">Signaling</span>
+            <h3 class="realm-name">Kithkin</h3>
+            <p class="realm-feeling">People who name what's real.</p>
+          </header>
+          <div class="archetype-grid">
+            <button class="archetype-card" type="button" data-archetype="the-arrow" data-magnetic aria-expanded="false" style="--archetype-color: #C4721A;">
+              <span class="archetype-shape" aria-hidden="true"><img src="/assets/img/shapes/arrow.svg" alt="" width="48" height="48"></span>
+              <h4 class="archetype-name">The Arrow</h4>
+              <p class="archetype-tagline">I know where I'm going.</p>
+              <p class="archetype-desc">You cut through noise. When everyone else is circling a problem, you find the direction and name it. Your clarity is a service to the people around you.</p>
+            </button>
+            <button class="archetype-card" type="button" data-archetype="the-spark" data-magnetic aria-expanded="false" style="--archetype-color: #C4960A;">
+              <span class="archetype-shape" aria-hidden="true"><img src="/assets/img/shapes/triangle.svg" alt="" width="48" height="48"></span>
+              <h4 class="archetype-name">The Spark</h4>
+              <p class="archetype-tagline">I start things.</p>
+              <p class="archetype-desc">You carry the ignition. Ideas come to life around you, not because you force them, but because you believe before others are ready to believe. Beginnings are your native habitat.</p>
+            </button>
+            <button class="archetype-card" type="button" data-archetype="the-edge" data-magnetic aria-expanded="false" style="--archetype-color: #1A1A1A;">
+              <span class="archetype-shape" aria-hidden="true"><img src="/assets/img/shapes/triangle.svg" alt="" width="48" height="48"></span>
+              <h4 class="archetype-name">The Edge</h4>
+              <p class="archetype-tagline">I say the thing others won't.</p>
+              <p class="archetype-desc">You have the courage to name what everyone is avoiding. This is not cruelty. It is a form of care. You go into the dark so others don't have to pretend it isn't there.</p>
+            </button>
+          </div>
+        </article>
+
+        <!-- Realm: Kridasar (Radiating) -->
+        <article class="realm" data-realm="radiating" style="--realm-color: var(--realm-radiating);">
+          <header class="realm-header parallax-layer" data-parallax-speed="0.08">
+            <span class="realm-eyebrow">Radiating</span>
+            <h3 class="realm-name">Kridasar</h3>
+            <p class="realm-feeling">People who light things up.</p>
+          </header>
+          <div class="archetype-grid">
+            <button class="archetype-card" type="button" data-archetype="the-sun" data-magnetic aria-expanded="false" style="--archetype-color: #C4960A;">
+              <span class="archetype-shape" aria-hidden="true"><img src="/assets/img/shapes/star.svg" alt="" width="48" height="48"></span>
+              <h4 class="archetype-name">The Sun</h4>
+              <p class="archetype-tagline">I light up whatever I enter.</p>
+              <p class="archetype-desc">You do not try to be seen. You simply are. People feel more alive around you, more generous, more hopeful, and more themselves. That effect is not accidental.</p>
+            </button>
+            <button class="archetype-card" type="button" data-archetype="the-bloom" data-magnetic aria-expanded="false" style="--archetype-color: #C4506A;">
+              <span class="archetype-shape" aria-hidden="true"><img src="/assets/img/shapes/star.svg" alt="" width="48" height="48"></span>
+              <h4 class="archetype-name">The Bloom</h4>
+              <p class="archetype-tagline">I grow toward connection.</p>
+              <p class="archetype-desc">You move toward people, not away from them. You open things that were closed: conversations, possibilities, and people who had stopped expecting to be met. You do this gently.</p>
+            </button>
+            <button class="archetype-card" type="button" data-archetype="the-lantern" data-magnetic aria-expanded="false" style="--archetype-color: #C4721A;">
+              <span class="archetype-shape" aria-hidden="true"><img src="/assets/img/shapes/star.svg" alt="" width="48" height="48"></span>
+              <h4 class="archetype-name">The Lantern</h4>
+              <p class="archetype-tagline">I show the way, not the answer.</p>
+              <p class="archetype-desc">You do not give people answers. You hold the light steady so they can find their own. Your presence is clarifying. Others leave conversations with you knowing what they actually think.</p>
+            </button>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="archetypes-cta">
+        <a href="/archetypes/" class="btn btn-primary" data-magnetic>Explore all twelve archetypes</a>
       </div>
     </div>
   </section>
