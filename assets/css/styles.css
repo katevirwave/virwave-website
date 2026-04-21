@@ -1980,6 +1980,41 @@ button[type="submit"]:disabled {
   margin-top: var(--sp-4);
 }
 
+/* --- Phone Screenshot (App Preview homepage) --------------- */
+.phone-screenshot-wrap {
+  position: relative;
+  display: inline-block;
+  margin: 0 auto;
+}
+
+.phone-screenshot-img {
+  display: block;
+  width: 260px;
+  height: auto;
+  border-radius: var(--radius);
+}
+
+.phone-screenshot-wrap .app-demo-shape {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 36%;
+  height: auto;
+}
+
+.phone-screenshot-wrap .app-demo-labels {
+  position: absolute;
+  top: 43%;
+  left: 0; right: 0;
+  inset: unset;
+}
+
+.phone-screenshot-wrap .app-demo-label {
+  bottom: auto;
+  top: 0;
+}
+
 /* --- Phone frame responsive & small variant ---------------- */
 .phone-frame-sm {
   width: 200px;
