@@ -2568,7 +2568,7 @@ button[type="submit"]:disabled {
   to   { transform: rotate(360deg); }
 }
 
-.constellation-shape {
+.shape-constellation .constellation-shape {
   --angle: calc(var(--i) * 30deg);
   position: absolute;
   top: -30px;
@@ -2578,27 +2578,22 @@ button[type="submit"]:disabled {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 50% 40%,
-    color-mix(in oklab, var(--chip-color, var(--teal)) 42%, rgba(255, 255, 255, 0.08)) 0%,
-    color-mix(in oklab, var(--chip-color, var(--teal)) 15%, transparent) 65%,
-    transparent 100%
-  );
-  box-shadow:
-    0 0 26px color-mix(in oklab, var(--chip-color, var(--teal)) 55%, transparent),
-    inset 0 0 0 1px color-mix(in oklab, var(--chip-color, var(--teal)) 48%, transparent);
+  color: var(--chip-color, var(--teal));
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
   transform: translate(0, 0) scale(0.7);
   opacity: 0;
   animation: shape-journey 2.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   animation-delay: calc(var(--i) * 70ms);
   will-change: transform, opacity;
+  filter: drop-shadow(0 0 10px color-mix(in oklab, var(--chip-color, var(--teal)) 55%, transparent));
 }
 
-.constellation-shape img {
-  width: 32px;
-  height: 32px;
-  filter: drop-shadow(0 0 8px color-mix(in oklab, var(--chip-color, var(--teal)) 70%, transparent));
+.shape-constellation .constellation-shape svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 @keyframes shape-journey {
@@ -2644,15 +2639,11 @@ button[type="submit"]:disabled {
   .world-hero { min-height: 88vh; padding: calc(var(--sp-20)) 0 var(--sp-12); }
   .shape-constellation { --ring-radius: 130px; }
   .world-hero-heading { font-size: clamp(2.1rem, 8vw + 0.5rem, 3rem); }
-  .constellation-shape {
+  .shape-constellation .constellation-shape {
     top: -24px;
     left: -24px;
     width: 48px;
     height: 48px;
-  }
-  .constellation-shape img {
-    width: 26px;
-    height: 26px;
   }
   @keyframes constellation-park {
     from { transform: translate(-50%, -50%) scale(1); }
@@ -2954,7 +2945,7 @@ button[type="submit"]:disabled {
     transform: translate(calc(-50% - 30vw), calc(-50% - 26vh)) scale(0.55) !important;
   }
   .constellation-spinner { animation: none !important; }
-  .constellation-shape {
+  .shape-constellation .constellation-shape {
     animation: none !important;
     opacity: 1 !important;
     transform:
