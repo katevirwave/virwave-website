@@ -2570,7 +2570,7 @@ button[type="submit"]:disabled {
 
 @keyframes constellation-park {
   from { transform: translate(-50%, -50%) scale(1); }
-  to   { transform: translate(-50%, calc(-50% - 26vh)) scale(0.7); }
+  to   { transform: translate(-50%, calc(-50% - 18vh)) scale(0.7); }
 }
 
 .constellation-spinner {
@@ -2680,7 +2680,7 @@ button[type="submit"]:disabled {
   }
   @keyframes constellation-park {
     from { transform: translate(-50%, -50%) scale(1); }
-    to   { transform: translate(-50%, calc(-50% - 28vh)) scale(0.72); }
+    to   { transform: translate(-50%, calc(-50% - 20vh)) scale(0.72); }
   }
   .constellation-info { min-width: 260px; }
   .world-hero-inner { padding-top: clamp(280px, 42vh, 420px); }
