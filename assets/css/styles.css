@@ -2462,6 +2462,8 @@ button[type="submit"]:disabled {
   text-align: center;
   width: 100%;
   gap: var(--sp-6);
+  margin-top: auto;
+  padding-top: clamp(340px, 46vh, 520px);
 }
 
 .world-hero-text {
@@ -2568,7 +2570,7 @@ button[type="submit"]:disabled {
 
 @keyframes constellation-park {
   from { transform: translate(-50%, -50%) scale(1); }
-  to   { transform: translate(-50%, calc(-50% - 18vh)) scale(0.75); }
+  to   { transform: translate(-50%, calc(-50% - 26vh)) scale(0.7); }
 }
 
 .constellation-spinner {
@@ -2678,9 +2680,10 @@ button[type="submit"]:disabled {
   }
   @keyframes constellation-park {
     from { transform: translate(-50%, -50%) scale(1); }
-    to   { transform: translate(-50%, calc(-50% - 20vh)) scale(0.78); }
+    to   { transform: translate(-50%, calc(-50% - 28vh)) scale(0.72); }
   }
   .constellation-info { min-width: 260px; }
+  .world-hero-inner { padding-top: clamp(280px, 42vh, 420px); }
 }
 
 /* --- Realms Overview (4-column cards with archetype dropdowns) --- */
@@ -3169,7 +3172,7 @@ button[type="submit"]:disabled {
   .world-hero::before { animation: none !important; }
   .constellation-position {
     animation: none !important;
-    transform: translate(-50%, calc(-50% - 18vh)) scale(0.75) !important;
+    transform: translate(-50%, calc(-50% - 26vh)) scale(0.7) !important;
   }
   .constellation-spinner { animation: none !important; }
   .constellation-info { animation: none !important; opacity: 1 !important; transform: none !important; }
