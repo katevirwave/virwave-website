@@ -2458,7 +2458,7 @@ button[type="submit"]:disabled {
    WORLD PAGE (/archetypes/) — gallery hero + varied realms
    ========================================================= */
 
-/* --- Hero: 3D wheel of archetypes -------------------------- */
+/* --- Hero: Spiral Carousel --------------------------------- */
 .world-hero {
   position: relative;
   min-height: 100vh;
@@ -2485,122 +2485,17 @@ button[type="submit"]:disabled {
   to   { opacity: 1;    transform: translate3d( 1%, -1%, 0) scale(1.04); }
 }
 
-/* Wheel stage — positioned so only a corner arc is visible */
-.world-hero-wheel {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  overflow: hidden;
-  perspective: 1800px;
-  perspective-origin: 75% 35%;
-}
-.wheel-stage {
-  position: absolute;
-  /* Anchor wheel to bottom-right; only top-left corner/arc visible */
-  right: -26vw;
-  bottom: -60vh;
-  width: 140vh;
-  height: 140vh;
-  min-width: 1100px;
-  min-height: 1100px;
-  transform-style: preserve-3d;
-}
-.wheel-ring {
-  position: absolute;
-  inset: 0;
-  transform-style: preserve-3d;
-  animation: wheel-spin 60s linear infinite;
-  will-change: transform;
-}
-@keyframes wheel-spin {
-  from { transform: rotateX(72deg) rotateZ(0deg); }
-  to   { transform: rotateX(72deg) rotateZ(-360deg); }
-}
-
-.wheel-shape {
-  --count: 12;
-  --radius: 48%;
-  --angle: calc(360deg / var(--count) * var(--i));
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: clamp(84px, 10vw, 140px);
-  height: clamp(84px, 10vw, 140px);
-  margin-left: calc(clamp(84px, 10vw, 140px) / -2);
-  margin-top: calc(clamp(84px, 10vw, 140px) / -2);
-  transform-style: preserve-3d;
-  transform:
-    rotateZ(var(--angle))
-    translateX(var(--radius))
-    rotateZ(calc(var(--angle) * -1))
-    rotateX(-72deg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 35% 30%,
-    color-mix(in oklab, var(--chip-color, var(--teal)) 35%, rgba(255, 255, 255, 0.08)),
-    color-mix(in oklab, var(--chip-color, var(--teal)) 15%, transparent) 70%
-  );
-  border: 1px solid color-mix(in oklab, var(--chip-color, var(--teal)) 50%, rgba(255, 255, 255, 0.15));
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  box-shadow:
-    0 0 40px color-mix(in oklab, var(--chip-color, var(--teal)) 40%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
-}
-.wheel-shape img {
-  width: 52%;
-  height: 52%;
-  filter: drop-shadow(0 0 14px color-mix(in oklab, var(--chip-color, var(--teal)) 70%, transparent));
-}
-
-/* Subtle ring guide behind shapes — suggests the rim */
-.world-hero-wheel::after {
-  content: "";
-  position: absolute;
-  right: -26vw;
-  bottom: -60vh;
-  width: 140vh;
-  height: 140vh;
-  min-width: 1100px;
-  min-height: 1100px;
-  border-radius: 50%;
-  border: 1px dashed color-mix(in oklab, var(--teal) 30%, transparent);
-  opacity: 0.18;
-  transform: perspective(1800px) rotateX(72deg);
-  transform-origin: center;
-  pointer-events: none;
-}
-
-/* Text overlay — sits over the visible corner of the wheel */
-.world-hero-overlay {
+.world-hero-inner {
   position: relative;
-  z-index: 3;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(320px, 1fr) minmax(420px, 1.15fr);
+  gap: var(--sp-10);
+  align-items: center;
   width: 100%;
 }
-.world-hero-overlay > .container {
-  position: relative;
-}
-.world-hero-overlay > .container::before {
-  content: "";
-  position: absolute;
-  left: -15%;
-  top: -20%;
-  width: 90%;
-  height: 140%;
-  background: radial-gradient(
-    ellipse 60% 55% at 35% 50%,
-    color-mix(in oklab, var(--navy-deep) 85%, transparent),
-    transparent 75%
-  );
-  filter: blur(40px);
-  opacity: 0.9;
-  pointer-events: none;
-  z-index: -1;
-}
+
+.world-hero-text { position: relative; }
 .world-hero-eyebrow {
   color: color-mix(in oklab, var(--mint) 40%, var(--white));
   opacity: 0.92;
@@ -2608,17 +2503,17 @@ button[type="submit"]:disabled {
   font-weight: 600;
 }
 .world-hero-heading {
-  font-size: clamp(2.6rem, 6vw + 1rem, 5.25rem);
-  line-height: 1.02;
-  letter-spacing: -0.03em;
+  font-size: clamp(2.4rem, 4.4vw + 1rem, 4.5rem);
+  line-height: 1.04;
+  letter-spacing: -0.028em;
   margin: var(--sp-5) 0 var(--sp-6);
-  max-width: 18ch;
+  max-width: 16ch;
   color: var(--white);
   font-weight: 600;
   text-wrap: balance;
 }
 .world-hero-sub {
-  max-width: 560px;
+  max-width: 520px;
   font-size: var(--text-lg);
   line-height: 1.6;
   color: color-mix(in oklab, var(--text-muted) 80%, var(--white));
@@ -2632,33 +2527,164 @@ button[type="submit"]:disabled {
   padding-bottom: 1px;
 }
 
-@media (max-width: 900px) {
-  .wheel-stage {
-    right: -40vw;
-    bottom: -45vh;
-    width: 120vh;
-    height: 120vh;
+/* Carousel stage */
+.world-hero-carousel {
+  position: relative;
+  height: 440px;
+  perspective: 1400px;
+}
+.carousel-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+/* Card */
+.carousel-card {
+  --card-w: clamp(200px, 22vw, 260px);
+  --card-h: clamp(280px, 30vw, 360px);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--card-w);
+  height: var(--card-h);
+  margin-left: calc(var(--card-w) / -2);
+  margin-top: calc(var(--card-h) / -2);
+  padding: var(--sp-6) var(--sp-5);
+  border-radius: 20px;
+  background:
+    radial-gradient(
+      140% 90% at 50% 0%,
+      color-mix(in oklab, var(--chip-color, var(--teal)) 28%, rgba(255, 255, 255, 0.06)),
+      transparent 70%
+    ),
+    rgba(255, 255, 255, 0.05);
+  border: 1px solid color-mix(in oklab, var(--chip-color, var(--teal)) 38%, rgba(255, 255, 255, 0.14));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.45),
+    0 0 48px color-mix(in oklab, var(--chip-color, var(--teal)) 30%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--sp-3);
+  transform-origin: center center;
+  transition:
+    transform 1100ms var(--ease-calm),
+    opacity 900ms var(--ease-calm);
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+/* Slot positions */
+.carousel-card[data-slot="hidden"] {
+  transform: translate3d(0, 0, 0) scale(0.35) rotate(-200deg);
+  opacity: 0;
+}
+.carousel-card[data-slot="left"] {
+  transform: translate3d(-66%, 0, -160px) rotateY(22deg) scale(0.88);
+  opacity: 0.55;
+  z-index: 1;
+}
+.carousel-card[data-slot="center"] {
+  transform: translate3d(0, 0, 0) rotateY(0deg) scale(1);
+  opacity: 1;
+  z-index: 3;
+}
+.carousel-card[data-slot="right"] {
+  transform: translate3d(66%, 0, -160px) rotateY(-22deg) scale(0.88);
+  opacity: 0.55;
+  z-index: 1;
+}
+.carousel-card[data-slot="offstage-left"] {
+  transform: translate3d(-140%, 0, -320px) rotateY(30deg) scale(0.7);
+  opacity: 0;
+  z-index: 0;
+}
+.carousel-card[data-slot="offstage-right"] {
+  transform: translate3d(140%, 0, -320px) rotateY(-30deg) scale(0.7);
+  opacity: 0;
+  z-index: 0;
+}
+
+/* Card internals */
+.carousel-card-shape {
+  width: 88px;
+  height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: color-mix(in oklab, var(--chip-color, var(--teal)) 24%, transparent);
+  box-shadow:
+    0 0 56px color-mix(in oklab, var(--chip-color, var(--teal)) 50%, transparent),
+    inset 0 0 0 1px color-mix(in oklab, var(--chip-color, var(--teal)) 55%, transparent);
+  margin-top: var(--sp-2);
+}
+.carousel-card-shape img {
+  width: 50px;
+  height: 50px;
+  filter: drop-shadow(0 0 14px color-mix(in oklab, var(--chip-color, var(--teal)) 75%, transparent));
+  animation: shape-breathe 12s var(--ease-calm) infinite;
+}
+.carousel-card-realm {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: color-mix(in oklab, var(--chip-color, var(--teal)) 30%, var(--white));
+  opacity: 0.9;
+  margin: var(--sp-2) 0 0;
+  font-weight: 600;
+}
+.carousel-card-name {
+  font-size: clamp(1.5rem, 2vw + 0.5rem, 1.875rem);
+  font-weight: 600;
+  color: var(--white);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.carousel-card-tag {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  font-style: italic;
+  line-height: 1.5;
+  margin: auto 0 var(--sp-2);
+  opacity: 0.9;
+}
+
+/* Stacked-at-center helper (initial render before JS kicks in) */
+.carousel-card[data-slot="hidden"]:nth-child(n+4) {
+  /* keep deep stack shallow so we don't double-paint twelve big blurs */
+  filter: none;
+}
+
+@media (max-width: 1024px) {
+  .world-hero-inner {
+    grid-template-columns: 1fr;
+    gap: var(--sp-12);
   }
-  .world-hero-wheel::after {
-    right: -40vw;
-    bottom: -45vh;
-    width: 120vh;
-    height: 120vh;
-  }
+  .world-hero-heading { max-width: 22ch; }
+  .world-hero-carousel { height: 420px; }
 }
 
 @media (max-width: 720px) {
-  .world-hero { min-height: 90vh; padding-top: var(--sp-20); }
-  .world-hero-heading { font-size: clamp(2.2rem, 8vw + 0.5rem, 3rem); }
-  .wheel-stage {
-    right: -50vw;
-    bottom: -35vh;
-    width: 110vh;
-    height: 110vh;
-    min-width: 700px;
-    min-height: 700px;
+  .world-hero { min-height: auto; padding: calc(var(--sp-20)) 0 var(--sp-12); }
+  .world-hero-heading { font-size: clamp(2.1rem, 8vw + 0.5rem, 3rem); }
+  .world-hero-carousel { height: 380px; }
+  .carousel-card {
+    --card-w: clamp(180px, 60vw, 240px);
+    --card-h: clamp(260px, 80vw, 320px);
   }
-  .world-hero-wheel::after { display: none; }
+  .carousel-card[data-slot="left"] {
+    transform: translate3d(-48%, 0, -140px) rotateY(18deg) scale(0.84);
+  }
+  .carousel-card[data-slot="right"] {
+    transform: translate3d(48%, 0, -140px) rotateY(-18deg) scale(0.84);
+  }
 }
 
 /* --- Intro: "In the world of VirWave..." ------------------- */
@@ -2949,8 +2975,10 @@ button[type="submit"]:disabled {
 
 /* --- Reduced motion for world page ------------------------- */
 @media (prefers-reduced-motion: reduce) {
-  .wheel-ring { animation: none !important; transform: rotateX(72deg) rotateZ(-20deg) !important; }
   .world-hero::before { animation: none !important; }
+  .carousel-card { transition-duration: 0ms !important; }
+  .carousel-card[data-slot="hidden"] { transform: none !important; opacity: 0 !important; }
+  .carousel-card-shape img { animation: none !important; }
   .archetype-orbit-grid::before { animation: none !important; }
   .wave-item-a, .wave-item-b, .wave-item-c { transform: none !important; }
   .archetype-orbit-left, .archetype-orbit-right { transform: none !important; }

@@ -55,37 +55,131 @@
 
   <main id="main-content">
 
-  <!-- ========== Hero: 3D Wheel of Archetypes ========== -->
+  <!-- ========== Hero: Spiral Carousel ========== -->
   <section class="world-hero" data-section="world-hero">
+    <div class="container world-hero-inner">
 
-    <div class="world-hero-wheel" aria-hidden="true">
-      <div class="wheel-stage">
-        <div class="wheel-ring">
-          <span class="wheel-shape" style="--i: 0;  --chip-color: #7A5230;"><img src="/assets/img/shapes/box.svg" alt=""></span>
-          <span class="wheel-shape" style="--i: 1;  --chip-color: #4A7A4A;"><img src="/assets/img/shapes/pentagon.svg" alt=""></span>
-          <span class="wheel-shape" style="--i: 2;  --chip-color: #8A8A8A;"><img src="/assets/img/shapes/hexagon.svg" alt=""></span>
-          <span class="wheel-shape" style="--i: 3;  --chip-color: #C4506A;"><img src="/assets/img/shapes/circle.svg" alt=""></span>
-          <span class="wheel-shape" style="--i: 4;  --chip-color: #6B4FA0;"><img src="/assets/img/shapes/oval.svg" alt=""></span>
-          <span class="wheel-shape" style="--i: 5;  --chip-color: #2A9A94;"><img src="/assets/img/shapes/wave.svg" alt=""></span>
-          <span class="wheel-shape" style="--i: 6;  --chip-color: #C4721A;"><img src="/assets/img/shapes/arrow.svg" alt=""></span>
-          <span class="wheel-shape" style="--i: 7;  --chip-color: #C4960A;"><img src="/assets/img/shapes/starburst.svg" alt=""></span>
-          <span class="wheel-shape" style="--i: 8;  --chip-color: #E8C34A;"><img src="/assets/img/shapes/triangle.svg" alt=""></span>
-          <span class="wheel-shape" style="--i: 9;  --chip-color: #C4960A;"><img src="/assets/img/shapes/star.svg" alt=""></span>
-          <span class="wheel-shape" style="--i: 10; --chip-color: #C4506A;"><img src="/assets/img/shapes/flower.svg" alt=""></span>
-          <span class="wheel-shape" style="--i: 11; --chip-color: #C4721A;"><img src="/assets/img/shapes/diamond.svg" alt=""></span>
+      <div class="world-hero-text">
+        <p class="hero-eyebrow world-hero-eyebrow">The World of VirWave</p>
+        <h1 class="world-hero-heading" data-split-words>Twelve shapes, four realms, one is yours.</h1>
+        <p class="world-hero-sub">In this world, everyone is from a <em>realm</em> and carries an <em>archetype</em>. Learning your shape &mdash; and others&rsquo; &mdash; makes it easier to help each other.</p>
+      </div>
+
+      <div class="world-hero-carousel" aria-hidden="true">
+        <div class="carousel-stage" id="archetype-carousel">
+          <article class="carousel-card" data-slot="hidden" style="--i: 0;  --chip-color: #7A5230;">
+            <div class="carousel-card-shape"><img src="/assets/img/shapes/box.svg" alt=""></div>
+            <p class="carousel-card-realm">Grounded</p>
+            <h3 class="carousel-card-name">The Root</h3>
+            <p class="carousel-card-tag">I hold what matters.</p>
+          </article>
+          <article class="carousel-card" data-slot="hidden" style="--i: 1;  --chip-color: #4A7A4A;">
+            <div class="carousel-card-shape"><img src="/assets/img/shapes/pentagon.svg" alt=""></div>
+            <p class="carousel-card-realm">Grounded</p>
+            <h3 class="carousel-card-name">The Keeper</h3>
+            <p class="carousel-card-tag">I stay when others leave.</p>
+          </article>
+          <article class="carousel-card" data-slot="hidden" style="--i: 2;  --chip-color: #8A8A8A;">
+            <div class="carousel-card-shape"><img src="/assets/img/shapes/hexagon.svg" alt=""></div>
+            <p class="carousel-card-realm">Grounded</p>
+            <h3 class="carousel-card-name">The Architect</h3>
+            <p class="carousel-card-tag">I build what lasts.</p>
+          </article>
+          <article class="carousel-card" data-slot="hidden" style="--i: 3;  --chip-color: #C4506A;">
+            <div class="carousel-card-shape"><img src="/assets/img/shapes/circle.svg" alt=""></div>
+            <p class="carousel-card-realm">Flowing</p>
+            <h3 class="carousel-card-name">The Mirror</h3>
+            <p class="carousel-card-tag">I feel what you feel.</p>
+          </article>
+          <article class="carousel-card" data-slot="hidden" style="--i: 4;  --chip-color: #6B4FA0;">
+            <div class="carousel-card-shape"><img src="/assets/img/shapes/oval.svg" alt=""></div>
+            <p class="carousel-card-realm">Flowing</p>
+            <h3 class="carousel-card-name">The River</h3>
+            <p class="carousel-card-tag">I go deep before fast.</p>
+          </article>
+          <article class="carousel-card" data-slot="hidden" style="--i: 5;  --chip-color: #2A9A94;">
+            <div class="carousel-card-shape"><img src="/assets/img/shapes/wave.svg" alt=""></div>
+            <p class="carousel-card-realm">Flowing</p>
+            <h3 class="carousel-card-name">The Tide</h3>
+            <p class="carousel-card-tag">I move with what&rsquo;s true.</p>
+          </article>
+          <article class="carousel-card" data-slot="hidden" style="--i: 6;  --chip-color: #C4721A;">
+            <div class="carousel-card-shape"><img src="/assets/img/shapes/arrow.svg" alt=""></div>
+            <p class="carousel-card-realm">Signaling</p>
+            <h3 class="carousel-card-name">The Arrow</h3>
+            <p class="carousel-card-tag">I know where I&rsquo;m going.</p>
+          </article>
+          <article class="carousel-card" data-slot="hidden" style="--i: 7;  --chip-color: #C4960A;">
+            <div class="carousel-card-shape"><img src="/assets/img/shapes/starburst.svg" alt=""></div>
+            <p class="carousel-card-realm">Signaling</p>
+            <h3 class="carousel-card-name">The Spark</h3>
+            <p class="carousel-card-tag">I start things.</p>
+          </article>
+          <article class="carousel-card" data-slot="hidden" style="--i: 8;  --chip-color: #E8C34A;">
+            <div class="carousel-card-shape"><img src="/assets/img/shapes/triangle.svg" alt=""></div>
+            <p class="carousel-card-realm">Signaling</p>
+            <h3 class="carousel-card-name">The Edge</h3>
+            <p class="carousel-card-tag">I say what others won&rsquo;t.</p>
+          </article>
+          <article class="carousel-card" data-slot="hidden" style="--i: 9;  --chip-color: #C4960A;">
+            <div class="carousel-card-shape"><img src="/assets/img/shapes/star.svg" alt=""></div>
+            <p class="carousel-card-realm">Radiating</p>
+            <h3 class="carousel-card-name">The Sun</h3>
+            <p class="carousel-card-tag">I light whatever I enter.</p>
+          </article>
+          <article class="carousel-card" data-slot="hidden" style="--i: 10; --chip-color: #C4506A;">
+            <div class="carousel-card-shape"><img src="/assets/img/shapes/flower.svg" alt=""></div>
+            <p class="carousel-card-realm">Radiating</p>
+            <h3 class="carousel-card-name">The Bloom</h3>
+            <p class="carousel-card-tag">I grow toward connection.</p>
+          </article>
+          <article class="carousel-card" data-slot="hidden" style="--i: 11; --chip-color: #C4721A;">
+            <div class="carousel-card-shape"><img src="/assets/img/shapes/diamond.svg" alt=""></div>
+            <p class="carousel-card-realm">Radiating</p>
+            <h3 class="carousel-card-name">The Lantern</h3>
+            <p class="carousel-card-tag">I show the way, not the answer.</p>
+          </article>
         </div>
       </div>
-    </div>
 
-    <div class="world-hero-overlay">
-      <div class="container">
-        <p class="hero-eyebrow world-hero-eyebrow">The World of VirWave</p>
-        <h1 class="world-hero-heading" data-split-words>A wheel of shapes, turning.</h1>
-        <p class="world-hero-sub">In this world, everyone is from a <em>realm</em> and carries an <em>archetype</em>. Twelve shapes. Four realms. One is yours.</p>
-      </div>
     </div>
-
   </section>
+
+  <script>
+    (function () {
+      var stage = document.getElementById('archetype-carousel');
+      if (!stage) return;
+      var cards = Array.prototype.slice.call(stage.querySelectorAll('.carousel-card'));
+      var total = cards.length;
+      if (!total) return;
+      var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var index = 0;
+
+      function setSlots() {
+        for (var i = 0; i < total; i++) {
+          var pos = (i - index + total) % total;
+          var slot = 'hidden';
+          if (pos === 0) slot = 'left';
+          else if (pos === 1) slot = 'center';
+          else if (pos === 2) slot = 'right';
+          else if (pos === 3) slot = 'offstage-right';
+          else if (pos === total - 1) slot = 'offstage-left';
+          cards[i].setAttribute('data-slot', slot);
+        }
+      }
+
+      // Intro: let stacked state render briefly, then fan out.
+      var introDelay = prefersReducedMotion ? 0 : 900;
+      setTimeout(function () {
+        setSlots();
+        if (prefersReducedMotion) return;
+        setInterval(function () {
+          index = (index + 1) % total;
+          setSlots();
+        }, 3800);
+      }, introDelay);
+    })();
+  </script>
 
 
   <!-- ========== Intro ========== -->
