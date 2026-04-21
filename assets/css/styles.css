@@ -2461,11 +2461,10 @@ button[type="submit"]:disabled {
 /* --- Hero: Endless shape gallery --------------------------- */
 .world-hero {
   position: relative;
-  min-height: 92vh;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   overflow: hidden;
-  padding: calc(var(--sp-24) + var(--sp-8)) 0 var(--sp-20);
+  padding: calc(var(--sp-24) + var(--sp-8)) 0 var(--sp-16);
   background:
     radial-gradient(ellipse at 20% 10%, rgba(10, 126, 164, 0.22), transparent 55%),
     radial-gradient(ellipse at 80% 90%, rgba(196, 150, 10, 0.12), transparent 55%),
@@ -2473,13 +2472,10 @@ button[type="submit"]:disabled {
 }
 
 .world-hero-marquee {
-  position: absolute;
-  inset: 0;
+  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  gap: var(--sp-8);
-  padding: var(--sp-12) 0;
+  gap: var(--sp-4);
   pointer-events: none;
   mask-image: linear-gradient(
     90deg,
@@ -2495,6 +2491,15 @@ button[type="submit"]:disabled {
     rgba(0, 0, 0, 0.95) 90%,
     transparent 100%
   );
+}
+
+.world-hero-marquee-top {
+  margin-bottom: var(--sp-12);
+}
+
+.world-hero-marquee-bottom {
+  margin-top: var(--sp-12);
+  opacity: 0.85;
 }
 
 .marquee-row {
@@ -2573,7 +2578,6 @@ button[type="submit"]:disabled {
   position: relative;
   z-index: 2;
   width: 100%;
-  padding-top: var(--sp-8);
 }
 .world-hero-eyebrow {
   color: color-mix(in oklab, var(--teal) 30%, var(--white));
