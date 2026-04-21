@@ -2458,7 +2458,7 @@ button[type="submit"]:disabled {
    WORLD PAGE (/archetypes/) — gallery hero + varied realms
    ========================================================= */
 
-/* --- Hero: Spiral Carousel --------------------------------- */
+/* --- Hero: Shape Constellation ----------------------------- */
 .world-hero {
   position: relative;
   min-height: 100vh;
@@ -2488,14 +2488,18 @@ button[type="submit"]:disabled {
 .world-hero-inner {
   position: relative;
   z-index: 2;
-  display: grid;
-  grid-template-columns: minmax(320px, 1fr) minmax(420px, 1.15fr);
-  gap: var(--sp-10);
+  display: flex;
+  justify-content: flex-end;
   align-items: center;
   width: 100%;
 }
 
-.world-hero-text { position: relative; }
+.world-hero-text {
+  position: relative;
+  max-width: 620px;
+  margin-left: auto;
+  text-align: left;
+}
 .world-hero-eyebrow {
   color: color-mix(in oklab, var(--mint) 40%, var(--white));
   opacity: 0.92;
@@ -2527,163 +2531,132 @@ button[type="submit"]:disabled {
   padding-bottom: 1px;
 }
 
-/* Carousel stage */
-.world-hero-carousel {
-  position: relative;
-  height: 440px;
-  perspective: 1400px;
-}
-.carousel-stage {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-}
-
-/* Card */
-.carousel-card {
-  --card-w: clamp(200px, 22vw, 260px);
-  --card-h: clamp(280px, 30vw, 360px);
+/* Constellation: stacked → spiral → circle → park top-left → spin */
+.shape-constellation {
+  --ring-radius: 220px;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: var(--card-w);
-  height: var(--card-h);
-  margin-left: calc(var(--card-w) / -2);
-  margin-top: calc(var(--card-h) / -2);
-  padding: var(--sp-6) var(--sp-5);
-  border-radius: 20px;
-  background:
-    radial-gradient(
-      140% 90% at 50% 0%,
-      color-mix(in oklab, var(--chip-color, var(--teal)) 28%, rgba(255, 255, 255, 0.06)),
-      transparent 70%
-    ),
-    rgba(255, 255, 255, 0.05);
-  border: 1px solid color-mix(in oklab, var(--chip-color, var(--teal)) 38%, rgba(255, 255, 255, 0.14));
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow:
-    0 24px 60px rgba(0, 0, 0, 0.45),
-    0 0 48px color-mix(in oklab, var(--chip-color, var(--teal)) 30%, transparent),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: var(--sp-3);
-  transform-origin: center center;
-  transition:
-    transform 1100ms var(--ease-calm),
-    opacity 900ms var(--ease-calm);
-  will-change: transform, opacity;
+  inset: 0;
+  z-index: 1;
   pointer-events: none;
 }
 
-/* Slot positions */
-.carousel-card[data-slot="hidden"] {
-  transform: translate3d(0, 0, 0) scale(0.35) rotate(-200deg);
-  opacity: 0;
-}
-.carousel-card[data-slot="left"] {
-  transform: translate3d(-66%, 0, -160px) rotateY(22deg) scale(0.88);
-  opacity: 0.55;
-  z-index: 1;
-}
-.carousel-card[data-slot="center"] {
-  transform: translate3d(0, 0, 0) rotateY(0deg) scale(1);
-  opacity: 1;
-  z-index: 3;
-}
-.carousel-card[data-slot="right"] {
-  transform: translate3d(66%, 0, -160px) rotateY(-22deg) scale(0.88);
-  opacity: 0.55;
-  z-index: 1;
-}
-.carousel-card[data-slot="offstage-left"] {
-  transform: translate3d(-140%, 0, -320px) rotateY(30deg) scale(0.7);
-  opacity: 0;
-  z-index: 0;
-}
-.carousel-card[data-slot="offstage-right"] {
-  transform: translate3d(140%, 0, -320px) rotateY(-30deg) scale(0.7);
-  opacity: 0;
-  z-index: 0;
+.constellation-position {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform: translate(-50%, -50%);
+  animation: constellation-park 1.2s cubic-bezier(0.4, 0, 0.2, 1) 3.6s forwards;
 }
 
-/* Card internals */
-.carousel-card-shape {
-  width: 88px;
-  height: 88px;
+@keyframes constellation-park {
+  from { transform: translate(-50%, -50%) scale(1); }
+  to   { transform: translate(calc(-50% - 30vw), calc(-50% - 26vh)) scale(0.55); }
+}
+
+.constellation-spinner {
+  position: relative;
+  width: 0;
+  height: 0;
+  animation: constellation-spin 52s linear 4.8s infinite;
+  transform-origin: 0 0;
+}
+
+@keyframes constellation-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.constellation-shape {
+  --angle: calc(var(--i) * 30deg);
+  position: absolute;
+  top: -30px;
+  left: -30px;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: color-mix(in oklab, var(--chip-color, var(--teal)) 24%, transparent);
+  background: radial-gradient(
+    circle at 50% 40%,
+    color-mix(in oklab, var(--chip-color, var(--teal)) 42%, rgba(255, 255, 255, 0.08)) 0%,
+    color-mix(in oklab, var(--chip-color, var(--teal)) 15%, transparent) 65%,
+    transparent 100%
+  );
   box-shadow:
-    0 0 56px color-mix(in oklab, var(--chip-color, var(--teal)) 50%, transparent),
-    inset 0 0 0 1px color-mix(in oklab, var(--chip-color, var(--teal)) 55%, transparent);
-  margin-top: var(--sp-2);
-}
-.carousel-card-shape img {
-  width: 50px;
-  height: 50px;
-  filter: drop-shadow(0 0 14px color-mix(in oklab, var(--chip-color, var(--teal)) 75%, transparent));
-  animation: shape-breathe 12s var(--ease-calm) infinite;
-}
-.carousel-card-realm {
-  font-size: var(--text-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: color-mix(in oklab, var(--chip-color, var(--teal)) 30%, var(--white));
-  opacity: 0.9;
-  margin: var(--sp-2) 0 0;
-  font-weight: 600;
-}
-.carousel-card-name {
-  font-size: clamp(1.5rem, 2vw + 0.5rem, 1.875rem);
-  font-weight: 600;
-  color: var(--white);
-  letter-spacing: -0.01em;
-  margin: 0;
-}
-.carousel-card-tag {
-  font-size: var(--text-sm);
-  color: var(--text-muted);
-  font-style: italic;
-  line-height: 1.5;
-  margin: auto 0 var(--sp-2);
-  opacity: 0.9;
+    0 0 26px color-mix(in oklab, var(--chip-color, var(--teal)) 55%, transparent),
+    inset 0 0 0 1px color-mix(in oklab, var(--chip-color, var(--teal)) 48%, transparent);
+  transform: translate(0, 0) scale(0.7);
+  opacity: 0;
+  animation: shape-journey 2.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: calc(var(--i) * 70ms);
+  will-change: transform, opacity;
 }
 
-/* Stacked-at-center helper (initial render before JS kicks in) */
-.carousel-card[data-slot="hidden"]:nth-child(n+4) {
-  /* keep deep stack shallow so we don't double-paint twelve big blurs */
-  filter: none;
+.constellation-shape img {
+  width: 32px;
+  height: 32px;
+  filter: drop-shadow(0 0 8px color-mix(in oklab, var(--chip-color, var(--teal)) 70%, transparent));
+}
+
+@keyframes shape-journey {
+  0% {
+    transform: translate(0, 0) scale(0.7);
+    opacity: 0;
+  }
+  14% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  55% {
+    transform:
+      rotate(calc(var(--angle) + 220deg))
+      translateX(calc(var(--ring-radius) * 0.45))
+      rotate(calc((var(--angle) + 220deg) * -1))
+      scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform:
+      rotate(var(--angle))
+      translateX(var(--ring-radius))
+      rotate(calc(var(--angle) * -1))
+      scale(1);
+    opacity: 1;
+  }
 }
 
 @media (max-width: 1024px) {
-  .world-hero-inner {
-    grid-template-columns: 1fr;
-    gap: var(--sp-12);
+  .shape-constellation { --ring-radius: 180px; }
+  .world-hero-inner { justify-content: center; }
+  .world-hero-text {
+    margin-left: 0;
+    margin-right: auto;
+    max-width: 100%;
+    padding-top: var(--sp-20);
   }
   .world-hero-heading { max-width: 22ch; }
-  .world-hero-carousel { height: 420px; }
 }
 
 @media (max-width: 720px) {
-  .world-hero { min-height: auto; padding: calc(var(--sp-20)) 0 var(--sp-12); }
+  .world-hero { min-height: 88vh; padding: calc(var(--sp-20)) 0 var(--sp-12); }
+  .shape-constellation { --ring-radius: 130px; }
   .world-hero-heading { font-size: clamp(2.1rem, 8vw + 0.5rem, 3rem); }
-  .world-hero-carousel { height: 380px; }
-  .carousel-card {
-    --card-w: clamp(180px, 60vw, 240px);
-    --card-h: clamp(260px, 80vw, 320px);
+  .constellation-shape {
+    top: -24px;
+    left: -24px;
+    width: 48px;
+    height: 48px;
   }
-  .carousel-card[data-slot="left"] {
-    transform: translate3d(-48%, 0, -140px) rotateY(18deg) scale(0.84);
+  .constellation-shape img {
+    width: 26px;
+    height: 26px;
   }
-  .carousel-card[data-slot="right"] {
-    transform: translate3d(48%, 0, -140px) rotateY(-18deg) scale(0.84);
+  @keyframes constellation-park {
+    from { transform: translate(-50%, -50%) scale(1); }
+    to   { transform: translate(calc(-50% - 28vw), calc(-50% - 30vh)) scale(0.6); }
   }
 }
 
@@ -2976,9 +2949,19 @@ button[type="submit"]:disabled {
 /* --- Reduced motion for world page ------------------------- */
 @media (prefers-reduced-motion: reduce) {
   .world-hero::before { animation: none !important; }
-  .carousel-card { transition-duration: 0ms !important; }
-  .carousel-card[data-slot="hidden"] { transform: none !important; opacity: 0 !important; }
-  .carousel-card-shape img { animation: none !important; }
+  .constellation-position {
+    animation: none !important;
+    transform: translate(calc(-50% - 30vw), calc(-50% - 26vh)) scale(0.55) !important;
+  }
+  .constellation-spinner { animation: none !important; }
+  .constellation-shape {
+    animation: none !important;
+    opacity: 1 !important;
+    transform:
+      rotate(var(--angle))
+      translateX(var(--ring-radius))
+      rotate(calc(var(--angle) * -1)) !important;
+  }
   .archetype-orbit-grid::before { animation: none !important; }
   .wave-item-a, .wave-item-b, .wave-item-c { transform: none !important; }
   .archetype-orbit-left, .archetype-orbit-right { transform: none !important; }
