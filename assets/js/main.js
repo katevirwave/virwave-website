@@ -131,7 +131,7 @@
   function initTimelineScroll() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    var timeline = document.querySelector('[data-section="how-it-works"] .timeline');
+    var timeline = document.querySelector('.timeline');
     if (!timeline) return;
 
     var numbers = Array.prototype.slice.call(timeline.querySelectorAll('.timeline-number'));
