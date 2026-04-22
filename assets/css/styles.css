@@ -2120,6 +2120,111 @@ button[type="submit"]:disabled {
   .app-screen-img:hover { transform: none; }
 }
 
+/* --- App Screenshot Carousel ------------------------------- */
+.app-carousel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+/* Track wrapper clips the peek — overflow: hidden here, not on the outer div */
+.app-carousel__track-wrap {
+  width: 300px;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+}
+
+.app-carousel__track {
+  display: flex;
+  gap: 12px;
+  transition: transform var(--dur-gentle) var(--ease-calm);
+  will-change: transform;
+}
+
+.app-carousel__slide {
+  flex: 0 0 260px;
+  margin: 0;
+}
+
+.app-carousel__img {
+  width: 260px;
+  height: auto;
+  display: block;
+  border-radius: var(--radius);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Footer row: ‹ · · · · › */
+.app-carousel__footer {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.app-carousel__nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--white);
+  cursor: pointer;
+  transition: background var(--dur-snappy) var(--ease-calm),
+              border-color var(--dur-snappy) var(--ease-calm);
+}
+.app-carousel__nav:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.30);
+}
+.app-carousel__nav:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+
+.app-carousel__dots {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+
+.app-carousel__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.25);
+  transition: background var(--dur-snappy) var(--ease-calm),
+              transform var(--dur-snappy) var(--ease-calm);
+}
+.app-carousel__dot.is-active {
+  background: var(--mint);
+  transform: scale(1.5);
+}
+.app-carousel__dot:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 3px;
+  border-radius: 50%;
+}
+
+@media (max-width: 480px) {
+  .app-carousel__track-wrap { width: 280px; }
+  .app-carousel__slide      { flex: 0 0 240px; }
+  .app-carousel__img        { width: 240px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-carousel__track { transition: none; }
+  .app-carousel__dot   { transition: none; transform: none !important; }
+}
+
 /* --- Breathing Cadence Reveal ------------------------------ */
 .breathing-reveal-wrap {
   padding: var(--sp-6) var(--sp-6);

@@ -80,23 +80,51 @@
             <a href="/interest/?interest=early-access" class="btn btn-primary">Join Waitlist</a>
           </div>
         </div>
-        <div class="product-spread__visual product-spread__visual--glow reveal">
-          <img src="/assets/img/app-screens/2.png"
-               class="app-screen-img"
-               alt="VirWave — active breathing session"
-               width="260" height="520">
-        </div>
-      </div>
-
-      <!-- App screenshot strip -->
-      <div class="app-screens-strip">
-        <div class="app-screens-scroll" role="region" aria-label="App screenshots">
-          <img src="/assets/img/app-screens/1.png" alt="VirWave Breathing Studio — choose your shape and rhythm" class="app-screen-img">
-          <img src="/assets/img/app-screens/2.png" alt="Active breathing session with aura animation" class="app-screen-img">
-          <img src="/assets/img/app-screens/3.png" alt="Connections — understand anyone you share a code with" class="app-screen-img">
-          <img src="/assets/img/app-screens/4.png" alt="Archetype profile — The Keeper" class="app-screen-img">
-          <img src="/assets/img/app-screens/5.png" alt="How to show up for your connection" class="app-screen-img">
-          <img src="/assets/img/app-screens/6.png" alt="Reflect — journal entries with mood and tag filters" class="app-screen-img">
+        <div class="product-spread__visual reveal">
+          <div class="app-carousel" role="region" aria-label="App screenshots" tabindex="0">
+            <div class="app-carousel__track-wrap">
+              <div class="app-carousel__track">
+                <figure class="app-carousel__slide">
+                  <img src="/assets/img/app-screens/1.png" alt="VirWave Breathing Studio — choose your shape and rhythm" class="app-carousel__img">
+                </figure>
+                <figure class="app-carousel__slide">
+                  <img src="/assets/img/app-screens/2.png" alt="Active breathing session with aura animation" class="app-carousel__img">
+                </figure>
+                <figure class="app-carousel__slide">
+                  <img src="/assets/img/app-screens/3.png" alt="Connections — understand anyone you share a code with" class="app-carousel__img">
+                </figure>
+                <figure class="app-carousel__slide">
+                  <img src="/assets/img/app-screens/4.png" alt="Archetype profile — The Keeper" class="app-carousel__img">
+                </figure>
+                <figure class="app-carousel__slide">
+                  <img src="/assets/img/app-screens/5.png" alt="How to show up for your connection" class="app-carousel__img">
+                </figure>
+                <figure class="app-carousel__slide">
+                  <img src="/assets/img/app-screens/6.png" alt="Reflect — journal entries with mood and tag filters" class="app-carousel__img">
+                </figure>
+              </div>
+            </div>
+            <div class="app-carousel__footer">
+              <button class="app-carousel__nav" data-dir="-1" aria-label="Previous screenshot" type="button">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <div class="app-carousel__dots" role="tablist" aria-label="Screenshot navigation">
+                <button class="app-carousel__dot is-active" role="tab" aria-selected="true"  aria-label="Screenshot 1" type="button"></button>
+                <button class="app-carousel__dot"           role="tab" aria-selected="false" aria-label="Screenshot 2" type="button"></button>
+                <button class="app-carousel__dot"           role="tab" aria-selected="false" aria-label="Screenshot 3" type="button"></button>
+                <button class="app-carousel__dot"           role="tab" aria-selected="false" aria-label="Screenshot 4" type="button"></button>
+                <button class="app-carousel__dot"           role="tab" aria-selected="false" aria-label="Screenshot 5" type="button"></button>
+                <button class="app-carousel__dot"           role="tab" aria-selected="false" aria-label="Screenshot 6" type="button"></button>
+              </div>
+              <button class="app-carousel__nav" data-dir="1" aria-label="Next screenshot" type="button">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M5 2L10 7L5 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -235,5 +263,84 @@
 
   <!-- Scripts -->
   <script src="/assets/js/main.js"></script>
+
+  <script>
+  /* ============================================================
+     App Screenshot Carousel
+     Auto-advances every 3.5s, pauses on hover, touch-swipeable,
+     keyboard accessible (arrow keys), dots are clickable.
+     Respects prefers-reduced-motion (no auto-advance).
+  ============================================================ */
+  (function () {
+    'use strict';
+
+    var carousel = document.querySelector('.app-carousel');
+    if (!carousel) return;
+
+    var track   = carousel.querySelector('.app-carousel__track');
+    var slides  = Array.from(carousel.querySelectorAll('.app-carousel__slide'));
+    var dots    = Array.from(carousel.querySelectorAll('.app-carousel__dot'));
+    var prevBtn = carousel.querySelector('[data-dir="-1"]');
+    var nextBtn = carousel.querySelector('[data-dir="1"]');
+    var n       = slides.length;
+    var current = 0;
+    var timer;
+    var INTERVAL = 3500;
+
+    function stepPx() {
+      var gap = parseFloat(window.getComputedStyle(track).gap) || 12;
+      return slides[0].offsetWidth + gap;
+    }
+
+    function goTo(idx) {
+      current = ((idx % n) + n) % n;
+      track.style.transform = 'translateX(' + (-current * stepPx()) + 'px)';
+      dots.forEach(function (d, i) {
+        var active = i === current;
+        d.classList.toggle('is-active', active);
+        d.setAttribute('aria-selected', String(active));
+      });
+    }
+
+    function startTimer() {
+      clearInterval(timer);
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      timer = setInterval(function () { goTo(current + 1); }, INTERVAL);
+    }
+
+    function stopTimer() { clearInterval(timer); }
+
+    prevBtn && prevBtn.addEventListener('click', function () { goTo(current - 1); startTimer(); });
+    nextBtn && nextBtn.addEventListener('click', function () { goTo(current + 1); startTimer(); });
+
+    dots.forEach(function (d, i) {
+      d.addEventListener('click', function () { goTo(i); startTimer(); });
+    });
+
+    carousel.addEventListener('mouseenter', stopTimer);
+    carousel.addEventListener('mouseleave', startTimer);
+
+    carousel.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft')  { goTo(current - 1); startTimer(); e.preventDefault(); }
+      if (e.key === 'ArrowRight') { goTo(current + 1); startTimer(); e.preventDefault(); }
+    });
+
+    var touchStartX = 0;
+    track.addEventListener('touchstart', function (e) {
+      touchStartX = e.touches[0].clientX;
+      stopTimer();
+    }, { passive: true });
+    track.addEventListener('touchend', function (e) {
+      var dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 40) { dx < 0 ? goTo(current + 1) : goTo(current - 1); }
+      startTimer();
+    }, { passive: true });
+
+    window.addEventListener('resize', function () { goTo(current); });
+
+    goTo(0);
+    startTimer();
+  })();
+  </script>
 </body>
 </html>
