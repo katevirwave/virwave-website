@@ -2140,6 +2140,10 @@ button[type="submit"]:disabled {
   gap: 12px;
   transition: transform var(--dur-gentle) var(--ease-calm);
   will-change: transform;
+  cursor: grab;
+}
+.app-carousel__track:active {
+  cursor: grabbing;
 }
 
 .app-carousel__slide {

@@ -317,24 +317,71 @@
       d.addEventListener('click', function () { goTo(i); startTimer(); });
     });
 
-    carousel.addEventListener('mouseenter', stopTimer);
-    carousel.addEventListener('mouseleave', startTimer);
-
     carousel.addEventListener('keydown', function (e) {
       if (e.key === 'ArrowLeft')  { goTo(current - 1); startTimer(); e.preventDefault(); }
       if (e.key === 'ArrowRight') { goTo(current + 1); startTimer(); e.preventDefault(); }
     });
 
-    var touchStartX = 0;
-    track.addEventListener('touchstart', function (e) {
-      touchStartX = e.touches[0].clientX;
+    /* --- Drag (finger + mouse) --------------------------------
+       Track follows the pointer in real time; snaps to the target
+       slide on release. Uses passive:false on touchmove only so
+       we can prevent page scroll during a horizontal swipe.       ---------------------------------------------------------- */
+    var dragStartX = 0;
+    var dragCurrentX = 0;
+    var dragging = false;
+    var SNAP_THRESHOLD = 50; // px needed to commit to next/prev
+
+    function dragStart(clientX) {
+      dragStartX = dragCurrentX = clientX;
+      dragging = true;
+      track.style.transition = 'none'; // follow finger without easing
       stopTimer();
-    }, { passive: true });
-    track.addEventListener('touchend', function (e) {
-      var dx = e.changedTouches[0].clientX - touchStartX;
-      if (Math.abs(dx) > 40) { dx < 0 ? goTo(current + 1) : goTo(current - 1); }
+    }
+
+    function dragMove(clientX) {
+      if (!dragging) return;
+      dragCurrentX = clientX;
+      var dx = dragCurrentX - dragStartX;
+      // Add light rubber-band resistance past the first/last slide
+      var base = -current * stepPx();
+      var atEdge = (current === 0 && dx > 0) || (current === n - 1 && dx < 0);
+      track.style.transform = 'translateX(' + (base + (atEdge ? dx * 0.25 : dx)) + 'px)';
+    }
+
+    function dragEnd() {
+      if (!dragging) return;
+      dragging = false;
+      var dx = dragCurrentX - dragStartX;
+      var target = Math.abs(dx) > SNAP_THRESHOLD
+        ? (dx < 0 ? current + 1 : current - 1)
+        : current;
+      track.style.transition = ''; // re-enable CSS ease for the snap
+      goTo(target);
       startTimer();
+    }
+
+    // Touch
+    track.addEventListener('touchstart', function (e) {
+      dragStart(e.touches[0].clientX);
     }, { passive: true });
+
+    track.addEventListener('touchmove', function (e) {
+      if (!dragging) return;
+      // Only prevent scroll if the intent is clearly horizontal
+      if (Math.abs(e.touches[0].clientX - dragStartX) > 8) e.preventDefault();
+      dragMove(e.touches[0].clientX);
+    }, { passive: false });
+
+    track.addEventListener('touchend',    function () { dragEnd(); }, { passive: true });
+    track.addEventListener('touchcancel', function () { dragEnd(); }, { passive: true });
+
+    // Mouse (desktop drag)
+    track.addEventListener('mousedown', function (e) {
+      dragStart(e.clientX);
+      e.preventDefault(); // prevent text/image selection while dragging
+    });
+    document.addEventListener('mousemove', function (e) { dragMove(e.clientX); });
+    document.addEventListener('mouseup',   function ()  { if (dragging) dragEnd(); });
 
     window.addEventListener('resize', function () { goTo(current); });
 
