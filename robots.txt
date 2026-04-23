@@ -6,3 +6,6 @@ Sitemap: https://virwave.com/sitemap.xml
 
 # Block access to internal asset directories from indexing
 Disallow: /assets/js/
+
+# Plushie pages are private per-object; don't index them.
+Disallow: /plushie/

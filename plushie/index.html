@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="base-path" content="/">
+
+  <title>Plushie — VirWave</title>
+  <meta name="description" content="Every VirWave plushie has its own page. Scan your plushie's tag to meet it.">
+  <meta name="robots" content="noindex">
+
+  <!-- OpenGraph -->
+  <meta property="og:title" content="Plushie — VirWave">
+  <meta property="og:description" content="Every VirWave plushie has its own page.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://virwave.com/plushie/">
+
+  <!-- Favicon -->
+  <link rel="icon" href="/assets/favicon.png" type="image/png">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <!-- ========== Navigation ========== -->
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo" aria-label="VirWave home">
+        <img src="/assets/logo_virwave.avif" alt="" width="32" height="32">
+        VirWave
+      </a>
+
+      <button id="nav-toggle" class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+
+      <ul id="nav-links" class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/archetypes/">World</a></li>
+        <li data-nav="blog"><a href="/blog/">Blog</a></li>
+        <li data-nav="events"><a href="/events/">Events</a></li>
+        <li data-nav="products"><a href="/products/">Products</a></li>
+        <li><a href="/#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <!-- ========== Plushie Page ========== -->
+  <main id="main-content" class="plushie-main">
+    <div class="container">
+      <div id="plushie-mount">
+        <!-- Populated by /assets/js/plushie.js.
+             Shows a loading shimmer so the empty container isn't jarring. -->
+        <div class="plushie-loading" aria-hidden="true">
+          <div class="plushie-loading__figure"></div>
+          <div class="plushie-loading__line plushie-loading__line--sm"></div>
+          <div class="plushie-loading__line"></div>
+          <div class="plushie-loading__line plushie-loading__line--md"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+
+  <!-- ========== Footer ========== -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copy">&copy; 2026 VirWave OAM. All rights reserved.</p>
+      <nav aria-label="Footer">
+      <ul class="footer-links">
+        <li><a href="/privacy/">Privacy Policy</a></li>
+        <li><a href="/terms/">Terms of Service</a></li>
+        <li data-nav="blog"><a href="/blog/">Blog</a></li>
+        <li><a href="/interest/">Get in Touch</a></li>
+      </ul>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/assets/js/main.js"></script>
+  <script src="/assets/js/supabase.js"></script>
+  <script src="/assets/js/plushie.js"></script>
+</body>
+</html>
