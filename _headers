@@ -1,0 +1,13 @@
+# Custom HTTP headers for CDN serving (Netlify, Cloudflare Pages).
+# GitHub Pages does not support custom headers natively — these take effect
+# only if traffic is routed through a CDN layer that reads this file.
+# Without a CDN, .well-known/apple-app-site-association may be served as
+# application/octet-stream, which causes iOS Universal Links to fail.
+# Solution: add a Cloudflare Worker or proxy that sets Content-Type: application/json
+# for the two AASA/assetlinks paths below.
+
+/.well-known/apple-app-site-association
+  Content-Type: application/json
+
+/.well-known/assetlinks.json
+  Content-Type: application/json

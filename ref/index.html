@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opening VirWave…</title>
+  <meta name="description" content="VirWave — Breathing and wellness. Opening the app now.">
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Favicon -->
+  <link rel="icon" href="/assets/favicon.png" type="image/png">
+
+  <style>
+    /* ── Design tokens (self-contained — no external stylesheet dependency) ── */
+    :root {
+      --navy-deep:  #091826;
+      --navy:       #0D2137;
+      --teal:       #0A7EA4;
+      --teal-light: #0C9AC4;
+      --mint:       #8CEBAA;
+      --white:      #F8F8F6;
+      --text:       rgba(248, 248, 246, 0.85);
+      --text-muted: rgba(248, 248, 246, 0.55);
+      --font:       -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --radius-lg:  12px;
+      --radius:     8px;
+
+      /* Breathing pulse durations */
+      --pulse-dur:  3s;
+      --fade-dur:   0.7s;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: var(--navy-deep);
+      color: var(--white);
+      font-family: var(--font);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100dvh;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    /* ── Breathing pulse animation ── */
+    .pulse-ring {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 2.5rem;
+      flex-shrink: 0;
+    }
+
+    .pulse-ring::before,
+    .pulse-ring::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle,
+        rgba(10, 126, 164, 0.35) 0%,
+        rgba(140, 235, 170, 0.12) 55%,
+        transparent 80%
+      );
+    }
+
+    .pulse-ring::before {
+      animation: breathe var(--pulse-dur) ease-in-out infinite;
+    }
+
+    .pulse-ring::after {
+      animation: breathe var(--pulse-dur) ease-in-out infinite;
+      animation-delay: calc(var(--pulse-dur) / 2);
+      opacity: 0.5;
+    }
+
+    .pulse-core {
+      position: absolute;
+      inset: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal), var(--mint));
+      box-shadow:
+        0 0 24px rgba(10, 126, 164, 0.5),
+        0 0 48px rgba(140, 235, 170, 0.2);
+      animation: core-pulse var(--pulse-dur) ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% { transform: scale(1);   opacity: 0.6; }
+      50%       { transform: scale(1.6); opacity: 0; }
+    }
+
+    @keyframes core-pulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1);    box-shadow: 0 0 24px rgba(10, 126, 164, 0.5), 0 0 48px rgba(140, 235, 170, 0.2); }
+      50%       { transform: translate(-50%, -50%) scale(1.12); box-shadow: 0 0 36px rgba(10, 126, 164, 0.7), 0 0 72px rgba(140, 235, 170, 0.35); }
+    }
+
+    /* ── Logo wordmark ── */
+    .wordmark {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .wordmark span {
+      color: var(--teal-light);
+    }
+
+    /* ── Status messages ── */
+    .status-primary {
+      font-size: 1.125rem;
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1.4;
+      margin-bottom: 0.5rem;
+      transition: opacity var(--fade-dur) ease;
+    }
+
+    .status-secondary {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      opacity: 0;
+      transition: opacity var(--fade-dur) ease;
+    }
+
+    .status-secondary.visible {
+      opacity: 1;
+    }
+
+    /* ── Fallback store links (shown after redirect) ── */
+    .store-links {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: center;
+      opacity: 0;
+      transition: opacity var(--fade-dur) ease;
+    }
+
+    .store-links.visible {
+      opacity: 1;
+    }
+
+    .store-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-lg);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      font-family: var(--font);
+      min-height: 48px;
+      min-width: 200px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      border: none;
+    }
+
+    .store-btn:hover {
+      opacity: 0.85;
+      transform: translateY(-1px);
+    }
+
+    .store-btn-primary {
+      background: linear-gradient(135deg, var(--teal), var(--teal-light));
+      color: var(--white);
+      justify-content: center;
+    }
+
+    .store-btn-secondary {
+      background: rgba(255, 255, 255, 0.10);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: var(--white);
+      justify-content: center;
+    }
+
+    /* ── Footer note ── */
+    .footer-note {
+      margin-top: 3rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      opacity: 0.6;
+    }
+
+    /* ── Reduced motion: suppress animation, keep functionality ── */
+    @media (prefers-reduced-motion: reduce) {
+      .pulse-ring::before,
+      .pulse-ring::after,
+      .pulse-core {
+        animation: none;
+      }
+      .store-btn {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Breathing pulse indicator -->
+  <div class="pulse-ring" role="presentation" aria-hidden="true">
+    <div class="pulse-core"></div>
+  </div>
+
+  <!-- Wordmark -->
+  <p class="wordmark" aria-label="VirWave">Vir<span>Wave</span></p>
+
+  <!-- Status messaging -->
+  <p class="status-primary" id="status-primary" aria-live="polite">Opening VirWave…</p>
+  <p class="status-secondary" id="status-secondary">Taking you to the App Store.</p>
+
+  <!-- Store fallback links (revealed after timeout) -->
+  <div class="store-links" id="store-links" aria-label="Download VirWave">
+    <a id="primary-store-link" href="https://apps.apple.com/app/id6737994265" class="store-btn store-btn-primary" aria-label="Download on the App Store">
+      Download on the App Store
+    </a>
+    <a id="secondary-store-link" href="https://play.google.com/store/apps/details?id=com.virwave.virwave" class="store-btn store-btn-secondary" aria-label="Get it on Google Play" style="display:none">
+      Get it on Google Play
+    </a>
+  </div>
+
+  <p class="footer-note">VirWave &middot; Breathe first. Then move.</p>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // ── Extract affiliate code from URL ──
+      // Supports both /ref?code=CODE and /ref/CODE path patterns.
+      var params  = new URLSearchParams(window.location.search);
+      var code    = params.get('code') || params.get('ref');
+
+      if (!code) {
+        // Try last path segment: /ref/KATE → KATE
+        var segments = window.location.pathname.split('/').filter(Boolean);
+        var last = segments[segments.length - 1];
+        // Only treat as code if it passes the affiliate code format check
+        if (last && /^[A-Z0-9]{3,20}$/i.test(last) && last.toLowerCase() !== 'ref') {
+          code = last;
+        }
+      }
+
+      code = code ? code.toUpperCase() : null;
+
+      // ── Detect platform ──
+      var ua        = navigator.userAgent || '';
+      var isAndroid = /android/i.test(ua);
+      var isIOS     = /iphone|ipad|ipod/i.test(ua);
+
+      // ── Fire attribution beacon (fire-and-forget, non-blocking) ──
+      // Uses affiliate-fingerprint (verify_jwt=false) for unauthenticated click recording.
+      // The app handles authenticated attribution via affiliate-attribute after sign-in.
+      //
+      // Note: Content-Type: application/json required — sendBeacon with plain string
+      // sends text/plain which some edge functions tolerate, but Blob is explicit.
+      if (code) {
+        try {
+          var beaconUrl     = 'https://xswebtvkueusdaeboizp.supabase.co/functions/v1/affiliate-fingerprint';
+          var beaconPayload = JSON.stringify({
+            action:         'record',
+            affiliate_code: code,
+            user_agent:     ua,
+            timezone:       Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+            language:       navigator.language || 'en-US'
+          });
+
+          if (navigator.sendBeacon) {
+            navigator.sendBeacon(beaconUrl, new Blob([beaconPayload], { type: 'application/json' }));
+          } else {
+            // Fallback for browsers without sendBeacon (rare, non-blocking)
+            fetch(beaconUrl, {
+              method:    'POST',
+              headers:   { 'Content-Type': 'application/json' },
+              body:      beaconPayload,
+              keepalive: true
+            }).catch(function () {});
+          }
+        } catch (e) {
+          // Attribution beacon failure is non-fatal — redirect continues regardless
+        }
+      }
+
+      // ── Build store URLs with attribution referrer ──
+      var appStoreUrl  = 'https://apps.apple.com/app/id6737994265';
+      var playStoreUrl = 'https://play.google.com/store/apps/details?id=com.virwave.virwave';
+
+      if (code) {
+        // Android Play Install Referrer carries the affiliate code for app-side attribution
+        playStoreUrl += '&referrer=' + encodeURIComponent('affiliate_code=' + code);
+      }
+
+      // ── Attempt to open the app via custom deep link ──
+      // virwave://ref?code=CODE opens the app directly if installed.
+      // After 1.5s with no navigation (app not installed), we redirect to the store.
+      if (code && (isIOS || isAndroid)) {
+        window.location.href = 'virwave://ref?code=' + encodeURIComponent(code);
+      }
+
+      // ── Fallback redirect after timeout ──
+      // Runs for all visitors: installed users get the app, others go to their store.
+      // prefers-reduced-motion: we still fire the redirect — the timeout affects UX only.
+      var redirectUrl;
+      if (isAndroid) {
+        redirectUrl = playStoreUrl;
+      } else {
+        // iOS + desktop both go to App Store (best signal for desktop referrals)
+        redirectUrl = appStoreUrl;
+      }
+
+      var statusPrimary   = document.getElementById('status-primary');
+      var statusSecondary = document.getElementById('status-secondary');
+      var storeLinks      = document.getElementById('store-links');
+      var primaryLink     = document.getElementById('primary-store-link');
+      var secondaryLink   = document.getElementById('secondary-store-link');
+
+      // Update store links to correct platform
+      if (isAndroid) {
+        primaryLink.href        = playStoreUrl;
+        primaryLink.textContent = 'Get it on Google Play';
+        primaryLink.setAttribute('aria-label', 'Get it on Google Play');
+      } else {
+        // On non-Android, also show the Play Store link as secondary
+        secondaryLink.style.display = '';
+        secondaryLink.href          = playStoreUrl;
+      }
+
+      // After 1.5s: update messaging and redirect
+      var TIMEOUT_MS   = 1500;
+      var motionOk     = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var redirectTimer = setTimeout(function () {
+        // Update status text
+        if (statusPrimary)   { statusPrimary.textContent = 'Taking you to the App Store…'; }
+        if (statusSecondary) {
+          statusSecondary.textContent = "If VirWave didn't open, download it below.";
+          statusSecondary.classList.add('visible');
+        }
+        if (storeLinks) { storeLinks.classList.add('visible'); }
+
+        // Navigate to store
+        window.location.href = redirectUrl;
+      }, TIMEOUT_MS);
+
+      // Desktop (no app to open) — show store links immediately, redirect normally
+      if (!isIOS && !isAndroid) {
+        statusPrimary.textContent = 'Download VirWave to get started.';
+        storeLinks.classList.add('visible');
+        // Still redirect to App Store after timeout for desktop users
+      }
+    })();
+  </script>
+
+  <!--
+    AASA / Universal Links note:
+    The .well-known/apple-app-site-association file requires Content-Type: application/json.
+    GitHub Pages serves files without extension with Content-Type: application/octet-stream
+    by default. If universal links fail to activate, a CDN layer (Cloudflare, Netlify) is
+    needed to set the correct Content-Type header. The _headers file at the repo root
+    configures this for Netlify / Cloudflare Pages serving.
+  -->
+
+</body>
+</html>
