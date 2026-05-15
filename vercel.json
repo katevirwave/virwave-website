@@ -1,8 +1,8 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-  "rewrites": [
-    { "source": "/ref/:code", "destination": "/ref/index.html" }
+  "redirects": [
+    { "source": "/ref/:code", "destination": "/ref?code=:code", "permanent": false }
   ],
   "headers": [
     {
