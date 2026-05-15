@@ -1,0 +1,12 @@
+.page { display: flex; flex-direction: column; gap: var(--sp-6); }
+.title { font-size: 1.5rem; font-weight: 600; color: var(--color-white-90); }
+.statGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: var(--sp-4); }
+.card { padding: var(--sp-5); }
+.cardValue { font-size: 1.75rem; font-weight: 300; color: var(--color-white-90); margin-bottom: var(--sp-1); }
+.cardLabel { font-size: 0.8125rem; color: var(--color-white-50); }
+.sectionTitle { font-size: 1rem; font-weight: 600; color: var(--color-white-80); margin-bottom: var(--sp-3); }
+.table { width: 100%; border-collapse: collapse; }
+.table th { text-align: left; font-size: 0.75rem; color: var(--color-white-40); text-transform: uppercase; letter-spacing: 0.06em; padding: var(--sp-2) var(--sp-3); border-bottom: 1px solid var(--glass-subtle-border); }
+.table td { padding: var(--sp-3); border-bottom: 1px solid var(--glass-subtle-border); color: var(--color-white-80); font-size: 0.9375rem; }
+.link { color: var(--color-teal-400); text-decoration: none; }
+.link:hover { text-decoration: underline; }

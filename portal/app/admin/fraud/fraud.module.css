@@ -1,0 +1,5 @@
+.page { display: flex; flex-direction: column; gap: var(--sp-6); }
+.title { font-size: 1.5rem; font-weight: 600; color: var(--color-white-90); }
+.subtitle { font-size: 0.875rem; color: var(--color-white-50); margin-top: calc(-1 * var(--sp-4)); }
+.clear { padding: var(--sp-8); text-align: center; color: var(--color-white-60); font-size: 0.9375rem; }
+.sectionTitle { font-size: 1rem; font-weight: 600; color: var(--color-white-80); margin-bottom: var(--sp-3); }

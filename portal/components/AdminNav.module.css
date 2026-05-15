@@ -1,0 +1,28 @@
+.sidebar {
+  width: 220px; min-height: 100svh; flex-shrink: 0;
+  background: var(--color-gray-950);
+  border-right: 1px solid var(--glass-subtle-border);
+  /* 3px amber top border visually distinguishes admin from affiliate portal */
+  border-top: 3px solid var(--color-amber-400);
+  display: flex; flex-direction: column; padding: var(--sp-6) 0;
+}
+.header { padding: 0 var(--sp-4) var(--sp-6); border-bottom: 1px solid var(--glass-subtle-border); margin-bottom: var(--sp-4); }
+.wordmark { display: block; font-size: 0.75rem; font-weight: 600; color: var(--color-amber-400); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: var(--sp-1); }
+.adminName { font-size: 0.875rem; color: var(--color-white-70); }
+.list { list-style: none; display: flex; flex-direction: column; gap: 2px; padding: 0 var(--sp-2); }
+.item {
+  display: flex; align-items: center; gap: var(--sp-3);
+  padding: var(--sp-3); border-radius: var(--radius);
+  color: var(--color-white-60); font-size: 0.875rem; min-height: 44px;
+  transition: background var(--duration-snappy) var(--ease-gentle), color var(--duration-snappy) var(--ease-gentle);
+}
+.item:hover { background: var(--glass-subtle-bg); color: var(--color-white-90); }
+.item.active { color: var(--color-teal-400); border-left: 3px solid var(--color-teal-400); padding-left: calc(var(--sp-3) - 3px); }
+.icon { font-size: 1rem; width: 20px; text-align: center; flex-shrink: 0; }
+.label { flex: 1; }
+.badge {
+  background: var(--color-teal-400); color: var(--color-white);
+  font-size: 0.6875rem; font-weight: 600; min-width: 18px; height: 18px;
+  border-radius: var(--radius-full); padding: 0 var(--sp-1);
+  display: flex; align-items: center; justify-content: center;
+}
