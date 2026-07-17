@@ -13,6 +13,9 @@ Desktop.ini
 # Claude Code local settings (project settings are committed)
 .claude/settings.local.json
 
+# Vercel CLI local project state (CI uses VERCEL_ORG_ID / VERCEL_PROJECT_ID secrets)
+.vercel/
+
 # Node (not used, but just in case)
 node_modules/
 npm-debug.log*

@@ -1,0 +1,14 @@
+.shell {
+  display: flex;
+  min-height: 100svh;
+}
+.content {
+  flex: 1;
+  padding: var(--sp-8);
+  max-width: 960px;
+  margin: 0 auto;
+}
+@media (max-width: 767px) {
+  .shell { flex-direction: column; }
+  .content { padding: var(--sp-4); padding-bottom: calc(var(--sp-16) + env(safe-area-inset-bottom)); }
+}

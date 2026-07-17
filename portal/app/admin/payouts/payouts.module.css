@@ -1,0 +1,14 @@
+.page { display: flex; flex-direction: column; gap: var(--sp-5); }
+.header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--sp-3); }
+.title { font-size: 1.5rem; font-weight: 600; color: var(--color-white-90); }
+.settlementBtn { padding: var(--sp-2) var(--sp-4); background: var(--glass-medium-bg); border: 1px solid var(--glass-medium-border); border-radius: var(--radius); color: var(--color-white-80); font-size: 0.875rem; cursor: pointer; }
+.settlementBtn:hover { filter: brightness(1.1); }
+.table { width: 100%; border-collapse: collapse; }
+.table th { text-align: left; font-size: 0.75rem; color: var(--color-white-40); text-transform: uppercase; letter-spacing: 0.06em; padding: var(--sp-2) var(--sp-3); border-bottom: 1px solid var(--glass-subtle-border); }
+.table td { padding: var(--sp-3); border-bottom: 1px solid var(--glass-subtle-border); color: var(--color-white-80); font-size: 0.9375rem; }
+.actionCell { display: flex; gap: var(--sp-2); align-items: center; }
+.approveBtn { padding: var(--sp-1) var(--sp-3); background: var(--glass-medium-bg); border: 1px solid var(--color-teal-400); border-radius: var(--radius); color: var(--color-teal-400); font-size: 0.8125rem; cursor: pointer; }
+.payForm { display: flex; gap: var(--sp-2); align-items: center; }
+.refInput { background: var(--glass-subtle-bg); border: 1px solid var(--glass-subtle-border); border-radius: var(--radius); height: 32px; padding: 0 var(--sp-3); font-size: 0.875rem; color: var(--color-white-90); width: 140px; }
+.payBtn { padding: var(--sp-1) var(--sp-3); background: var(--color-teal-400); border: none; border-radius: var(--radius); color: #fff; font-size: 0.8125rem; cursor: pointer; }
+.nextPage { color: var(--color-teal-400); font-size: 0.875rem; text-decoration: none; }

@@ -1,0 +1,12 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["7T37R78G7Y.com.virwave.virwave"],
+        "components": [
+          { "/": "/ref*", "comment": "Affiliate referral paths" }
+        ]
+      }
+    ]
+  }
+}

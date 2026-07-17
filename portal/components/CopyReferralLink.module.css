@@ -1,0 +1,22 @@
+.pill {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 var(--sp-2) 0 var(--sp-4);
+  gap: var(--sp-3);
+  margin-top: var(--sp-4);
+}
+.url { flex: 1; font-size: 0.875rem; color: var(--color-white-70); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.copyBtn {
+  padding: 0 var(--sp-4);
+  height: 36px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-white-90);
+  transition: filter var(--duration-snappy) var(--ease-gentle);
+  flex-shrink: 0;
+  border-radius: var(--radius);
+}
+.copyBtn:hover { filter: brightness(1.1); }

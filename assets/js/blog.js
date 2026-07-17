@@ -46,7 +46,7 @@
 
     return '<article class="blog-card">' +
       '<time class="blog-card-date" datetime="' + post.date + '">' + formatDate(post.date) + '</time>' +
-      '<h3><a href="' + getBase() + 'blog/post.html?slug=' + encodeURIComponent(post.slug) + '">' + post.title + '</a></h3>' +
+      '<h3><a href="' + getBase() + 'blog/post?slug=' + encodeURIComponent(post.slug) + '">' + post.title + '</a></h3>' +
       '<p>' + (post.description || '') + '</p>' +
       '<div class="blog-card-tags">' + tags + '</div>' +
       '</article>';

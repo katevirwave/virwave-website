@@ -1,0 +1,36 @@
+/* styles/tokens.css — VirWave design system tokens */
+:root {
+  --color-gray-950: #151718;
+  --color-teal-400: #0a7ea4;
+  --color-teal-600: #0d6a8a;
+  --color-teal-900: #052a3a;
+  --color-mint-400: #8cebaa;
+  --color-amber-400: #fbbf24;
+  --color-white: #f8f8f6;
+  --color-white-90: rgba(248, 248, 246, 0.90);
+  --color-white-80: rgba(248, 248, 246, 0.80);
+  --color-white-70: rgba(248, 248, 246, 0.70);
+  --color-white-60: rgba(248, 248, 246, 0.60);
+  --color-white-55: rgba(248, 248, 246, 0.55);
+  --color-white-50: rgba(248, 248, 246, 0.50);
+  --color-white-40: rgba(248, 248, 246, 0.40);
+  --color-white-30: rgba(248, 248, 246, 0.30);
+
+  --glass-subtle-bg:     rgba(255, 255, 255, 0.06);
+  --glass-subtle-border: rgba(255, 255, 255, 0.08);
+  --glass-medium-bg:     rgba(255, 255, 255, 0.12);
+  --glass-medium-border: rgba(255, 255, 255, 0.18);
+  --glass-strong-bg:     rgba(255, 255, 255, 0.20);
+  --glass-strong-border: rgba(255, 255, 255, 0.30);
+
+  --sp-1: 4px;  --sp-2: 8px;   --sp-3: 12px;  --sp-4: 16px;
+  --sp-5: 20px; --sp-6: 24px;  --sp-8: 32px;  --sp-12: 48px; --sp-16: 64px;
+
+  --radius:      8px;
+  --radius-lg:   12px;
+  --radius-full: 9999px;
+
+  --ease-gentle:     cubic-bezier(0.33, 1, 0.68, 1);
+  --duration-gentle: 350ms;
+  --duration-snappy: 200ms;
+}

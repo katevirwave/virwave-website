@@ -74,6 +74,19 @@ Container: 1120px max. Touch targets: 48px minimum.
 - Plain language, inclusive, calm. No guilt, no guru energy, no clinical jargon.
 - Neurodivergent-affirming by default.
 
+## Agent Tips (VS Code)
+
+- **Figma and Make links should trigger the Figma MCP workflow**: Read `../virwave_v3/docs/setup/FIGMA_MCP.md` and use it before inventing UI manually.
+- **Open Paper files should trigger the Paper MCP workflow**: Read `../virwave_v3/docs/setup/PAPER_MCP.md` and use Paper for live design context and incremental canvas edits.
+- **21st.dev for component inspiration**: Read `../virwave_v3/docs/setup/21ST_DEV_MCP.md`. Use `21st_magic_component_inspiration` for layout and interaction reference before building new sections. Never import npm packages — adapt to vanilla JS/CSS.
+- **Convert outputs to website conventions**: Treat Figma MCP or Paper-derived implementation guidance as reference only. Rebuild it as semantic HTML, scoped CSS in `assets/css/styles.css`, and vanilla JS when needed.
+- **Retry on the concrete frame**: If Figma context fails on a page root or selection-like node, fetch structure first and retry on the real frame/component node.
+- **Use Paper incrementally**: Start with file context and selection, make small changes, and screenshot the result during the build instead of batching everything.
+- **UI review**: Request screenshots via image carousel after CSS changes. Click any attachment to open the full image viewer with viewport comparison.
+- **Session forking**: Fork the conversation before touching `assets/css/styles.css` for major layout changes — easy rollback if the glassmorphism or grid work goes wrong.
+- **Nested subagents**: Use the Explore subagent to cross-reference brand tokens from `../virwave_v3/src/theme/tokens.ts` without leaving the main context.
+- **`/troubleshoot`**: Diagnose agent debug logs — now works for Copilot CLI sessions too.
+
 ## Verification
 
 After changes: serve locally (`python3 -m http.server 8000`), check mobile viewport, verify reduced motion behavior.

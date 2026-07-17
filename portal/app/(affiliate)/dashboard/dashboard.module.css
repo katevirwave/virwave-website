@@ -1,0 +1,69 @@
+.page { display: flex; flex-direction: column; gap: var(--sp-8); }
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-8) 0 var(--sp-4);
+}
+.heroMain { display: flex; flex-direction: column; gap: var(--sp-1); }
+.heroAmount { font-size: 3.5rem; font-weight: 300; color: var(--color-mint-400); line-height: 1.1; }
+.heroLabel {
+  font-size: 0.75rem; color: var(--color-white-70);
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+.heroSecondary { font-size: 1.5rem; font-weight: 400; color: var(--color-white-90); }
+.heroTertiary { font-size: 0.875rem; color: var(--color-white-70); }
+.heroPayoutNotice { font-size: 0.8125rem; color: var(--color-white-60); }
+
+.premiumBadge {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+}
+.premiumBadgeWarn { border-color: color-mix(in srgb, var(--color-amber-400) 40%, transparent); }
+.premiumMark { color: var(--color-mint-400); font-size: 0.875rem; flex-shrink: 0; }
+.premiumMarkWarn { color: var(--color-amber-400); font-size: 0.875rem; flex-shrink: 0; }
+.premiumText { font-size: 0.875rem; color: var(--color-white-70); }
+
+.tierBlock { display: flex; flex-direction: column; gap: var(--sp-2); }
+.tierLabel { font-size: 0.9375rem; color: var(--color-white-70); }
+.tierCustom { font-size: 0.9375rem; color: var(--color-white-70); }
+.progressTrack {
+  height: 8px; border-radius: var(--radius-full);
+  background: var(--glass-subtle-bg);
+  border: 1px solid var(--glass-subtle-border);
+  overflow: hidden;
+}
+.progressFill {
+  height: 100%; background: var(--color-teal-600); border-radius: var(--radius-full);
+  transition: width var(--duration-gentle) var(--ease-gentle);
+}
+@media (prefers-reduced-motion: reduce) {
+  .progressFill { transition: none; }
+}
+.progressCaption { font-size: 0.8125rem; color: var(--color-white-70); }
+
+.perksBlock { display: flex; flex-direction: column; gap: var(--sp-3); }
+.perksTitle {
+  font-size: 0.6875rem; color: var(--color-white-60);
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+.perksList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-2); }
+.perkItem { display: flex; align-items: center; gap: var(--sp-2); font-size: 0.875rem; color: var(--color-white-80); }
+.perkCheck { color: var(--color-mint-400); font-size: 0.75rem; flex-shrink: 0; }
+.perksNext { font-size: 0.8125rem; color: var(--color-white-55); padding-top: var(--sp-1); }
+
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--sp-4);
+}
+.statCard { padding: var(--sp-4); transition: border-color var(--duration-snappy) var(--ease-gentle); }
+.statCard:hover { border-color: var(--glass-strong-border); }
+.statValue { font-size: 1.5rem; font-weight: 600; margin-bottom: var(--sp-1); }
+.statLabel {
+  font-size: 0.6875rem; color: var(--color-white-60);
+  text-transform: uppercase; letter-spacing: 0.06em;
+}

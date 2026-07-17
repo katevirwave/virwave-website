@@ -1,0 +1,35 @@
+.page { display: flex; flex-direction: column; gap: var(--sp-6); }
+.title { font-size: 1.5rem; font-weight: 600; color: var(--color-white-90); }
+.emptyState { padding: var(--sp-8); text-align: center; font-size: 0.9375rem; color: var(--color-white-60); line-height: 1.6; }
+.emptyLink { margin-top: var(--sp-6); }
+
+.chartCard { padding: var(--sp-6); }
+.chartTitle { display: block; font-size: 0.875rem; color: var(--color-white-70); margin-bottom: var(--sp-6); }
+
+/* Funnel chart */
+.funnelChart { display: flex; flex-direction: column; gap: var(--sp-3); }
+.funnelRow { display: grid; grid-template-columns: 180px 1fr 40px; align-items: center; gap: var(--sp-3); }
+.funnelLabel { font-size: 0.8125rem; color: var(--color-white-80); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.funnelBarTrack { height: 8px; background: var(--glass-subtle-bg); border-radius: var(--radius-full); overflow: hidden; }
+.funnelBarFill {
+  height: 100%; background: var(--color-teal-400); border-radius: var(--radius-full);
+  transition: width var(--duration-gentle) var(--ease-gentle);
+}
+.funnelCount { font-size: 0.8125rem; color: var(--color-white-80); text-align: right; }
+
+/* Monthly trend (vertical bar chart) */
+.trendChart { display: flex; align-items: flex-end; gap: var(--sp-2); height: 120px; }
+.trendBar { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; flex: 1; height: 100%; gap: var(--sp-1); }
+.trendBarFill {
+  width: 100%; min-height: 4px; background: var(--color-mint-400);
+  border-radius: var(--radius) var(--radius) 0 0;
+  transition: height var(--duration-gentle) var(--ease-gentle);
+}
+.trendMonth { font-size: 0.6875rem; color: var(--color-white-60); }
+
+@media (prefers-reduced-motion: reduce) {
+  .funnelBarFill, .trendBarFill { transition: none; }
+}
+@media (max-width: 600px) {
+  .funnelRow { grid-template-columns: 120px 1fr 32px; }
+}

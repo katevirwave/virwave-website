@@ -1,0 +1,12 @@
+.page { display: flex; flex-direction: column; gap: var(--sp-5); }
+.header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--sp-3); }
+.title { font-size: 1.5rem; font-weight: 600; color: var(--color-white-90); }
+.filters { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+.filterBtn { padding: var(--sp-1) var(--sp-3); border: 1px solid var(--glass-subtle-border); border-radius: var(--radius); background: transparent; color: var(--color-white-60); font-size: 0.875rem; cursor: pointer; text-decoration: none; }
+.filterActive { background: var(--glass-medium-bg); color: var(--color-white-90); border-color: var(--glass-medium-border); }
+.table { width: 100%; border-collapse: collapse; }
+.table th { text-align: left; font-size: 0.75rem; color: var(--color-white-40); text-transform: uppercase; letter-spacing: 0.06em; padding: var(--sp-2) var(--sp-3); border-bottom: 1px solid var(--glass-subtle-border); }
+.table td { padding: var(--sp-3); border-bottom: 1px solid var(--glass-subtle-border); color: var(--color-white-80); font-size: 0.9375rem; }
+.row:hover td { background: var(--glass-subtle-bg); }
+.link { color: var(--color-teal-400); text-decoration: none; font-weight: 500; }
+.nextPage { color: var(--color-teal-400); font-size: 0.875rem; text-decoration: none; }

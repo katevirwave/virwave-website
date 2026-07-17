@@ -1,0 +1,55 @@
+/* styles/globals.css */
+@import './tokens.css';
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--color-gray-950);
+  color: var(--color-white-90);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+
+.glass-card {
+  background: var(--glass-medium-bg);
+  border: 1px solid var(--glass-medium-border);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: var(--radius-lg);
+}
+.glass-card--strong {
+  background: var(--glass-strong-bg);
+  border-color: var(--glass-strong-border);
+}
+.glass-card--subtle {
+  background: var(--glass-subtle-bg);
+  border-color: var(--glass-subtle-border);
+}
+
+/* Accessible focus ring — never suppress */
+:focus-visible {
+  outline: 2px solid var(--color-teal-400);
+  outline-offset: 2px;
+}
+
+/* Screen-reader only */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* Page enter animation */
+@media (prefers-reduced-motion: no-preference) {
+  .page-enter {
+    animation: pageEnter var(--duration-gentle) var(--ease-gentle) both;
+  }
+  @keyframes pageEnter {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+}
