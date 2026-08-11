@@ -1550,6 +1550,20 @@ button[type="submit"]:disabled {
 .footer-copy {
   font-size: var(--text-sm);
 }
+.footer-copy p { margin: 0; }
+
+.footer-registration {
+  margin-top: var(--sp-1);
+  font-size: var(--text-xs);
+  opacity: 0.7;
+}
+.footer-registration a {
+  color: inherit;
+  transition: color 0.2s cubic-bezier(0.33, 1, 0.68, 1);
+}
+.footer-registration a:hover {
+  color: var(--mint);
+}
 
 /* --- Page Top Spacer --------------------------------------- */
 .page-top { padding-top: 64px; }
