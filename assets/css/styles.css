@@ -6605,8 +6605,21 @@ textarea.plushie-input {
   --book-night-text: rgba(248, 248, 246, 0.88);
   --book-night-mute: rgba(248, 248, 246, 0.58);
   --book-night-rule: rgba(140, 235, 170, 0.24);
-  --book-cover-1:    #15455F;
-  --book-cover-2:    #061320;
+  /* Aged leather binding: dark blue-black morocco, gilt tooling. */
+  --book-cover-1:    #1C2F3A;
+  --book-cover-2:    #080F15;
+  --book-leather-hi: #26404E;
+  --book-gilt:       #C9A961;
+  --book-gilt-dim:   rgba(201, 169, 97, 0.55);
+  --book-gilt-faint: rgba(201, 169, 97, 0.28);
+  --book-grain-hi:   rgba(255, 255, 255, 0.028);
+  --book-grain-lo:   rgba(0, 0, 0, 0.20);
+  --book-patina:     rgba(94, 132, 146, 0.11);
+  --book-patina-dk:  rgba(4, 10, 15, 0.55);
+  --book-hub-hi:     rgba(255, 255, 255, 0.10);
+  --book-hub-lo:     rgba(0, 0, 0, 0.34);
+  --book-foxing:     rgba(140, 102, 48, 0.13);
+  --book-edge-warm:  #DCCFB2;
   --book-emboss:     rgba(255, 255, 255, 0.14);
   --book-emboss-2:   rgba(255, 255, 255, 0.05);
   --book-gutter:     rgba(4, 12, 20, 0.45);
@@ -6719,9 +6732,10 @@ textarea.plushie-input {
   bottom: 3%;
   width: 7px;
   background:
+    linear-gradient(to bottom, var(--book-foxing), transparent 18%, transparent 82%, var(--book-foxing)),
     repeating-linear-gradient(
       to bottom,
-      var(--book-paper) 0 2px,
+      var(--book-edge-warm) 0 2px,
       var(--book-edge-line) 2px 3px
     );
   pointer-events: none;
@@ -6805,12 +6819,20 @@ textarea.plushie-input {
 .book__face--cover {
   cursor: pointer;
   padding: 0;
-  border-radius: 3px 9px 9px 3px;
+  border-radius: 2px 10px 10px 2px;
+  /* Grained leather: patina blotches over crosshatched grain over the hide. */
   background:
-    linear-gradient(150deg, var(--book-cover-1), var(--book-cover-2) 62%);
+    radial-gradient(38% 30% at 22% 16%, var(--book-patina), transparent 70%),
+    radial-gradient(34% 28% at 80% 74%, var(--book-patina-dk), transparent 72%),
+    radial-gradient(46% 38% at 62% 34%, var(--book-patina), transparent 76%),
+    repeating-linear-gradient(74deg, var(--book-grain-hi) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(-68deg, var(--book-grain-lo) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(14deg, var(--book-grain-hi) 0 1px, transparent 1px 6px),
+    linear-gradient(155deg, var(--book-leather-hi), var(--book-cover-1) 42%, var(--book-cover-2) 88%);
   box-shadow:
     inset 0 0 0 1px var(--book-emboss-2),
     inset 0 1px 0 var(--book-emboss),
+    inset 0 -18px 34px var(--book-patina-dk),
     0 24px 60px var(--book-drop);
   font: inherit;
   color: var(--book-night-text);
@@ -6818,35 +6840,81 @@ textarea.plushie-input {
 }
 .book__face--cover:hover {
   box-shadow:
-    inset 0 0 0 1px var(--book-night-rule),
+    inset 0 0 0 1px var(--book-gilt-faint),
     inset 0 1px 0 var(--book-emboss),
+    inset 0 -18px 34px var(--book-patina-dk),
     0 28px 70px var(--book-drop);
 }
 .book__face--cover:focus-visible {
-  outline: 2px solid var(--mint);
+  outline: 2px solid var(--book-gilt);
   outline-offset: -6px;
 }
 
 /* Cloth spine down the hinge side of the cover. */
+/* Raised hubs down the spine, the way a sewn-cord binding sits. */
 .book__cover-spine {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
-  width: 11%;
+  width: 13%;
   background:
-    linear-gradient(to right, rgba(4, 12, 20, 0.55), rgba(255, 255, 255, 0.04) 62%, transparent);
-  border-right: 1px solid var(--book-emboss-2);
+    repeating-linear-gradient(to bottom,
+      transparent 0 15.4%,
+      var(--book-hub-hi) 15.4% 16.6%,
+      var(--book-hub-lo) 16.6% 19.2%,
+      transparent 19.2% 20%),
+    linear-gradient(to right, var(--book-patina-dk), var(--book-grain-hi) 58%, transparent);
+  border-right: 1px solid var(--book-gilt-faint);
   pointer-events: none;
 }
 
+/* Gilt tooling: a double rule, the outer heavier than the inner. */
 .book__cover-frame {
   position: absolute;
   inset: calc(var(--page-w) * 0.055);
-  border: 1px solid var(--book-emboss-2);
-  border-radius: 2px;
-  box-shadow: inset 0 0 0 1px rgba(4, 12, 20, 0.35);
+  border: 1px solid var(--book-gilt-dim);
+  border-radius: 1px;
+  box-shadow: inset 0 0 0 1px var(--book-patina-dk);
   pointer-events: none;
+}
+.book__cover-frame::after {
+  content: '';
+  position: absolute;
+  inset: calc(var(--page-w) * 0.016);
+  border: 1px solid var(--book-gilt-faint);
+}
+
+/* Gilt corner brackets, doubled inward like tooled corner-pieces. */
+.book__corner {
+  position: absolute;
+  width: calc(var(--page-w) * 0.11);
+  height: calc(var(--page-w) * 0.11);
+  border-top: 1px solid var(--book-gilt-dim);
+  border-left: 1px solid var(--book-gilt-dim);
+  pointer-events: none;
+}
+.book__corner::after {
+  content: '';
+  position: absolute;
+  top: calc(var(--page-w) * 0.016);
+  left: calc(var(--page-w) * 0.016);
+  width: 38%;
+  height: 38%;
+  border-top: 1px solid var(--book-gilt-faint);
+  border-left: 1px solid var(--book-gilt-faint);
+}
+.book__corner--tl { top: calc(var(--page-w) * 0.055); left: calc(var(--page-w) * 0.055); }
+.book__corner--tr { top: calc(var(--page-w) * 0.055); right: calc(var(--page-w) * 0.055); transform: scaleX(-1); }
+.book__corner--bl { bottom: calc(var(--page-w) * 0.055); left: calc(var(--page-w) * 0.055); transform: scaleY(-1); }
+.book__corner--br { bottom: calc(var(--page-w) * 0.055); right: calc(var(--page-w) * 0.055); transform: scale(-1); }
+
+/* Printer's fleuron under the title. */
+.book__cover-fleuron {
+  display: block;
+  width: calc(var(--page-w) * 0.16);
+  color: var(--book-gilt);
+  opacity: 0.7;
 }
 
 .book__cover-inner {
@@ -6860,16 +6928,25 @@ textarea.plushie-input {
   padding: calc(var(--page-w) * 0.14) calc(var(--page-w) * 0.11);
   text-align: center;
 }
+/* The app mark, struck as a gilt medallion rather than pasted on as a
+   modern icon — a colour app tile would break the antique binding. */
 .book__cover-mark {
-  width: clamp(28px, calc(var(--page-w) * 0.13), 52px);
+  width: clamp(28px, calc(var(--page-w) * 0.125), 50px);
   height: auto;
-  opacity: 0.92;
+  border-radius: 50%;
+  opacity: 0.88;
+  filter: grayscale(1) sepia(1) saturate(2.6) hue-rotate(-8deg) brightness(0.92) contrast(1.08);
+  box-shadow:
+    0 0 0 1px var(--book-gilt-dim),
+    0 0 0 4px var(--book-patina-dk),
+    0 0 0 5px var(--book-gilt-faint);
 }
 .book__cover-name {
   font-family: var(--book-serif);
   font-size: clamp(1.4rem, calc(var(--page-w) * 0.125), 2.4rem);
-  letter-spacing: 0.08em;
-  color: var(--mint);
+  letter-spacing: 0.1em;
+  color: var(--book-gilt);
+  text-shadow: 0 1px 0 var(--book-patina-dk);
 }
 .book__cover-tag {
   font-family: var(--book-serif);
@@ -6881,8 +6958,8 @@ textarea.plushie-input {
 .book__cover-rule {
   width: 42%;
   height: 1px;
-  background: linear-gradient(to right, transparent, var(--mint), transparent);
-  opacity: 0.4;
+  background: linear-gradient(to right, transparent, var(--book-gilt), transparent);
+  opacity: 0.5;
 }
 .book__cover-open {
   position: absolute;
@@ -6897,7 +6974,7 @@ textarea.plushie-input {
   font-size: clamp(0.58rem, calc(var(--page-w) * 0.032), 0.75rem);
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: var(--book-night-mute);
+  color: var(--book-gilt-dim);
 }
 .book__cover-open svg {
   animation: book-nudge 2.6s var(--ease-calm) infinite;
@@ -7014,7 +7091,11 @@ textarea.plushie-input {
 /* --- Left leaf: the VirWave world (night page) ---------------- */
 .book__face--virwave {
   border-radius: 9px 3px 3px 9px;
+  /* Dark vellum: mottled, with the outer edge worn darker. */
   background:
+    radial-gradient(30% 24% at 26% 30%, var(--book-grain-hi), transparent 72%),
+    radial-gradient(26% 22% at 74% 66%, var(--book-patina-dk), transparent 74%),
+    linear-gradient(to right, var(--book-patina-dk), transparent 26%),
     radial-gradient(120% 90% at 100% 0%, rgba(10, 126, 164, 0.24), transparent 62%),
     linear-gradient(200deg, var(--book-night), var(--book-night-2));
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
@@ -7040,7 +7121,14 @@ textarea.plushie-input {
 /* --- Right leaf: AIKEI (paper page) --------------------------- */
 .book__face--aikei {
   border-radius: 3px 9px 9px 3px;
+  /* Foxed and sunned: age spots, a darkened outer edge, laid-paper tone. */
   background:
+    radial-gradient(2.4% 1.8% at 18% 24%, var(--book-foxing), transparent 70%),
+    radial-gradient(1.8% 1.4% at 73% 16%, var(--book-foxing), transparent 70%),
+    radial-gradient(3% 2.2% at 84% 58%, var(--book-foxing), transparent 72%),
+    radial-gradient(2% 1.6% at 31% 79%, var(--book-foxing), transparent 70%),
+    radial-gradient(2.6% 2% at 58% 90%, var(--book-foxing), transparent 72%),
+    linear-gradient(to left, var(--book-foxing), transparent 22%),
     radial-gradient(120% 90% at 0% 0%, var(--book-paper), var(--book-paper-2));
   box-shadow: inset 0 0 0 1px rgba(36, 31, 24, 0.10);
 }
@@ -7060,6 +7148,59 @@ textarea.plushie-input {
 }
 
 /* --- Caption + scroll cue ------------------------------------ */
+/* Closing the book again. Fades in as the turn lands; leaves the tab
+   order entirely while the book is shut. */
+.book-gate__close {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  border: 1px solid var(--book-gilt-faint);
+  border-radius: var(--radius);
+  background: none;
+  font-family: var(--book-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--book-gilt-dim);
+  cursor: pointer;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity var(--dur-gentle) var(--ease-calm),
+    visibility 0s linear var(--dur-gentle),
+    color var(--dur-snappy) var(--ease-calm),
+    border-color var(--dur-snappy) var(--ease-calm);
+}
+.book-gate.is-open .book-gate__close {
+  visibility: visible;
+  opacity: 1;
+  transition:
+    opacity var(--dur-gentle) var(--ease-calm) 900ms,
+    visibility 0s linear 900ms,
+    color var(--dur-snappy) var(--ease-calm),
+    border-color var(--dur-snappy) var(--ease-calm);
+}
+.book-gate.is-instant .book-gate__close,
+.book-gate.is-instant.is-open .book-gate__close { transition: none; }
+.book-gate__close:hover {
+  color: var(--book-gilt);
+  border-color: var(--book-gilt-dim);
+}
+.book-gate__close:focus-visible {
+  outline: 2px solid var(--book-gilt);
+  outline-offset: 2px;
+}
+
+.book-gate__foot {
+  position: relative;
+  z-index: 51;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
 .book-gate__caption {
   min-height: 1.6em;
   font-family: var(--book-mono);

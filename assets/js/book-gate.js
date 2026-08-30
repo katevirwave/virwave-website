@@ -21,15 +21,45 @@
     if (caption) caption.textContent = text;
   }
 
+  var closer  = gate.querySelector('[data-book-close]');
+  var autoOpen;
+
+  /* Once the reader has decided either way, stop the book opening itself. */
+  function cancelAutoOpen() {
+    if (autoOpen) { window.clearTimeout(autoOpen); autoOpen = null; }
+  }
+
   function open() {
+    cancelAutoOpen();
     if (gate.classList.contains('is-open')) return;
     gate.classList.add('is-open');
     if (cover) cover.setAttribute('aria-expanded', 'true');
     setCaption(CAPTION_OPEN);
   }
 
+  function close() {
+    cancelAutoOpen();
+    if (!gate.classList.contains('is-open')) return;
+    /* Hand focus back to the cover before the closer leaves the tab order. */
+    if (closer && gate.contains(document.activeElement) && cover) {
+      cover.focus({ preventScroll: true });
+    }
+    gate.classList.remove('is-open');
+    if (cover) cover.setAttribute('aria-expanded', 'false');
+    setCaption(CAPTION_CLOSED);
+  }
+
   /* Deep links (/#team, /#building…) and reduced motion skip the turn. */
   var instant = reduce.matches || (window.location.hash && window.location.hash.length > 1);
+
+  if (cover) cover.addEventListener('click', open);
+  if (closer) closer.addEventListener('click', close);
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape' && e.key !== 'Esc') return;
+    if (!gate.classList.contains('is-open')) return;
+    close();
+  });
 
   if (instant) {
     gate.classList.add('is-instant');
@@ -37,13 +67,9 @@
   } else {
     setCaption(CAPTION_CLOSED);
 
-    if (cover) {
-      cover.addEventListener('click', open);
-    }
-
     /* Nobody should be stranded on a closed book. */
-    var autoOpen = window.setTimeout(open, 2200);
-    gate.addEventListener('click', function () { window.clearTimeout(autoOpen); }, { once: true });
+    autoOpen = window.setTimeout(open, 2200);
+    gate.addEventListener('click', cancelAutoOpen, { once: true });
   }
 
   /* The mascot plate holds its poster frame when motion is unwelcome. */

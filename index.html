@@ -123,11 +123,24 @@
                   aria-label="Open the book to choose between VirWave and AIKEI">
             <span class="book__cover-spine" aria-hidden="true"></span>
             <span class="book__cover-frame" aria-hidden="true"></span>
+            <span class="book__corner book__corner--tl" aria-hidden="true"></span>
+            <span class="book__corner book__corner--tr" aria-hidden="true"></span>
+            <span class="book__corner book__corner--bl" aria-hidden="true"></span>
+            <span class="book__corner book__corner--br" aria-hidden="true"></span>
             <span class="book__cover-inner">
               <img class="book__cover-mark" src="/assets/logo_virwave.avif" alt="" width="48" height="48">
               <span class="book__cover-name">VirWave</span>
               <span class="book__cover-rule" aria-hidden="true"></span>
               <span class="book__cover-tag">Regulate Yourself.<br>Rise for Others.</span>
+              <svg class="book__cover-fleuron" viewBox="0 0 64 16" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" aria-hidden="true">
+                <path d="M2 8h16"/>
+                <path d="M46 8h16"/>
+                <path d="M32 2c3 3 3 9 0 12-3-3-3-9 0-12z"/>
+                <path d="M24 8c3-2.6 5-2.6 8 0-3 2.6-5 2.6-8 0z"/>
+                <path d="M40 8c-3-2.6-5-2.6-8 0 3 2.6 5 2.6 8 0z"/>
+                <circle cx="21" cy="8" r="1.1" fill="currentColor" stroke="none"/>
+                <circle cx="43" cy="8" r="1.1" fill="currentColor" stroke="none"/>
+              </svg>
               <span class="book__cover-open" aria-hidden="true">
                 Open the book
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -172,7 +185,16 @@
       </div>
     </div>
 
-    <p class="book-gate__caption" data-book-caption>Open the book</p>
+    <div class="book-gate__foot">
+      <p class="book-gate__caption" data-book-caption>Open the book</p>
+      <button type="button" class="book-gate__close" data-book-close aria-controls="book">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v16H6.5A2.5 2.5 0 0 0 4 21z"/>
+          <path d="M15 8.5 10 12l5 3.5"/>
+        </svg>
+        Close the book
+      </button>
+    </div>
   </section>
 
   <!-- ========== Hero ========== -->
