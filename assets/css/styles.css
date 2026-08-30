@@ -6605,10 +6605,28 @@ textarea.plushie-input {
   --book-night-text: rgba(248, 248, 246, 0.88);
   --book-night-mute: rgba(248, 248, 246, 0.58);
   --book-night-rule: rgba(140, 235, 170, 0.24);
-  /* Aged leather binding: dark blue-black morocco, gilt tooling. */
-  --book-cover-1:    #1C2F3A;
-  --book-cover-2:    #080F15;
-  --book-leather-hi: #26404E;
+  /* Medieval codex: worn oak-brown hide over boards, brass furniture,
+     blind tooling. Deliberately warmer than the rest of the site — the
+     binding is meant to read as centuries older than what it opens onto. */
+  --book-cover-1:    #4A3626;
+  --book-cover-2:    #150E08;
+  --book-leather-hi: #6E5136;
+  --book-brass:      #A98B46;
+  --book-brass-hi:   #E3CE93;
+  --book-brass-lo:   #4F3D1A;
+  --book-blind:      rgba(10, 6, 3, 0.62);
+  --book-blind-hi:   rgba(224, 196, 140, 0.14);
+  --book-wear:       rgba(196, 160, 112, 0.15);
+  --book-crack:      rgba(8, 5, 2, 0.45);
+  --book-crack-hair: rgba(8, 5, 2, 0.16);
+  --book-grain-soft: rgba(196, 160, 112, 0.05);
+  --book-ink-worn:   rgba(228, 204, 158, 0.72);
+  --book-gem-core:   #EAFFF2;
+  --book-gem-1:      #8CEBAA;
+  --book-gem-2:      #1E9C63;
+  --book-gem-3:      #06432C;
+  --book-gem-glow:   rgba(140, 235, 170, 0.55);
+  --book-gem-halo:   rgba(140, 235, 170, 0.20);
   --book-gilt:       #C9A961;
   --book-gilt-dim:   rgba(201, 169, 97, 0.55);
   --book-gilt-faint: rgba(201, 169, 97, 0.28);
@@ -6730,9 +6748,14 @@ textarea.plushie-input {
   position: absolute;
   top: 3%;
   bottom: 3%;
-  width: 7px;
+  width: 10px;
+  /* Uncut leaves: an uneven fore-edge, warm where the light catches it. */
+  clip-path: polygon(
+    0% 0%, 82% 1.5%, 100% 4%, 74% 7%, 96% 11%, 78% 15%, 100% 19%, 80% 24%,
+    94% 29%, 76% 34%, 100% 39%, 82% 45%, 96% 51%, 74% 57%, 100% 63%, 79% 69%,
+    93% 75%, 76% 81%, 100% 87%, 81% 93%, 95% 97%, 0% 100%);
   background:
-    linear-gradient(to bottom, var(--book-foxing), transparent 18%, transparent 82%, var(--book-foxing)),
+    linear-gradient(to bottom, var(--book-foxing), transparent 14%, transparent 86%, var(--book-foxing)),
     repeating-linear-gradient(
       to bottom,
       var(--book-edge-warm) 0 2px,
@@ -6741,11 +6764,12 @@ textarea.plushie-input {
   pointer-events: none;
 }
 .book__edge--right {
-  right: -7px;
+  right: -10px;
   border-radius: 0 4px 4px 0;
 }
 .book__edge--left {
-  left: -7px;
+  left: -10px;
+  transform: scaleX(-1);
   border-radius: 4px 0 0 4px;
   opacity: 0;
   transition: opacity 500ms var(--ease-calm) 500ms;
@@ -6815,106 +6839,151 @@ textarea.plushie-input {
   transition: visibility 0s linear 1100ms;
 }
 
-/* --- The cover ---------------------------------------------- */
+/* --- The cover: a medieval codex ----------------------------- */
+/* Worn hide over wooden boards, rubbed bare at the corners, with brass
+   furniture and blind (unheated) tooling rather than fine gilt rules. */
 .book__face--cover {
   cursor: pointer;
   padding: 0;
-  border-radius: 2px 10px 10px 2px;
-  /* Grained leather: patina blotches over crosshatched grain over the hide. */
+  border-radius: 2px 5px 5px 2px;
   background:
-    radial-gradient(38% 30% at 22% 16%, var(--book-patina), transparent 70%),
-    radial-gradient(34% 28% at 80% 74%, var(--book-patina-dk), transparent 72%),
-    radial-gradient(46% 38% at 62% 34%, var(--book-patina), transparent 76%),
-    repeating-linear-gradient(74deg, var(--book-grain-hi) 0 1px, transparent 1px 3px),
-    repeating-linear-gradient(-68deg, var(--book-grain-lo) 0 1px, transparent 1px 4px),
-    repeating-linear-gradient(14deg, var(--book-grain-hi) 0 1px, transparent 1px 6px),
-    linear-gradient(155deg, var(--book-leather-hi), var(--book-cover-1) 42%, var(--book-cover-2) 88%);
+    /* rubbed bare where centuries of hands have held it */
+    radial-gradient(30% 22% at 6% 8%, var(--book-wear), transparent 72%),
+    radial-gradient(26% 20% at 96% 94%, var(--book-wear), transparent 72%),
+    radial-gradient(34% 26% at 92% 10%, var(--book-wear), transparent 74%),
+    /* darkened blotches — irregular, so the hide never reads as a pattern */
+    radial-gradient(40% 32% at 30% 62%, var(--book-crack), transparent 74%),
+    radial-gradient(22% 34% at 68% 22%, var(--book-crack), transparent 76%),
+    radial-gradient(18% 12% at 14% 38%, var(--book-crack), transparent 78%),
+    radial-gradient(28% 16% at 52% 86%, var(--book-crack), transparent 76%),
+    radial-gradient(14% 26% at 86% 54%, var(--book-crack), transparent 78%),
+    radial-gradient(120% 100% at 50% 50%, transparent 42%, var(--book-crack) 100%),
+    /* a few hairline creases, sparse enough not to tile visibly */
+    repeating-linear-gradient(102deg, transparent 0 47px, var(--book-crack-hair) 47px 47.7px, transparent 47.7px 119px),
+    repeating-linear-gradient(-79deg, transparent 0 63px, var(--book-crack-hair) 63px 63.6px, transparent 63.6px 151px),
+    /* grain, kept below the threshold where it reads as woven cloth */
+    repeating-linear-gradient(74deg, var(--book-grain-soft) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(-68deg, var(--book-crack-hair) 0 1px, transparent 1px 5px),
+    linear-gradient(155deg, var(--book-leather-hi), var(--book-cover-1) 44%, var(--book-cover-2) 92%);
   box-shadow:
-    inset 0 0 0 1px var(--book-emboss-2),
-    inset 0 1px 0 var(--book-emboss),
-    inset 0 -18px 34px var(--book-patina-dk),
-    0 24px 60px var(--book-drop);
+    inset 0 0 0 1px var(--book-blind),
+    inset 0 1px 0 var(--book-wear),
+    inset 0 -22px 40px var(--book-crack),
+    0 26px 64px var(--book-drop);
   font: inherit;
   color: var(--book-night-text);
   transition: box-shadow var(--dur-gentle) var(--ease-calm);
 }
 .book__face--cover:hover {
   box-shadow:
-    inset 0 0 0 1px var(--book-gilt-faint),
-    inset 0 1px 0 var(--book-emboss),
-    inset 0 -18px 34px var(--book-patina-dk),
-    0 28px 70px var(--book-drop);
+    inset 0 0 0 1px var(--book-brass-lo),
+    inset 0 1px 0 var(--book-wear),
+    inset 0 -22px 40px var(--book-crack),
+    0 30px 74px var(--book-drop);
 }
 .book__face--cover:focus-visible {
-  outline: 2px solid var(--book-gilt);
+  outline: 2px solid var(--book-brass);
   outline-offset: -6px;
 }
 
-/* Cloth spine down the hinge side of the cover. */
-/* Raised hubs down the spine, the way a sewn-cord binding sits. */
+/* Heavy raised bands over the sewn cords. */
 .book__cover-spine {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
-  width: 13%;
+  width: 15%;
   background:
     repeating-linear-gradient(to bottom,
-      transparent 0 15.4%,
-      var(--book-hub-hi) 15.4% 16.6%,
-      var(--book-hub-lo) 16.6% 19.2%,
-      transparent 19.2% 20%),
-    linear-gradient(to right, var(--book-patina-dk), var(--book-grain-hi) 58%, transparent);
-  border-right: 1px solid var(--book-gilt-faint);
+      transparent 0 14.2%,
+      var(--book-wear) 14.2% 15.6%,
+      var(--book-leather-hi) 15.6% 17.4%,
+      var(--book-crack) 17.4% 19.6%,
+      transparent 19.6% 20%),
+    linear-gradient(to right, var(--book-crack), var(--book-wear) 54%, transparent);
+  border-right: 1px solid var(--book-crack);
   pointer-events: none;
 }
 
-/* Gilt tooling: a double rule, the outer heavier than the inner. */
+/* Blind tooling: impressed into the hide, caught by a little light. */
 .book__cover-frame {
   position: absolute;
-  inset: calc(var(--page-w) * 0.055);
-  border: 1px solid var(--book-gilt-dim);
+  inset: calc(var(--page-w) * 0.085);
+  border: 0;
   border-radius: 1px;
-  box-shadow: inset 0 0 0 1px var(--book-patina-dk);
+  box-shadow:
+    inset 0 0 0 1px var(--book-blind),
+    inset 0 0 0 2px var(--book-blind-hi);
   pointer-events: none;
 }
 .book__cover-frame::after {
   content: '';
   position: absolute;
-  inset: calc(var(--page-w) * 0.016);
-  border: 1px solid var(--book-gilt-faint);
+  inset: calc(var(--page-w) * 0.03);
+  border-radius: 1px;
+  box-shadow:
+    inset 0 0 0 1px var(--book-blind),
+    inset 0 0 0 2px var(--book-blind-hi);
 }
 
-/* Gilt corner brackets, doubled inward like tooled corner-pieces. */
+/* Ornate brass corner-pieces. The knotwork is drawn as SVG so the
+   filigree survives at any size; CSS only places and lights them. */
 .book__corner {
   position: absolute;
-  width: calc(var(--page-w) * 0.11);
-  height: calc(var(--page-w) * 0.11);
-  border-top: 1px solid var(--book-gilt-dim);
-  border-left: 1px solid var(--book-gilt-dim);
+  width: calc(var(--page-w) * 0.24);
+  height: auto;
+  top: calc(var(--page-w) * 0.012);
+  left: calc(var(--page-w) * 0.012);
   pointer-events: none;
 }
-.book__corner::after {
+.book__corner--tr { left: auto; right: calc(var(--page-w) * 0.012); transform: scaleX(-1); }
+.book__corner--bl { top: auto; bottom: calc(var(--page-w) * 0.012); transform: scaleY(-1); }
+.book__corner--br { top: auto; left: auto; right: calc(var(--page-w) * 0.012); bottom: calc(var(--page-w) * 0.012); transform: scale(-1); }
+
+/* Strap-and-clasp across the fore-edge. They let go as the book opens. */
+.book__clasp {
+  position: absolute;
+  right: 0;
+  width: calc(var(--page-w) * 0.24);
+  height: calc(var(--page-w) * 0.052);
+  background:
+    linear-gradient(to bottom, var(--book-leather-hi), var(--book-cover-1) 45%, var(--book-cover-2));
+  box-shadow:
+    inset 0 1px 0 var(--book-wear),
+    0 2px 5px var(--book-crack);
+  pointer-events: none;
+  transition:
+    opacity var(--dur-gentle) var(--ease-calm),
+    transform var(--dur-gentle) var(--ease-calm);
+}
+.book__clasp::after {
   content: '';
   position: absolute;
-  top: calc(var(--page-w) * 0.016);
-  left: calc(var(--page-w) * 0.016);
-  width: 38%;
-  height: 38%;
-  border-top: 1px solid var(--book-gilt-faint);
-  border-left: 1px solid var(--book-gilt-faint);
+  left: 0;
+  top: -14%;
+  bottom: -14%;
+  width: 32%;
+  border-radius: 2px;
+  background:
+    radial-gradient(circle at 50% 50%, var(--book-brass-lo) 0 1.4px, transparent 1.9px),
+    radial-gradient(72% 72% at 32% 26%, var(--book-brass-hi), var(--book-brass) 46%, var(--book-brass-lo) 100%);
+  box-shadow:
+    inset 0 1px 0 var(--book-brass-hi),
+    0 1px 4px var(--book-crack);
 }
-.book__corner--tl { top: calc(var(--page-w) * 0.055); left: calc(var(--page-w) * 0.055); }
-.book__corner--tr { top: calc(var(--page-w) * 0.055); right: calc(var(--page-w) * 0.055); transform: scaleX(-1); }
-.book__corner--bl { bottom: calc(var(--page-w) * 0.055); left: calc(var(--page-w) * 0.055); transform: scaleY(-1); }
-.book__corner--br { bottom: calc(var(--page-w) * 0.055); right: calc(var(--page-w) * 0.055); transform: scale(-1); }
+.book__clasp--top    { top: 27%; }
+.book__clasp--bottom { bottom: 27%; }
+.book-gate.is-open .book__clasp {
+  opacity: 0;
+  transform: translateX(18%);
+}
 
-/* Printer's fleuron under the title. */
+/* Motif under the title, stamped blind into the hide. */
 .book__cover-fleuron {
   display: block;
-  width: calc(var(--page-w) * 0.16);
-  color: var(--book-gilt);
-  opacity: 0.7;
+  width: calc(var(--page-w) * 0.17);
+  color: var(--book-brass-hi);
+  opacity: 0.72;
 }
 
 .book__cover-inner {
@@ -6923,58 +6992,100 @@ textarea.plushie-input {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: calc(var(--page-w) * 0.035);
+  gap: calc(var(--page-w) * 0.028);
   height: 100%;
-  padding: calc(var(--page-w) * 0.14) calc(var(--page-w) * 0.11);
+  min-height: 0;
+  padding: calc(var(--page-w) * 0.115) calc(var(--page-w) * 0.12) calc(var(--page-w) * 0.19);
   text-align: center;
 }
-/* The app mark, struck as a gilt medallion rather than pasted on as a
-   modern icon — a colour app tile would break the antique binding. */
-.book__cover-mark {
-  width: clamp(28px, calc(var(--page-w) * 0.125), 50px);
-  height: auto;
-  border-radius: 50%;
-  opacity: 0.88;
-  filter: grayscale(1) sepia(1) saturate(2.6) hue-rotate(-8deg) brightness(0.92) contrast(1.08);
-  box-shadow:
-    0 0 0 1px var(--book-gilt-dim),
-    0 0 0 4px var(--book-patina-dk),
-    0 0 0 5px var(--book-gilt-faint);
+.book__cover-name,
+.book__cover-tag,
+.book__cover-rule { flex: none; }
+/* The centre stone: an emerald set in knotwork, lighting the hide
+   around it. Mint is already the brand's accent, so the gem does double
+   duty as ornament and signature. */
+.book__gem-wrap {
+  position: relative;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+.book__gem-wrap::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 175%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, var(--book-gem-halo), transparent 62%);
+  pointer-events: none;
+  animation: book-gem-breathe 7s var(--ease-calm) infinite;
+}
+.book__gem {
+  position: relative;
+  display: block;
+  width: calc(var(--page-w) * 0.38);
+  height: calc(var(--page-w) * 0.38);
+  filter: drop-shadow(0 0 8px var(--book-gem-glow));
+}
+
+/* The stone breathes — 4s in, 6s out, the app's own cadence. */
+@keyframes book-gem-breathe {
+  0%   { opacity: 0.55; transform: translate(-50%, -50%) scale(0.94); }
+  40%  { opacity: 1;    transform: translate(-50%, -50%) scale(1.06); }
+  60%  { opacity: 0.95; transform: translate(-50%, -50%) scale(1.04); }
+  100% { opacity: 0.55; transform: translate(-50%, -50%) scale(0.94); }
+}
+
 .book__cover-name {
   font-family: var(--book-serif);
-  font-size: clamp(1.4rem, calc(var(--page-w) * 0.125), 2.4rem);
-  letter-spacing: 0.1em;
+  font-size: clamp(1.35rem, calc(var(--page-w) * 0.12), 2.3rem);
+  letter-spacing: 0.14em;
   color: var(--book-gilt);
-  text-shadow: 0 1px 0 var(--book-patina-dk);
+  opacity: 0.95;
+  text-shadow:
+    0 1px 0 var(--book-crack),
+    0 -1px 0 var(--book-blind-hi);
 }
 .book__cover-tag {
   font-family: var(--book-serif);
   font-style: italic;
-  font-size: clamp(0.78rem, calc(var(--page-w) * 0.045), 1rem);
+  font-size: clamp(0.76rem, calc(var(--page-w) * 0.043), 0.98rem);
   line-height: 1.5;
-  color: var(--book-night-mute);
+  color: var(--book-ink-worn);
 }
+.book__runes {
+  display: block;
+  flex: none;
+  width: 78%;
+  height: auto;
+  color: var(--book-gilt);
+  opacity: 0.66;
+}
+
 .book__cover-rule {
-  width: 42%;
-  height: 1px;
-  background: linear-gradient(to right, transparent, var(--book-gilt), transparent);
-  opacity: 0.5;
+  width: 46%;
+  height: 2px;
+  background:
+    linear-gradient(to bottom, var(--book-blind) 0 1px, var(--book-blind-hi) 1px 2px);
+  opacity: 0.9;
 }
 .book__cover-open {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: calc(var(--page-w) * 0.11);
+  bottom: calc(var(--page-w) * 0.13);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: var(--sp-2);
   font-family: var(--book-mono);
-  font-size: clamp(0.58rem, calc(var(--page-w) * 0.032), 0.75rem);
+  font-size: clamp(0.56rem, calc(var(--page-w) * 0.03), 0.72rem);
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: var(--book-gilt-dim);
+  color: var(--book-ink-worn);
 }
 .book__cover-open svg {
   animation: book-nudge 2.6s var(--ease-calm) infinite;
@@ -7303,5 +7414,6 @@ textarea.plushie-input {
     transition: none;
   }
   .book__cover-open svg { animation: none; }
+  .book__gem-wrap::before { animation: none; opacity: 0.85; transform: translate(-50%, -50%); }
   .book-gate.is-open .book__leaf { animation: none; }
 }
