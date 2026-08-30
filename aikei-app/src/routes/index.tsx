@@ -88,6 +88,9 @@ const COVERAGE = [
   { title: "Parent console", age: "oversight" },
 ];
 
+/** The AIKEI console: a different app on a different subdomain. */
+const CONSOLE_URL = "https://app.aikei.virwave.com";
+
 const btnPrimary =
   "cut-hover inline-block border border-teal bg-teal px-5 py-3 text-[15px] text-paper no-underline";
 const btnSecondary =
@@ -123,9 +126,17 @@ function Index() {
               </a>
             ))}
           </nav>
-          <a href="#pricing" className={btnPrimary}>
-            Run a release test
-          </a>
+          <div className="flex items-center gap-5">
+            {/* The console is a separate deployment. Without this there is no
+                route from the marketing site to the product at all, which is
+                exactly how an existing customer gets stranded here. */}
+            <a href={CONSOLE_URL} className="text-[15px] text-muted no-underline hover:text-ink">
+              Sign in
+            </a>
+            <a href="#pricing" className={btnPrimary}>
+              Run a release test
+            </a>
+          </div>
         </div>
       </header>
 
