@@ -574,7 +574,7 @@ export default function Globe3D() {
   return (
     <div className="w-full">
       <div
-        className="relative h-[540px] w-full md:h-[700px]"
+        className="relative h-[540px] w-full max-w-full overflow-hidden md:h-[700px]"
         style={{
           WebkitMaskImage:
             "radial-gradient(ellipse 78% 78% at 50% 50%, #000 55%, transparent 100%)",
