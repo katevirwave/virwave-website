@@ -6791,6 +6791,16 @@ textarea.plushie-input {
 .book__face--back { transform: rotateY(180deg); visibility: hidden; }
 .book-gate.is-open .book__face--back { visibility: visible; }
 
+/* Once the leaf has finished turning the cover faces away from the reader.
+   backface-visibility hides it but leaves it focusable, so keyboard focus
+   would land on an invisible button between the two pages. Take it out of
+   the tab order when the turn ends — the delay keeps it on screen for the
+   whole 1100ms turn. */
+.book-gate.is-open .book__face--cover {
+  visibility: hidden;
+  transition: visibility 0s linear 1100ms;
+}
+
 /* --- The cover ---------------------------------------------- */
 .book__face--cover {
   cursor: pointer;
@@ -7074,7 +7084,8 @@ textarea.plushie-input {
 .book-gate.is-instant .book__leaf--flip,
 .book-gate.is-instant .book__shadow,
 .book-gate.is-instant .book__gutter,
-.book-gate.is-instant .book__edge--left {
+.book-gate.is-instant .book__edge--left,
+.book-gate.is-instant .book__face--cover {
   transition: none;
 }
 .book-gate.is-instant .book__cover-open svg { animation: none; }
@@ -7146,7 +7157,8 @@ textarea.plushie-input {
   .book__edge--left,
   .book__page,
   .book__enter svg,
-  .book__curl {
+  .book__curl,
+  .book-gate.is-open .book__face--cover {
     transition: none;
   }
   .book__cover-open svg { animation: none; }
