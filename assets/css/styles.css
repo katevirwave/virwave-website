@@ -6630,19 +6630,27 @@ textarea.plushie-input {
   gap: var(--sp-6);
   padding: calc(64px + var(--sp-8)) var(--sp-6) var(--sp-8);
   overflow: hidden;
-  isolation: isolate;
 }
 
 .book-gate__glow {
   position: absolute;
   inset: -20% -10% auto;
   height: 90%;
-  z-index: -1;
+  z-index: 0;
   pointer-events: none;
   background:
     radial-gradient(58% 52% at 50% 46%, rgba(10, 126, 164, 0.20), transparent 70%),
     radial-gradient(40% 40% at 22% 68%, rgba(140, 235, 170, 0.10), transparent 72%);
   filter: blur(20px);
+}
+
+/* Lift the book and its labels above the site-wide particle canvas
+   (main.js, position:fixed, z-index:50) so white pixels never land on
+   the cream AIKEI page. The stars still drift behind the book. */
+.book-gate__intro,
+.book-gate__caption {
+  position: relative;
+  z-index: 51;
 }
 
 .book-gate__intro {
@@ -6669,6 +6677,7 @@ textarea.plushie-input {
   --page-h: min(600px, 56vh, calc(40vw * 1.34));
   --page-w: calc(var(--page-h) / 1.34);
   position: relative;
+  z-index: 51;
   width: 100%;
   height: var(--page-h);
   display: flex;
