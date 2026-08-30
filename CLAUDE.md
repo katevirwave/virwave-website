@@ -35,6 +35,25 @@ A **separate Next.js 14 App Router** app lives at `portal/`. It is **not** part 
 
 Do not add portal files to the static site root. Do not run `npm install` at the repo root.
 
+## AIKEI App (`aikei-app/`)
+
+A **separate TanStack Start (React 19 + Vite) SSR app** lives at `aikei-app/`. Like
+`portal/`, it is **not** part of the static site — own `package.json`, own build,
+own Vercel project.
+
+- **Source:** exported from the Lovable project "Release Challenge"
+- **URL:** `aikei.virwave.com` (separate Vercel project, root directory: `aikei-app/`)
+- **Dev:** `npm --prefix aikei-app run dev` (or the `aikei-app` entry in `.claude/launch.json`)
+- **Build:** `cd aikei-app && NITRO_PRESET=vercel npm run build` → `.vercel/output/`
+- **Renders:** a three.js/React Three Fiber globe, an interactive 23-node system map,
+  and a mascot video. This is why it is an app and not a static page.
+
+Assets that Lovable stores on its CDN (logo, mascot mp4/webm) are vendored into
+`aikei-app/public/media/`; the `src/assets/*.asset.json` files point at those local
+paths so the app has no runtime dependency on Lovable.
+
+Do not add app files to the static site root. Do not run `npm install` at the repo root.
+
 ## File Structure
 
 ```

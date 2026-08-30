@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "asset_id": "1f5d6435-8a70-4841-8111-a392dcb17b47",
+  "project_id": "a751e4a9-609f-464c-bdcf-a3a18ed2b995",
+  "url": "/media/mascot-wave.mp4",
+  "r2_key": "a/v1/a751e4a9-609f-464c-bdcf-a3a18ed2b995/1f5d6435-8a70-4841-8111-a392dcb17b47/mascot-wave.mp4",
+  "original_filename": "mascot-wave.mp4",
+  "size": 777760,
+  "content_type": "video/mp4",
+  "created_at": "2026-08-30T02:01:43Z",
+  "_vendored": "Asset copied from Lovable CDN into public/media/ so the app is self-hosted."
+}

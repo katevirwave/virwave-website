@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "asset_id": "beb13a87-8c6f-49fb-9eab-d9d6f5235ca3",
+  "project_id": "a751e4a9-609f-464c-bdcf-a3a18ed2b995",
+  "url": "/media/mascot-wave.webm",
+  "r2_key": "a/v1/a751e4a9-609f-464c-bdcf-a3a18ed2b995/beb13a87-8c6f-49fb-9eab-d9d6f5235ca3/mascot-wave.webm",
+  "original_filename": "mascot-wave.webm",
+  "size": 913360,
+  "content_type": "video/webm",
+  "created_at": "2026-08-30T02:03:03Z",
+  "_vendored": "Asset copied from Lovable CDN into public/media/ so the app is self-hosted."
+}

@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "asset_id": "df7e58a4-b66b-4f9b-8436-2c8735d91e5d",
+  "project_id": "a751e4a9-609f-464c-bdcf-a3a18ed2b995",
+  "url": "/media/aikei-logo.png",
+  "r2_key": "a/v1/a751e4a9-609f-464c-bdcf-a3a18ed2b995/df7e58a4-b66b-4f9b-8436-2c8735d91e5d/aikei-logo.png",
+  "original_filename": "aikei-logo.png",
+  "size": 986297,
+  "content_type": "image/png",
+  "created_at": "2026-08-30T01:53:49Z",
+  "_vendored": "Asset copied from Lovable CDN into public/media/ so the app is self-hosted."
+}
