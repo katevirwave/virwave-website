@@ -4,12 +4,6 @@
   "redirects": [
     { "source": "/ref/:code", "destination": "/ref?code=:code", "permanent": false }
   ],
-  "rewrites": [
-    { "source": "/aikei", "destination": "https://kidmode-quest.lovable.app/" },
-    { "source": "/aikei/:path*", "destination": "https://kidmode-quest.lovable.app/:path*" },
-    { "source": "/assets/:file", "destination": "https://kidmode-quest.lovable.app/assets/:file" },
-    { "source": "/~:path*", "destination": "https://kidmode-quest.lovable.app/~:path*" }
-  ],
   "headers": [
     {
       "source": "/.well-known/apple-app-site-association",

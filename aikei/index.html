@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="base-path" content="/">
+
+  <title>AIKEI — The interaction intelligence layer for child-facing AI</title>
+  <meta name="description" content="AIKEI sits between the AI model and the child to decide not only whether an interaction is safe, but what the AI should do next to achieve the product's intended outcome. Private beta.">
+
+  <!-- OpenGraph -->
+  <meta property="og:title" content="AIKEI — The interaction intelligence layer for child-facing AI">
+  <meta property="og:description" content="Not detection. Orchestration. AIKEI decides what child-facing AI should do next — safely, developmentally, effectively.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://virwave.com/aikei/">
+
+  <!-- Favicon -->
+  <link rel="icon" href="/assets/favicon.png" type="image/png">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/assets/css/styles.css">
+
+  <!-- Gate — hide page until password entered -->
+  <script>
+    if (sessionStorage.getItem('aikei_ok') !== '1') {
+      document.documentElement.classList.add('gate-locked');
+    }
+  </script>
+  <style>
+    html.gate-locked body > *:not(#aikei-gate) { visibility: hidden; }
+  </style>
+</head>
+<body class="home-infra aikei-page">
+
+  <!-- ========== Password gate ========== -->
+  <div id="aikei-gate" role="dialog" aria-labelledby="gate-title" aria-modal="true">
+    <form id="gate-form" autocomplete="off">
+      <h1 id="gate-title">Private preview</h1>
+      <p class="gate-sub">Enter the preview password to continue.</p>
+      <input id="gate-input" type="password" autocomplete="off" spellcheck="false" placeholder="password" aria-label="Preview password" required>
+      <button type="submit">Unlock</button>
+      <p id="gate-error" role="alert" hidden>Wrong password.</p>
+      <a href="/" class="gate-back">&larr; Back to virwave.com</a>
+    </form>
+  </div>
+
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <!-- ========== Minimal Navigation (stealth) ========== -->
+  <nav class="aikei-nav" aria-label="Main navigation">
+    <div class="container aikei-nav__inner">
+      <div class="aikei-nav__brand">
+        <a href="/aikei/" class="aikei-nav__logo" aria-label="AIKEI home">
+          <span class="aikei-wordmark">AIKEI</span>
+        </a>
+        <a href="/" class="aikei-nav__parent" aria-label="Back to virwave.com">by VirWave</a>
+      </div>
+      <div class="aikei-nav__links">
+        <a href="#orchestration" class="aikei-nav__link">How it works</a>
+        <a href="#tiers" class="aikei-nav__link">Tiers</a>
+        <a href="#compliance" class="aikei-nav__link">Compliance</a>
+        <a href="#contact" class="nav-cta">Request beta</a>
+      </div>
+    </div>
+  </nav>
+
+
+  <main id="main-content">
+
+  <!-- ========== Hero ========== -->
+  <section class="infra-hero aikei-hero" data-section="hero">
+    <canvas id="hero-canvas" aria-hidden="true"></canvas>
+    <div class="container">
+      <div class="infra-hero__content">
+        <span class="infra-badge">
+          <span class="infra-badge__dot" aria-hidden="true"></span>
+          Private beta · 2026
+        </span>
+        <h1 class="infra-hero__heading">
+          The interaction intelligence layer for child-facing AI.
+        </h1>
+        <p class="infra-hero__sub">
+          AIKEI sits between the AI model and the child to decide &mdash; not only whether an interaction is safe, but what the AI should do next to achieve the product's intended outcome.
+        </p>
+        <div class="infra-hero__actions">
+          <a href="#contact" class="btn btn-primary btn-lg" data-magnetic>Request beta access</a>
+          <a href="#orchestration" class="btn btn-ghost btn-lg" data-magnetic>See how it works</a>
+        </div>
+      </div>
+
+      <div class="infra-trust">
+        <p class="infra-trust__label">Built for teams shipping AI into</p>
+        <div class="infra-trust__logos" aria-hidden="true">
+          <div class="infra-trust__logo">Kids' apps</div>
+          <div class="infra-trust__logo">Ed-tech</div>
+          <div class="infra-trust__logo">Health-tech</div>
+          <div class="infra-trust__logo">Connected toys</div>
+          <div class="infra-trust__logo">Teen mental-health</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ========== Video demo ========== -->
+  <section class="aikei-video-section" data-section="video">
+    <div class="container">
+      <div class="aikei-video-frame">
+        <video
+          class="aikei-video"
+          src="/assets/video/right-next-interaction.mp4"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          aria-label="AIKEI selecting the right next interaction"
+        ></video>
+      </div>
+      <p class="aikei-video-caption">The right next interaction &mdash; selected, every turn.</p>
+    </div>
+  </section>
+
+
+  <!-- ========== The problem ========== -->
+  <section class="infra-section aikei-problem" data-section="problem">
+    <div class="container">
+      <p class="aikei-problem__line">
+        AI models don't know they're talking to a nine-year-old.
+      </p>
+      <p class="aikei-problem__body">
+        Foundation models are trained on the open internet. They improvise on grief. They suggest &ldquo;coping strategies&rdquo; a clinician wouldn't. They drift, given a long enough conversation, into content no one signed off on.
+      </p>
+      <p class="aikei-problem__body">
+        Moderation tools catch some of that after the fact &mdash; they flag harmful output. What they don't do is tell the AI what to do <em>instead</em>. That's the gap AIKEI closes.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- ========== Beyond moderation — orchestration ========== -->
+  <section class="infra-section infra-section--alt" id="orchestration" data-section="orchestration">
+    <div class="container">
+      <div class="section-header section-header-left">
+        <p class="section-eyebrow">Beyond moderation</p>
+        <p>Every turn, AIKEI combines five signals in real time and selects the interaction that fits &mdash; the response, the level of support, a redirection, an activity, or an adult handoff.</p>
+      </div>
+
+      <div class="aikei-orch">
+        <div class="aikei-orch__col aikei-orch__col--inputs">
+          <p class="aikei-orch__label">What AIKEI considers</p>
+          <ol class="aikei-orch__list">
+            <li><span class="aikei-orch__num">01</span> Real-time safety and relational boundaries</li>
+            <li><span class="aikei-orch__num">02</span> The child's age, emotional state and relevant context</li>
+            <li><span class="aikei-orch__num">03</span> Learning or experience objectives</li>
+            <li><span class="aikei-orch__num">04</span> Brand and character behaviour</li>
+            <li><span class="aikei-orch__num">05</span> The child's demonstrated needs and previous responses</li>
+          </ol>
+        </div>
+
+        <div class="aikei-orch__hub" aria-hidden="true">
+          <div class="aikei-orch__hub-label">AIKEI</div>
+          <div class="aikei-orch__hub-sub">orchestrates</div>
+        </div>
+
+        <div class="aikei-orch__col aikei-orch__col--outputs">
+          <p class="aikei-orch__label">What AIKEI selects</p>
+          <ol class="aikei-orch__list">
+            <li><span class="aikei-orch__num">01</span> The appropriate response</li>
+            <li><span class="aikei-orch__num">02</span> The right level of support</li>
+            <li><span class="aikei-orch__num">03</span> A redirection, if needed</li>
+            <li><span class="aikei-orch__num">04</span> An activity, when it fits</li>
+            <li><span class="aikei-orch__num">05</span> An adult handoff, when required</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="aikei-orch__footnotes">
+        <p><strong>Not another moderation tool.</strong> Moderation tools primarily detect harmful content. AIKEI orchestrates interactions that are safe, developmentally appropriate, and effective.</p>
+        <p><strong>You keep the data.</strong> The customer retains ownership of the child's data. AIKEI uses only the context necessary to make the interaction better.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ========== The moat deep-dive ========== -->
+  <section class="infra-section aikei-moat" data-section="moat">
+    <div class="container">
+      <div class="aikei-moat__inner">
+        <div class="aikei-moat__text">
+          <p class="section-eyebrow">Why the safety lint matters</p>
+          <h2>Post-model beats pre-model.</h2>
+          <p>
+            System prompts, model-side guardrails, and RLHF fine-tunes can all be worked around. A nine-year-old asking the same question three ways will eventually get the model to answer it. That's not a bug in the model &mdash; it's the nature of a stochastic system trained to be helpful.
+          </p>
+          <p>
+            AIKEI's safety lint runs on the model's output, deterministically, against a rule set that includes hard invariants (never configurable off) and per-persona overlays. A regex hit substitutes a vetted fallback message and logs the incident. No amount of prompt engineering can turn it off, because the check happens <em>after</em> the model is done talking.
+          </p>
+        </div>
+        <div class="aikei-moat__proof">
+          <div class="aikei-moat__card">
+            <span class="aikei-moat__label">Invariant tier</span>
+            <p>Rules that cannot be configured off by the customer. Diagnosis claims, sexual content, self-harm instruction. Every customer inherits these.</p>
+          </div>
+          <div class="aikei-moat__card">
+            <span class="aikei-moat__label">Overlay tier</span>
+            <p>Per-persona rules the customer opts into. VirWave's Wavekeeper is stricter than a general chatbot. A toy company can add product-specific bans.</p>
+          </div>
+          <div class="aikei-moat__card">
+            <span class="aikei-moat__label">Audit surface</span>
+            <p>Every substitution logs category, pattern, excerpt, tier, original message, substituted-with. Auditable end-to-end.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ========== Tiers ========== -->
+  <section class="infra-section infra-section--alt" id="tiers" data-section="tiers">
+    <div class="container">
+      <div class="section-header section-header-left">
+        <p class="section-eyebrow">The layered offering</p>
+        <h2>Buy as much of the stack as you need.</h2>
+        <p>Each tier includes everything below it. A safety-only integration can upgrade to full emotional response without a rewrite &mdash; same contract, more layers active.</p>
+      </div>
+
+      <div class="aikei-tier-grid">
+        <article class="aikei-tier">
+          <div class="aikei-tier__level">Tier 1</div>
+          <h3>Safety only</h3>
+          <p class="aikei-tier__desc">Pre-scan, safety lint, crisis routing. The bare minimum required to put ANY generative AI in front of a child or vulnerable user.</p>
+          <ul class="aikei-tier__includes">
+            <li>Pre-scan</li>
+            <li>Safety lint</li>
+            <li>Crisis routing surface</li>
+            <li>Audit payload</li>
+          </ul>
+          <div class="aikei-tier__price">Starts at compliance</div>
+        </article>
+
+        <article class="aikei-tier">
+          <div class="aikei-tier__level">Tier 2</div>
+          <h3>Emotional response</h3>
+          <p class="aikei-tier__desc">Add a validated persona voice and the managed model call. AIKEI runs the LLM for you and hands back structured, safe responses.</p>
+          <ul class="aikei-tier__includes">
+            <li>Everything in Tier 1</li>
+            <li>Persona voice files</li>
+            <li>Managed model call</li>
+            <li>Validated Zod contract</li>
+          </ul>
+          <div class="aikei-tier__price">Chat-shaped products</div>
+        </article>
+
+        <article class="aikei-tier aikei-tier--featured">
+          <div class="aikei-tier__level">Tier 3</div>
+          <h3>Feeling recognition</h3>
+          <p class="aikei-tier__desc">Wavekeeper-style diagnostic layer. Each turn returns an emotional-intent verdict the product can act on &mdash; not just a message.</p>
+          <ul class="aikei-tier__includes">
+            <li>Everything in Tier 2</li>
+            <li>Wavekeeper diagnostic persona</li>
+            <li>Verdict enum: clean / distress / crisis</li>
+            <li>Cross-session summary hooks</li>
+          </ul>
+          <div class="aikei-tier__price">Most common</div>
+        </article>
+
+        <article class="aikei-tier">
+          <div class="aikei-tier__level">Tier 4</div>
+          <h3>Guide-to-a-tool</h3>
+          <p class="aikei-tier__desc">Full stack. Every turn returns a message, a verdict, and a recommended in-app tool from your registered set. The pipeline knows when to talk and when to step back.</p>
+          <ul class="aikei-tier__includes">
+            <li>Everything in Tier 3</li>
+            <li>Tool derivation</li>
+            <li>Intent classifier</li>
+            <li>Step-back protocol</li>
+          </ul>
+          <div class="aikei-tier__price">Kids' apps &middot; toys</div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ========== Compliance / metrics ========== -->
+  <section class="infra-section" id="compliance" data-section="compliance">
+    <div class="container">
+      <div class="section-header section-header-left">
+        <p class="section-eyebrow">The invariants</p>
+        <h2>What cannot be configured off.</h2>
+        <p>Compliance is not a mode. It's structural. These are the guarantees the pipeline enforces on every customer, in every tier.</p>
+      </div>
+
+      <div class="infra-badge-grid">
+        <div class="infra-badge-card">
+          <div class="infra-badge-card__icon" aria-hidden="true">✓</div>
+          <h3>Pre-scan cannot be skipped</h3>
+          <p>Crisis-language detection runs before the model call on every turn. No config flag can bypass it.</p>
+        </div>
+        <div class="infra-badge-card">
+          <div class="infra-badge-card__icon" aria-hidden="true">✓</div>
+          <h3>Safety lint invariants</h3>
+          <p>The invariant tier of the safety rule set is inherited by every customer. Overlay rules add to it; they never subtract.</p>
+        </div>
+        <div class="infra-badge-card">
+          <div class="infra-badge-card__icon" aria-hidden="true">✓</div>
+          <h3>Response validation is enforced</h3>
+          <p>Malformed model output triggers one retry, then an in-character fallback. Callers never see raw model failures.</p>
+        </div>
+        <div class="infra-badge-card">
+          <div class="infra-badge-card__icon" aria-hidden="true">✓</div>
+          <h3>Audit payload is complete</h3>
+          <p>Every turn returns original output, lint matches, verdict, and tool reasoning. Auditors can reconstruct any conversation.</p>
+        </div>
+        <div class="infra-badge-card">
+          <div class="infra-badge-card__icon" aria-hidden="true">✓</div>
+          <h3>COPPA-friendly by architecture</h3>
+          <p>No user data leaves your infrastructure unless you configure telemetry. AIKEI is a library, not a hosted database of children's chats.</p>
+        </div>
+        <div class="infra-badge-card">
+          <div class="infra-badge-card__icon" aria-hidden="true">✓</div>
+          <h3>Zero third-party trackers</h3>
+          <p>Runtime-neutral TypeScript. No analytics SDK. What the model sees is what you send it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ========== Metrics + provenance quote ========== -->
+  <section class="infra-section infra-section--alt" data-section="metrics">
+    <div class="container">
+      <div class="infra-metrics">
+        <div class="infra-metric">
+          <div class="infra-metric__num">7</div>
+          <div class="infra-metric__label">pipeline steps &mdash; identical every turn</div>
+        </div>
+        <div class="infra-metric">
+          <div class="infra-metric__num">4</div>
+          <div class="infra-metric__label">tiers &mdash; upgrade without rewriting</div>
+        </div>
+        <div class="infra-metric">
+          <div class="infra-metric__num">36</div>
+          <div class="infra-metric__label">engine + safety tests, on every commit</div>
+        </div>
+        <div class="infra-metric">
+          <div class="infra-metric__num">0</div>
+          <div class="infra-metric__label">ways to disable the safety lint</div>
+        </div>
+      </div>
+
+      <figure class="infra-quote">
+        <blockquote>
+          <p>&ldquo;Unlike moderation tools that primarily detect harmful content, AIKEI orchestrates interactions that are safe, developmentally appropriate, and effective. The customer retains ownership of the child's data. AIKEI uses only the context necessary to make the interaction better.&rdquo;</p>
+        </blockquote>
+        <figcaption>
+          <span class="infra-quote__name">Kate Julia</span>
+          <span class="infra-quote__role">Founder, VirWave &middot; AIKEI</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+
+  <!-- ========== CTA ========== -->
+  <section class="infra-cta" id="contact" data-section="contact">
+    <div class="container">
+      <div class="infra-cta__inner">
+        <p class="section-eyebrow">Private beta · 2026</p>
+        <h2>Ready to wrap your model?</h2>
+        <p>Working with a small cohort of kids' app, ed-tech, health-tech, and connected-toy partners. Beta includes API access, adapter source, sample integrations, and hands-on tuning of the persona and safety-rule overlays for your product.</p>
+        <div class="infra-cta__actions">
+          <a href="mailto:info@virwave.com?subject=AIKEI%20beta%20access" class="btn btn-primary btn-lg" data-magnetic>Request beta access</a>
+          <a href="mailto:info@virwave.com?subject=AIKEI%20technical%20questions" class="btn btn-ghost btn-lg" data-magnetic>Ask a technical question</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+
+  <!-- ========== Minimal footer ========== -->
+  <footer class="aikei-footer">
+    <div class="container aikei-footer__inner">
+      <p class="aikei-footer__copy">AIKEI is a VirWave OAM UK LTD product. &copy; 2026.</p>
+      <ul class="aikei-footer__links">
+        <li><a href="/" class="aikei-footer__home">&larr; virwave.com</a></li>
+        <li><a href="/privacy/">Privacy</a></li>
+        <li><a href="/terms/">Terms</a></li>
+        <li><a href="mailto:info@virwave.com">info@virwave.com</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/assets/js/hero-canvas.js"></script>
+  <script src="/assets/js/main.js"></script>
+
+  <!-- Gate logic — change the password on the next line before shipping. -->
+  <script>
+    (function () {
+      var CORRECT = 'aikei-beta-2026';
+      var gate = document.getElementById('aikei-gate');
+      var form = document.getElementById('gate-form');
+      var input = document.getElementById('gate-input');
+      var error = document.getElementById('gate-error');
+
+      function unlock() {
+        sessionStorage.setItem('aikei_ok', '1');
+        document.documentElement.classList.remove('gate-locked');
+        gate.classList.add('is-unlocking');
+        setTimeout(function () { gate.remove(); }, 300);
+      }
+
+      if (sessionStorage.getItem('aikei_ok') === '1') {
+        gate.remove();
+        return;
+      }
+
+      input.focus();
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (input.value.trim().toLowerCase() === CORRECT) {
+          unlock();
+        } else {
+          error.hidden = false;
+          form.classList.remove('shake');
+          void form.offsetWidth; // restart animation
+          form.classList.add('shake');
+          input.select();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
