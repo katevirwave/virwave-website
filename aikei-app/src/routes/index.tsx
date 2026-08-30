@@ -351,10 +351,7 @@ function Index() {
             Ready to test a <span className="text-muted">release</span>?
           </h2>
           <div className="mt-10">
-            <a
-              href="mailto:hello@virwave.com?subject=AIKEI%20release%20test"
-              className={btnPrimary}
-            >
+            <a href="mailto:info@virwave.com?subject=AIKEI%20release%20test" className={btnPrimary}>
               Run a release test
             </a>
           </div>
