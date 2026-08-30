@@ -72,13 +72,6 @@
     gate.addEventListener('click', cancelAutoOpen, { once: true });
   }
 
-  /* The mascot plate holds its poster frame when motion is unwelcome. */
-  var plate = gate.querySelector('[data-book-plate]');
-  if (plate && reduce.matches) {
-    plate.removeAttribute('autoplay');
-    plate.pause();
-  }
-
   /* Turning the AIKEI leaf on the way out. */
   var aikei = gate.querySelector('[data-book-door="aikei"]');
   if (aikei) {
