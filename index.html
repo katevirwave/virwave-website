@@ -20,8 +20,26 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="/assets/css/styles.css">
+
+  <!-- Without JS the book cannot be turned, so render it already open. -->
+  <noscript>
+    <style>
+      .book-gate .book { transform: translateX(0) rotateX(5deg); }
+      .book-gate .book__leaf--flip { transform: translateZ(1px) rotateY(-180deg); }
+      .book-gate .book__leaf--base,
+      .book-gate .book__face--back { visibility: visible; }
+      .book-gate .book__gutter,
+      .book-gate .book__edge--left { opacity: 1; }
+      .book-gate .book__shadow { width: calc(var(--page-w) * 2.06); }
+      .book-gate .book__face--cover { display: none; }
+      @media (max-width: 860px) {
+        .book-gate .book__leaf--base,
+        .book-gate .book__face--back { display: block; }
+      }
+    </style>
+  </noscript>
 </head>
-<body class="home-infra">
+<body class="home-infra home-book">
 
   <a href="#main-content" class="skip-link">Skip to content</a>
 
@@ -54,8 +72,111 @@
 
   <main id="main-content">
 
+
+  <!-- ========== Book gateway ========== -->
+  <section class="book-gate" data-section="book" data-book-gate
+           data-caption-closed="Open the book"
+           data-caption-open="Choose a page to enter">
+    <div class="book-gate__glow" aria-hidden="true"></div>
+
+    <div class="book-gate__intro">
+      <p class="book-gate__eyebrow">VirWave OAM</p>
+      <p>One house, two volumes. Turn the cover and pick the world you came for.</p>
+    </div>
+
+    <div class="book-stage">
+      <div class="book__shadow" aria-hidden="true"></div>
+
+      <div class="book" id="book">
+
+        <!-- Right leaf, lying under the cover: AIKEI -->
+        <div class="book__leaf book__leaf--base">
+          <div class="book__face book__face--aikei">
+            <a class="book__page book__page--aikei" href="/aikei" data-book-door="aikei">
+              <p class="book__eyebrow">Volume Two</p>
+              <h2 class="book__title">AIKEI</h2>
+              <p class="book__lede">The release test for AI that talks to children. Multi-turn evaluations, transcript evidence, and a decision you can defend.</p>
+              <figure class="book__plate" aria-hidden="true">
+                <video class="book__plate-media" autoplay muted loop playsinline
+                       preload="metadata" poster="/assets/video/mascots-wave.jpg"
+                       width="520" height="520" data-book-plate>
+                  <source src="/assets/video/mascots-wave.mp4" type="video/mp4">
+                </video>
+              </figure>
+              <p class="book__meta">Evidence &middot; Judgement &middot; Release</p>
+              <span class="book__enter">
+                Enter AIKEI
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                  <polyline points="13 6 19 12 13 18"/>
+                </svg>
+              </span>
+              <span class="book__curl" aria-hidden="true"></span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Turning leaf: the cover on the front, the VirWave page on the back -->
+        <div class="book__leaf book__leaf--flip">
+          <button type="button" class="book__face book__face--cover" data-book-cover
+                  aria-expanded="false" aria-controls="book"
+                  aria-label="Open the book to choose between VirWave and AIKEI">
+            <span class="book__cover-spine" aria-hidden="true"></span>
+            <span class="book__cover-frame" aria-hidden="true"></span>
+            <span class="book__cover-inner">
+              <img class="book__cover-mark" src="/assets/logo_virwave.avif" alt="" width="48" height="48">
+              <span class="book__cover-name">VirWave</span>
+              <span class="book__cover-rule" aria-hidden="true"></span>
+              <span class="book__cover-tag">Regulate Yourself.<br>Rise for Others.</span>
+              <span class="book__cover-open" aria-hidden="true">
+                Open the book
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 6 15 12 9 18"/>
+                </svg>
+              </span>
+            </span>
+          </button>
+
+          <div class="book__face book__face--back book__face--virwave">
+            <a class="book__page book__page--virwave" href="#virwave" data-book-door="virwave">
+              <p class="book__eyebrow">Volume One</p>
+              <h2 class="book__title">The world of VirWave</h2>
+              <p class="book__lede">Breathe first. Then move. Twelve breathing patterns, a four-layer emotional portrait, and language for the people you love.</p>
+              <figure class="book__plate book__plate--figure" aria-hidden="true">
+                <svg viewBox="0 0 160 100" fill="none" stroke="currentColor" stroke-linecap="round">
+                  <circle cx="80" cy="50" r="42" stroke-width="0.75" opacity="0.22"/>
+                  <circle cx="80" cy="50" r="31" stroke-width="0.9" opacity="0.38"/>
+                  <circle cx="80" cy="50" r="20" stroke-width="1.05" opacity="0.58"/>
+                  <circle cx="80" cy="50" r="9" stroke-width="1.2" opacity="0.85"/>
+                  <circle cx="80" cy="50" r="1.6" fill="currentColor" stroke="none" opacity="0.9"/>
+                  <path d="M8 88h144" stroke-width="0.75" opacity="0.34"/>
+                  <path d="M20 68c10-9 18-9 28 0s18 9 28 0 18-9 28 0 18 9 28 0" stroke-width="0.9" opacity="0.42"/>
+                </svg>
+              </figure>
+              <p class="book__meta">The app &middot; The world &middot; The companions</p>
+              <span class="book__enter">
+                Enter VirWave
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                  <polyline points="13 6 19 12 13 18"/>
+                </svg>
+              </span>
+              <span class="book__curl" aria-hidden="true"></span>
+            </a>
+          </div>
+        </div>
+
+        <span class="book__edge book__edge--right" aria-hidden="true"></span>
+        <span class="book__edge book__edge--left" aria-hidden="true"></span>
+        <span class="book__gutter" aria-hidden="true"></span>
+      </div>
+    </div>
+
+    <p class="book-gate__caption" data-book-caption>Open the book</p>
+  </section>
+
   <!-- ========== Hero ========== -->
-  <section class="infra-hero" data-section="hero">
+  <section class="infra-hero" id="virwave" data-section="hero">
     <canvas id="hero-canvas" aria-hidden="true"></canvas>
     <div class="container">
       <div class="infra-hero__content">
@@ -315,6 +436,7 @@
   </footer>
 
   <!-- Scripts -->
+  <script src="/assets/js/book-gate.js"></script>
   <script src="/assets/js/hero-canvas.js"></script>
   <script src="/assets/js/main.js"></script>
 </body>

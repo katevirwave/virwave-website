@@ -6583,3 +6583,563 @@ textarea.plushie-input {
   text-transform: uppercase;
   font-family: var(--infra-mono);
 }
+
+/* ============================================================
+   Home — Book gateway
+   A closed volume that opens into a two-page spread:
+   the flipping leaf carries the cover on its front and the
+   VirWave page on its back; the leaf beneath it is AIKEI.
+   Scoped under body.home-book so it doesn't leak elsewhere.
+   ============================================================ */
+
+.home-book {
+  --book-paper:      #EFE8D9;
+  --book-paper-2:    #DED4BE;
+  --book-ink:        #241F18;
+  --book-ink-mute:   rgba(36, 31, 24, 0.70);
+  --book-rule:       rgba(36, 31, 24, 0.18);
+  --book-rule-soft:  rgba(36, 31, 24, 0.10);
+  --book-teal:       #0A5F76;
+  --book-night:      #0C2137;
+  --book-night-2:    #071522;
+  --book-night-text: rgba(248, 248, 246, 0.88);
+  --book-night-mute: rgba(248, 248, 246, 0.58);
+  --book-night-rule: rgba(140, 235, 170, 0.24);
+  --book-cover-1:    #15455F;
+  --book-cover-2:    #061320;
+  --book-emboss:     rgba(255, 255, 255, 0.14);
+  --book-emboss-2:   rgba(255, 255, 255, 0.05);
+  --book-gutter:     rgba(4, 12, 20, 0.45);
+  --book-drop:       rgba(3, 10, 18, 0.62);
+  --book-edge-line:  rgba(36, 31, 24, 0.30);
+  --book-mono:       'SF Mono', 'JetBrains Mono', 'Fira Code', ui-monospace, Consolas, monospace;
+  --book-page-text:  rgba(248, 248, 246, 0.88);
+  --book-page-mute:  rgba(248, 248, 246, 0.55);
+  --book-serif:      Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Times New Roman', serif;
+}
+
+/* --- Section shell ------------------------------------------ */
+.book-gate {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-6);
+  padding: calc(64px + var(--sp-8)) var(--sp-6) var(--sp-8);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.book-gate__glow {
+  position: absolute;
+  inset: -20% -10% auto;
+  height: 90%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(58% 52% at 50% 46%, rgba(10, 126, 164, 0.20), transparent 70%),
+    radial-gradient(40% 40% at 22% 68%, rgba(140, 235, 170, 0.10), transparent 72%);
+  filter: blur(20px);
+}
+
+.book-gate__intro {
+  max-width: 52ch;
+  text-align: center;
+}
+.book-gate__eyebrow {
+  font-family: var(--book-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--book-night-mute);
+}
+.book-gate__intro p {
+  margin-top: var(--sp-3);
+  font-family: var(--book-serif);
+  font-size: clamp(0.98rem, 1.9vw, 1.2rem);
+  line-height: 1.5;
+  color: var(--book-page-text);
+}
+
+/* --- Stage & book ------------------------------------------- */
+.book-stage {
+  --page-h: min(600px, 56vh, calc(40vw * 1.34));
+  --page-w: calc(var(--page-h) / 1.34);
+  position: relative;
+  width: 100%;
+  height: var(--page-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 2200px;
+  perspective-origin: 50% 44%;
+}
+
+.book__shadow {
+  position: absolute;
+  left: 50%;
+  bottom: -3%;
+  width: var(--page-w);
+  height: 9%;
+  transform: translateX(-50%);
+  background: radial-gradient(50% 50% at 50% 50%, var(--book-drop), transparent 72%);
+  filter: blur(6px);
+  transition: width 1100ms var(--ease-calm);
+  pointer-events: none;
+}
+.book-gate.is-open .book__shadow { width: calc(var(--page-w) * 2.06); }
+
+.book {
+  position: relative;
+  width: calc(var(--page-w) * 2);
+  height: var(--page-h);
+  transform-style: preserve-3d;
+  transform: translateX(calc(var(--page-w) / -2)) rotateX(5deg);
+  transition: transform 1100ms var(--ease-calm);
+}
+.book-gate.is-open .book { transform: translateX(0) rotateX(5deg); }
+
+/* Page-block edges. Sit just outside the leaves so they read as
+   the stacked paper of a real volume. */
+.book__edge {
+  position: absolute;
+  top: 3%;
+  bottom: 3%;
+  width: 7px;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      var(--book-paper) 0 2px,
+      var(--book-edge-line) 2px 3px
+    );
+  pointer-events: none;
+}
+.book__edge--right {
+  right: -7px;
+  border-radius: 0 4px 4px 0;
+}
+.book__edge--left {
+  left: -7px;
+  border-radius: 4px 0 0 4px;
+  opacity: 0;
+  transition: opacity 500ms var(--ease-calm) 500ms;
+}
+.book-gate.is-open .book__edge--left { opacity: 1; }
+
+/* Gutter shadow down the spine, only once the book is open. */
+.book__gutter {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 12%;
+  transform: translateX(-50%);
+  background: linear-gradient(to right, transparent, var(--book-gutter) 45%, var(--book-gutter) 55%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 600ms var(--ease-calm) 500ms;
+}
+.book-gate.is-open .book__gutter { opacity: 1; }
+
+/* --- Leaves ------------------------------------------------- */
+.book__leaf {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--page-w);
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+/* The AIKEI leaf lies under the cover and is revealed by the turn. */
+.book__leaf--base {
+  transform: translateZ(-1px);
+  visibility: hidden;
+}
+.book-gate.is-open .book__leaf--base { visibility: visible; }
+
+/* The turning leaf: cover on the front, the VirWave page on the back. */
+.book__leaf--flip {
+  transform-origin: left center;
+  transform: translateZ(1px) rotateY(0deg);
+  transition: transform 1100ms var(--ease-calm);
+}
+.book-gate.is-open .book__leaf--flip { transform: translateZ(1px) rotateY(-180deg); }
+
+.book__face {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border: 0;
+  text-align: left;
+}
+.book__face--back { transform: rotateY(180deg); visibility: hidden; }
+.book-gate.is-open .book__face--back { visibility: visible; }
+
+/* --- The cover ---------------------------------------------- */
+.book__face--cover {
+  cursor: pointer;
+  padding: 0;
+  border-radius: 3px 9px 9px 3px;
+  background:
+    linear-gradient(150deg, var(--book-cover-1), var(--book-cover-2) 62%);
+  box-shadow:
+    inset 0 0 0 1px var(--book-emboss-2),
+    inset 0 1px 0 var(--book-emboss),
+    0 24px 60px var(--book-drop);
+  font: inherit;
+  color: var(--book-night-text);
+  transition: box-shadow var(--dur-gentle) var(--ease-calm);
+}
+.book__face--cover:hover {
+  box-shadow:
+    inset 0 0 0 1px var(--book-night-rule),
+    inset 0 1px 0 var(--book-emboss),
+    0 28px 70px var(--book-drop);
+}
+.book__face--cover:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: -6px;
+}
+
+/* Cloth spine down the hinge side of the cover. */
+.book__cover-spine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 11%;
+  background:
+    linear-gradient(to right, rgba(4, 12, 20, 0.55), rgba(255, 255, 255, 0.04) 62%, transparent);
+  border-right: 1px solid var(--book-emboss-2);
+  pointer-events: none;
+}
+
+.book__cover-frame {
+  position: absolute;
+  inset: calc(var(--page-w) * 0.055);
+  border: 1px solid var(--book-emboss-2);
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px rgba(4, 12, 20, 0.35);
+  pointer-events: none;
+}
+
+.book__cover-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--page-w) * 0.035);
+  height: 100%;
+  padding: calc(var(--page-w) * 0.14) calc(var(--page-w) * 0.11);
+  text-align: center;
+}
+.book__cover-mark {
+  width: clamp(28px, calc(var(--page-w) * 0.13), 52px);
+  height: auto;
+  opacity: 0.92;
+}
+.book__cover-name {
+  font-family: var(--book-serif);
+  font-size: clamp(1.4rem, calc(var(--page-w) * 0.125), 2.4rem);
+  letter-spacing: 0.08em;
+  color: var(--mint);
+}
+.book__cover-tag {
+  font-family: var(--book-serif);
+  font-style: italic;
+  font-size: clamp(0.78rem, calc(var(--page-w) * 0.045), 1rem);
+  line-height: 1.5;
+  color: var(--book-night-mute);
+}
+.book__cover-rule {
+  width: 42%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--mint), transparent);
+  opacity: 0.4;
+}
+.book__cover-open {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--page-w) * 0.11);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  font-family: var(--book-mono);
+  font-size: clamp(0.58rem, calc(var(--page-w) * 0.032), 0.75rem);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--book-night-mute);
+}
+.book__cover-open svg {
+  animation: book-nudge 2.6s var(--ease-calm) infinite;
+}
+@keyframes book-nudge {
+  0%, 68%, 100% { transform: translateX(0); opacity: 0.6; }
+  82%           { transform: translateX(4px); opacity: 1; }
+}
+
+/* --- Shared page anatomy ------------------------------------ */
+.book__page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: clamp(var(--sp-4), calc(var(--page-w) * 0.085), var(--sp-8));
+  text-decoration: none;
+  transition: filter var(--dur-gentle) var(--ease-calm);
+}
+.book__page:focus-visible { outline: 2px solid var(--teal); outline-offset: -6px; }
+
+.book__eyebrow {
+  font-family: var(--book-mono);
+  font-size: clamp(0.6rem, calc(var(--page-w) * 0.033), 0.75rem);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+.book__title {
+  margin-top: calc(var(--page-w) * 0.05);
+  font-family: var(--book-serif);
+  font-weight: 400;
+  font-size: clamp(1.15rem, calc(var(--page-w) * 0.088), 1.95rem);
+  line-height: 1.14;
+  letter-spacing: 0;
+}
+.book__lede {
+  margin-top: calc(var(--page-w) * 0.05);
+  font-size: clamp(0.72rem, calc(var(--page-w) * 0.042), 0.94rem);
+  line-height: 1.6;
+}
+.book__marks {
+  margin-top: auto;
+  padding: 0;
+  list-style: none;
+  font-family: var(--book-mono);
+  font-size: clamp(0.56rem, calc(var(--page-w) * 0.031), 0.72rem);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+.book__marks li { padding: calc(var(--page-w) * 0.022) 0; }
+
+/* Printed plate: line-art mascots inked straight onto the page. */
+.book__plate {
+  margin: auto 0 0;
+  aspect-ratio: 8 / 5;
+  overflow: hidden;
+  min-height: 0;
+  flex: 0 1 auto;
+}
+.book__plate-media {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 52%;
+  mix-blend-mode: multiply;
+}
+.book__plate--figure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.book__plate--figure svg {
+  width: 92%;
+  height: auto;
+  max-height: 100%;
+}
+
+.book__meta {
+  margin-top: calc(var(--page-w) * 0.03);
+  padding-top: calc(var(--page-w) * 0.03);
+  border-top: 1px solid var(--book-rule-soft);
+  font-family: var(--book-mono);
+  font-size: clamp(0.56rem, calc(var(--page-w) * 0.031), 0.72rem);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+.book__enter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding-top: calc(var(--page-w) * 0.055);
+  font-size: clamp(0.74rem, calc(var(--page-w) * 0.043), 0.9rem);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.book__enter svg { transition: transform var(--dur-snappy) var(--ease-calm); }
+.book__page:hover .book__enter svg,
+.book__page:focus-visible .book__enter svg { transform: translateX(4px); }
+
+/* Corner curl on the outer edge of each page. */
+.book__curl {
+  position: absolute;
+  bottom: 0;
+  width: clamp(38px, 5vw, 60px);
+  height: clamp(38px, 5vw, 60px);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--dur-gentle) var(--ease-calm), transform var(--dur-gentle) var(--ease-calm);
+}
+.book__page:hover .book__curl,
+.book__page:focus-visible .book__curl { opacity: 1; transform: none; }
+
+/* --- Left leaf: the VirWave world (night page) ---------------- */
+.book__face--virwave {
+  border-radius: 9px 3px 3px 9px;
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(10, 126, 164, 0.24), transparent 62%),
+    linear-gradient(200deg, var(--book-night), var(--book-night-2));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+.book__page--virwave .book__eyebrow { color: var(--mint); }
+.book__page--virwave .book__title   { color: var(--white); }
+.book__page--virwave .book__lede    { color: var(--book-night-mute); }
+.book__page--virwave .book__marks   { color: var(--book-night-mute); }
+.book__page--virwave .book__meta    { color: var(--book-night-mute); }
+.book__page--virwave .book__meta    { border-top-color: rgba(255, 255, 255, 0.08); }
+.book__page--virwave .book__plate--figure { color: var(--mint); }
+.book__page--virwave .book__marks li { border-top: 1px solid rgba(255, 255, 255, 0.08); }
+.book__page--virwave .book__enter   { color: var(--mint); }
+.book__page--virwave:hover          { filter: brightness(1.14); }
+/* Outer edge of this page renders on the left once the leaf has turned. */
+.book__page--virwave .book__curl {
+  left: 0;
+  transform: translate(-8px, 8px);
+  background: linear-gradient(45deg, rgba(140, 235, 170, 0.16), transparent 58%);
+  border-bottom-left-radius: 9px;
+}
+
+/* --- Right leaf: AIKEI (paper page) --------------------------- */
+.book__face--aikei {
+  border-radius: 3px 9px 9px 3px;
+  background:
+    radial-gradient(120% 90% at 0% 0%, var(--book-paper), var(--book-paper-2));
+  box-shadow: inset 0 0 0 1px rgba(36, 31, 24, 0.10);
+}
+.book__page--aikei .book__eyebrow { color: var(--book-teal); }
+.book__page--aikei .book__title   { color: var(--book-ink); }
+.book__page--aikei .book__lede    { color: var(--book-ink-mute); }
+.book__page--aikei .book__marks   { color: var(--book-ink-mute); }
+.book__page--aikei .book__meta    { color: var(--book-ink-mute); }
+.book__page--aikei .book__marks li { border-top: 1px solid var(--book-rule-soft); }
+.book__page--aikei .book__enter   { color: var(--book-teal); }
+.book__page--aikei:hover          { filter: brightness(1.03) saturate(1.05); }
+.book__page--aikei .book__curl {
+  right: 0;
+  transform: translate(8px, 8px);
+  background: linear-gradient(-45deg, rgba(36, 31, 24, 0.14), transparent 58%);
+  border-bottom-right-radius: 9px;
+}
+
+/* --- Caption + scroll cue ------------------------------------ */
+.book-gate__caption {
+  min-height: 1.6em;
+  font-family: var(--book-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--book-page-mute);
+  text-align: center;
+  transition: opacity var(--dur-gentle) var(--ease-calm);
+}
+
+/* --- Leaving: turn the AIKEI page as we navigate -------------- */
+.book-gate.is-leaving .book { transform: translateX(0) rotateX(5deg) scale(0.985); }
+.book-gate.is-leaving .book__leaf--base {
+  transform-origin: left center;
+  transform: translateZ(2px) rotateY(-24deg);
+  transition: transform 420ms var(--ease-calm);
+}
+
+/* --- Instant mode (reduced motion / deep link) ---------------- */
+.book-gate.is-instant .book,
+.book-gate.is-instant .book__leaf--flip,
+.book-gate.is-instant .book__shadow,
+.book-gate.is-instant .book__gutter,
+.book-gate.is-instant .book__edge--left {
+  transition: none;
+}
+.book-gate.is-instant .book__cover-open svg { animation: none; }
+
+/* --- Narrow screens: the spread stacks ----------------------- */
+@media (max-width: 860px) {
+  .book-gate { gap: var(--sp-8); padding-top: calc(64px + var(--sp-10)); }
+
+  .book-stage {
+    --page-w: min(88vw, 420px);
+    --page-h: auto;
+    height: auto;
+    perspective: none;
+  }
+  .book,
+  .book__leaf,
+  .book__leaf--flip,
+  .book__face,
+  .book__face--back {
+    transform: none;
+    transform-style: flat;
+  }
+  .book {
+    width: var(--page-w);
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-4);
+  }
+  .book__leaf {
+    position: relative;
+    width: 100%;
+    height: auto;
+    visibility: visible;
+  }
+  /* The turning leaf carries the VirWave page — keep it on top. */
+  .book__leaf--flip { order: -1; }
+  .book__face {
+    position: relative;
+    inset: auto;
+    backface-visibility: visible;
+    -webkit-backface-visibility: visible;
+    visibility: visible;
+  }
+  .book__page { height: auto; min-height: 0; }
+  .book__cover-inner { min-height: min(calc(var(--page-w) * 1.34), 62vh); }
+  .book__edge, .book__gutter, .book__shadow, .book__curl { display: none; }
+
+  /* Closed: the volume only. Open: the two pages. */
+  .book-gate:not(.is-open) .book__leaf--base,
+  .book-gate:not(.is-open) .book__face--back { display: none; }
+  .book-gate.is-open .book__face--cover { display: none; }
+  .book-gate.is-open .book__leaf { animation: book-rise 520ms var(--ease-calm) forwards; }
+  .book-gate.is-open .book__leaf--base { animation-delay: 90ms; }
+  .book__enter { padding-top: var(--sp-6); }
+  .book__meta { letter-spacing: 0.1em; }
+}
+
+@keyframes book-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .book,
+  .book__leaf--flip,
+  .book__shadow,
+  .book__gutter,
+  .book__edge--left,
+  .book__page,
+  .book__enter svg,
+  .book__curl {
+    transition: none;
+  }
+  .book__cover-open svg { animation: none; }
+  .book-gate.is-open .book__leaf { animation: none; }
+}
