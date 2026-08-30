@@ -88,6 +88,9 @@ const COVERAGE = [
   { title: "Parent console", age: "oversight" },
 ];
 
+/** The AIKEI console: a different app on a different subdomain. */
+const CONSOLE_URL = "https://app.aikei.virwave.com";
+
 const btnPrimary =
   "cut-hover inline-block border border-teal bg-teal px-5 py-3 text-[15px] text-paper no-underline";
 const btnSecondary =
@@ -123,9 +126,17 @@ function Index() {
               </a>
             ))}
           </nav>
-          <a href="#pricing" className={btnPrimary}>
-            Run a release test
-          </a>
+          <div className="flex items-center gap-5">
+            {/* The console is a separate deployment. Without this there is no
+                route from the marketing site to the product at all, which is
+                exactly how an existing customer gets stranded here. */}
+            <a href={CONSOLE_URL} className="text-[15px] text-muted no-underline hover:text-ink">
+              Sign in
+            </a>
+            <a href="#pricing" className={btnPrimary}>
+              Run a release test
+            </a>
+          </div>
         </div>
       </header>
 
@@ -133,7 +144,10 @@ function Index() {
         {/* 3. Hero */}
         <section className="py-[72px] md:py-[96px]">
           <div className="grid items-center gap-12 md:grid-cols-[0.95fr_1.1fr]">
-            <div>
+            {/* min-w-0: grid items default to min-width:auto, so the globe's
+                canvas floors this column at the canvas width and pushes the
+                hero copy off-screen on narrow viewports. */}
+            <div className="min-w-0">
               <p className="eyebrow">Release testing for AI that talks to children</p>
               <h1 className="mt-8 max-w-[14ch] text-[36px] md:text-[56px]">
                 The release test for AI that talks to{" "}
@@ -152,7 +166,7 @@ function Index() {
                 </a>
               </div>
             </div>
-            <div>
+            <div className="min-w-0">
               <Globe />
               <p className="eyebrow mt-2 text-center">
                 Every market, every child-facing product type
@@ -340,10 +354,7 @@ function Index() {
             Ready to test a <span className="text-muted">release</span>?
           </h2>
           <div className="mt-10">
-            <a
-              href="mailto:hello@virwave.com?subject=AIKEI%20release%20test"
-              className={btnPrimary}
-            >
+            <a href="mailto:info@virwave.com?subject=AIKEI%20release%20test" className={btnPrimary}>
               Run a release test
             </a>
           </div>

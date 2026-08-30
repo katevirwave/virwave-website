@@ -24,7 +24,7 @@ export const Route = createFileRoute("/terms")({
         "AIKEI provides evaluation results and a recommendation. The release decision remains yours. A report describes the build, scenario packs and evaluator versions used at the time of the run.",
         "You are responsible for the accuracy of the build endpoint and context you submit, and for the adjudication decisions your reviewers record.",
         "Scenario packs, evaluators and report formats are versioned. Changes are published with a new version rather than applied to past runs.",
-        "For contract questions, write to hello@virwave.com.",
+        "For contract questions, write to info@virwave.com.",
       ]}
     />
   ),

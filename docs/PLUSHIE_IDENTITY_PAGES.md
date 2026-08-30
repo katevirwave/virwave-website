@@ -522,5 +522,5 @@ Static ISO 3166-1 alpha-2 list in `plushie.js` (~5KB). No external API. Searchab
 
 - Check-in form: "Location updates are publicly visible on this page. [Privacy Policy](/privacy/)"
 - Privacy policy update: mention plushie location data collection + public display
-- Report link: `mailto:hello@virwave.com?subject=Plushie%20Report%20<ID>`
+- Report link: `mailto:info@virwave.com?subject=Plushie%20Report%20<ID>`
 - No email in check-in flow — interest via `/interest/` form with existing consent
