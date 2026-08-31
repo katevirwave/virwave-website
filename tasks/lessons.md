@@ -68,8 +68,14 @@ When Kate says "put X back", the default is **into the band as a logo** — go
 find the mark first. Re-adding it as a card is the fallback, and only when no
 mark exists. Getting this backwards cost her several rounds of asking for the
 same thing: App Store, Google Play and Yoga Alliance all had usable marks and
-should never have been cards. The only genuine card is the CDWF, which has no
-logo of its own anywhere.
+should never have been cards.
+
+The CDWF has no mark of its own (verified against their page, the trade
+coverage and the accreditation write-up — the framework is still in
+development). It rides in the band on the Fundamentally Children logo with a
+"CDWF Advisory Panel" caption, since FC lead the framework. Never draw a logo
+for an organisation that does not have one, and never substitute Innovate UK's
+— they fund the framework, not VirWave.
 
 ## Prior-employer client logos must be labelled as prior-role work
 
