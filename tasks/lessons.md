@@ -64,6 +64,13 @@ Rule: logos go in the band, never repeated as card icons. Text claims go in the
 Credibility cards, never duplicated in the band. Do not reintroduce per-row
 labels in the band.
 
+When Kate says "put X back", the default is **into the band as a logo** — go
+find the mark first. Re-adding it as a card is the fallback, and only when no
+mark exists. Getting this backwards cost her several rounds of asking for the
+same thing: App Store, Google Play and Yoga Alliance all had usable marks and
+should never have been cards. The only genuine card is the CDWF, which has no
+logo of its own anywhere.
+
 ## Prior-employer client logos must be labelled as prior-role work
 
 Amazon, eBay, Meta, Stripe and Google were Kate's clients during her Deloitte
