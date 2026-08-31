@@ -5222,19 +5222,106 @@ textarea.plushie-input {
   margin-bottom: var(--sp-6);
   font-weight: 500;
 }
+/* Logo rows scroll continuously: two identical tracks tiled end to end, the
+   pair translated by exactly one track width. Spacing is margin-right rather
+   than flex gap so the tracks tile seamlessly — with gap, the seam between the
+   two tracks is half a gap short and the loop visibly jumps. */
+.infra-trust__marquee {
+  position: relative;
+  overflow: hidden;
+}
+.infra-trust__marquee-inner {
+  display: flex;
+  width: max-content;
+}
+/* main.js clones the track enough times to fill the box, drives the drift on
+   its own transform, and adds is-scrolling. Without JS the row stays put as a
+   single static list. */
+.infra-trust__track--clone { display: none; }
+.infra-trust__marquee.is-scrolling {
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 72px), transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 72px), transparent 100%);
+}
+.infra-trust__marquee.is-scrolling .infra-trust__track--clone { display: flex; }
+.infra-trust__marquee.is-scrolling {
+  cursor: grab;
+  /* Claim the horizontal axis for dragging, leave the vertical one to the page. */
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.infra-trust__marquee.is-dragging { cursor: grabbing; }
+.infra-trust__marquee.is-scrolling .infra-trust__marquee-inner { will-change: transform; }
 .infra-trust__logos {
   display: flex;
-  gap: var(--sp-10);
-  flex-wrap: wrap;
   align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 .infra-trust__logo {
+  display: flex;
+  align-items: center;
+  margin-right: var(--sp-10);
+  /* Styles the alt text too, so a missing logo file degrades to the name. */
   font-family: var(--infra-mono);
   font-size: var(--text-sm);
   letter-spacing: 0.02em;
   color: var(--infra-text-mute);
   opacity: 0.7;
   transition: opacity 0.25s var(--ease-calm), color 0.25s var(--ease-calm);
+}
+.infra-trust__logo img {
+  display: block;
+  /* Optical sizing: each mark carries its own height, so a two-line lockup
+     doesn't read as half the size of a compact wordmark. */
+  height: calc(var(--logo-h, 26px) * var(--logo-scale, 1));
+  width: auto;
+  max-width: 280px;
+  object-fit: contain;
+  object-position: left center;
+  /* Partner marks are supplied in brand colour; flatten to white for the dark strip. */
+  filter: brightness(0) invert(1);
+}
+.logo--ucl  { --logo-h: 25px; }
+.logo--tedx { --logo-h: 32px; }
+.logo--fc   { --logo-h: 36px; }
+.logo--a4   { --logo-h: 34px; }
+.logo--deloitte { --logo-h: 21px; }
+.logo--kpmg     { --logo-h: 34px; }
+.logo--uw       { --logo-h: 20px; }
+.logo--hsg      { --logo-h: 27px; }
+.logo--tsinghua { --logo-h: 34px; }
+.logo--ubs      { --logo-h: 30px; }
+.logo--amazon   { --logo-h: 24px; }
+.logo--ebay     { --logo-h: 24px; }
+.logo--meta     { --logo-h: 22px; }
+.logo--stripe   { --logo-h: 24px; }
+.logo--google   { --logo-h: 22px; }
+/* The name is the fallback when a partner logo file is missing, and stays in the
+   accessibility tree once the image loads (the img itself is decorative). */
+.infra-trust__logo--captioned {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+.infra-trust__logo-caption {
+  font-family: var(--infra-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--infra-text-mute);
+}
+.infra-trust__logo:has(img) .infra-trust__logo-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 .infra-trust__logo:hover {
   opacity: 1;
@@ -5614,6 +5701,23 @@ textarea.plushie-input {
   font-weight: 700;
   margin-bottom: var(--sp-4);
 }
+/* Partner mark in place of the generic tick, where the org has a real one. */
+.infra-badge-card__logo {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+  margin-bottom: var(--sp-4);
+}
+.infra-badge-card__logo img {
+  display: block;
+  height: var(--logo-h, 26px);
+  width: auto;
+  max-width: 190px;
+  object-fit: contain;
+  object-position: left center;
+  filter: brightness(0) invert(1);
+  opacity: 0.85;
+}
 .infra-badge-card h3 {
   font-size: var(--text-base);
   font-weight: 600;
@@ -5783,6 +5887,8 @@ textarea.plushie-input {
   .infra-hero__actions { flex-direction: column; align-items: stretch; }
   .infra-hero__actions .btn { width: 100%; }
   .infra-trust__logos { gap: var(--sp-6); }
+  .infra-trust__logos { --logo-scale: 0.82; }
+  .infra-trust__logo { margin-right: var(--sp-6); }
 
   .infra-section { padding: var(--sp-16) var(--sp-4); }
   .infra-cta { padding: var(--sp-16) var(--sp-4); }
@@ -5810,6 +5916,15 @@ textarea.plushie-input {
   }
   .infra-breather__core { transform: scale(1); opacity: 1; }
   .infra-breather__pulse { transform: scale(1.1); opacity: 0.5; }
+
+  /* No drift under reduced motion — the row becomes a plain scroller the
+     reader moves themselves. */
+  .infra-trust__marquee {
+    overflow-x: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .infra-trust__track--clone { display: none; }
 }
 
 /* ============================================================
