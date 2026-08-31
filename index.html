@@ -87,6 +87,10 @@
     <div class="book-stage">
       <div class="book__shadow" aria-hidden="true"></div>
 
+      <!-- Stand-in for the AIKEI page: see openDoorFallback() in book-gate.js.
+           Only shown when the browser cannot hit-test the page itself. -->
+      <a class="book__door" href="/aikei" data-book-door-fallback aria-hidden="true" tabindex="-1"></a>
+
       <div class="book" id="book">
 
         <!-- Right leaf, lying under the cover: AIKEI -->
@@ -584,30 +588,6 @@
             <li>Innovate UK-funded standard</li>
           </ul>
         </article>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ========== Credibility ========== -->
-  <section class="infra-section infra-section--alt" data-section="credibility">
-    <div class="container">
-      <div class="section-header section-header-left">
-        <p class="section-eyebrow">Credibility</p>
-        <h2>What's actually behind it.</h2>
-      </div>
-
-      <div class="infra-badge-grid">
-        <div class="infra-badge-card">
-          <div class="infra-badge-card__icon" aria-hidden="true">✓</div>
-          <h3>Trauma-informed by design</h3>
-          <p>Every default assumes the user might be dysregulated, trauma-affected, or neurodivergent. Nothing shocks, pressures, or shames. Product decisions are shaped by the founder's clinical training in trauma-informed practice.</p>
-        </div>
-        <div class="infra-badge-card">
-          <div class="infra-badge-card__icon" aria-hidden="true">✓</div>
-          <h3>Evidence-informed</h3>
-          <p>Built on Big Five, Gottman, Enneagram, attachment theory, Plutchik's wheel, and slow-breathing research. Synthesised, not invented.</p>
-        </div>
       </div>
     </div>
   </section>
