@@ -2,10 +2,12 @@
   "_comment": "VirWave Website Visibility Config. Edit this file to hide pages, sections, or nav items without touching HTML.",
 
   "hiddenSections": [
-    "_example-section-key"
+    "_example-section-key",
+    "team"
   ],
 
   "hiddenNav": [
+    "team"
   ],
 
   "hiddenPages": [
