@@ -592,6 +592,152 @@
   }
 
   /* --- Init -------------------------------------------------- */
+  /* ---------------------------------------------------------
+     Logo rows: continuous drift, grab to move by hand
+     --------------------------------------------------------- */
+  function initTrustMarquees() {
+    const marquees = document.querySelectorAll('.infra-trust__marquee');
+    if (!marquees.length) return;
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const SPEED = 22;      // px per second — slow enough to read, quiet enough to ignore
+    const SETTLE = 0.55;   // seconds for a flick to ease back into the steady drift
+    const MAX_FLICK = 260; // cap on release velocity, so a hard flick can't send it spinning
+    const rows = [];
+    let frame = null;
+
+    function wrap(value, span) {
+      return ((value % span) + span) % span;
+    }
+
+    function build(marquee) {
+      const inner = marquee.querySelector('.infra-trust__marquee-inner');
+      const track = marquee.querySelector('.infra-trust__track');
+      if (!inner || !track) return null;
+
+      // Start from a single track every time, so resizes don't stack copies.
+      inner.querySelectorAll('.infra-trust__track--clone').forEach(function (el) { el.remove(); });
+      marquee.classList.remove('is-scrolling');
+      inner.style.transform = '';
+
+      if (reduce.matches) return null;
+
+      const width = track.scrollWidth;
+      if (!width) return null;
+
+      // Enough copies that the window is covered wherever the row is dragged to.
+      const copies = Math.max(2, Math.ceil(marquee.clientWidth / width) + 2);
+      for (let i = 1; i < copies; i++) {
+        const clone = track.cloneNode(true);
+        clone.classList.add('infra-trust__track--clone');
+        clone.setAttribute('aria-hidden', 'true');
+        inner.appendChild(clone);
+      }
+
+      marquee.classList.add('is-scrolling');
+
+      // One state object per row, reused across rebuilds so the drag handlers
+      // bound below stay pointed at live state.
+      const row = marquee.__trustRow || (marquee.__trustRow = {
+        marquee: marquee, offset: 0, velocity: SPEED,
+        hovered: false, dragging: false,
+        startX: 0, startOffset: 0, lastX: 0, lastTime: 0
+      });
+      row.inner = inner;
+      row.width = width;
+      row.offset = wrap(row.offset, width);
+      return row;
+    }
+
+    function draw(row) {
+      row.inner.style.transform = 'translate3d(' + (-row.offset) + 'px, 0, 0)';
+    }
+
+    function tick(now) {
+      frame = window.requestAnimationFrame(tick);
+      rows.forEach(function (row) {
+        const dt = Math.min((now - (row.lastFrame || now)) / 1000, 0.05);
+        row.lastFrame = now;
+        if (row.dragging) return;
+        // A flick decays into the steady drift; hovering brings it to a stop.
+        const target = row.hovered ? 0 : SPEED;
+        row.velocity += (target - row.velocity) * (1 - Math.exp(-dt / SETTLE));
+        row.offset = wrap(row.offset + row.velocity * dt, row.width);
+        draw(row);
+      });
+    }
+
+    function bind(row) {
+      const el = row.marquee;
+
+      el.addEventListener('pointerenter', function () { row.hovered = true; });
+      el.addEventListener('pointerleave', function () { row.hovered = false; });
+
+      el.addEventListener('pointerdown', function (event) {
+        if (event.button !== 0) return;
+        row.dragging = true;
+        row.startX = event.clientX;
+        row.startOffset = row.offset;
+        row.lastX = event.clientX;
+        row.lastTime = event.timeStamp;
+        row.velocity = 0;
+        el.classList.add('is-dragging');
+        try { el.setPointerCapture(event.pointerId); } catch (err) { /* capture is a nicety */ }
+      });
+
+      el.addEventListener('pointermove', function (event) {
+        if (!row.dragging) return;
+        event.preventDefault();
+        row.offset = wrap(row.startOffset - (event.clientX - row.startX), row.width);
+        const dt = (event.timeStamp - row.lastTime) / 1000;
+        if (dt > 0) row.velocity = -(event.clientX - row.lastX) / dt;
+        row.lastX = event.clientX;
+        row.lastTime = event.timeStamp;
+        draw(row);
+      });
+
+      function release(event) {
+        if (!row.dragging) return;
+        row.dragging = false;
+        el.classList.remove('is-dragging');
+        // A stale velocity from a long pause before letting go would launch it.
+        if (event.timeStamp - row.lastTime > 120) row.velocity = SPEED;
+        row.velocity = Math.max(-MAX_FLICK, Math.min(MAX_FLICK, row.velocity));
+        try {
+          if (el.hasPointerCapture(event.pointerId)) el.releasePointerCapture(event.pointerId);
+        } catch (err) { /* nothing to release */ }
+      }
+      el.addEventListener('pointerup', release);
+      el.addEventListener('pointercancel', release);
+    }
+
+    function sync() {
+      rows.length = 0;
+      marquees.forEach(function (marquee) {
+        const row = build(marquee);
+        if (!row) return;
+        rows.push(row);
+        if (!marquee.dataset.marqueeBound) {
+          bind(row);
+          marquee.dataset.marqueeBound = 'true';
+        }
+        draw(row);
+      });
+      if (frame) window.cancelAnimationFrame(frame);
+      if (rows.length) frame = window.requestAnimationFrame(tick);
+    }
+
+    sync();
+    // Track widths depend on the logo images, so re-measure once they land.
+    window.addEventListener('load', sync);
+    let resizeTimer;
+    window.addEventListener('resize', function () {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(sync, 200);
+    });
+    if (reduce.addEventListener) reduce.addEventListener('change', sync);
+  }
+
   async function init() {
     var config = await loadConfig();
     applyVisibility(config);
@@ -607,6 +753,7 @@
     initArchetypeToggle();
     initRealmTint();
     initSiteParticles();
+    initTrustMarquees();
   }
 
   if (document.readyState === 'loading') {
