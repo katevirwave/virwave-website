@@ -5298,6 +5298,9 @@ textarea.plushie-input {
 .logo--meta     { --logo-h: 22px; }
 .logo--stripe   { --logo-h: 24px; }
 .logo--google   { --logo-h: 22px; }
+.logo--appstore { --logo-h: 34px; }
+.logo--play     { --logo-h: 34px; }
+.logo--ya       { --logo-h: 30px; }
 /* The name is the fallback when a partner logo file is missing, and stays in the
    accessibility tree once the image loads (the img itself is decorative). */
 .infra-trust__logo--captioned {
