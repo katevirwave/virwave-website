@@ -4611,7 +4611,6 @@ button[type="submit"]:disabled {
 }
 
 
-
 /* === PRODUCTS ANIMATION ENHANCEMENTS === */
 
 /* -------------------------------------------------------
@@ -5676,71 +5675,10 @@ textarea.plushie-input {
 .infra-code .tk-n { color: #FBBF24; }              /* number */
 
 /* --- Compliance badges -------------------------------------- */
-.infra-badge-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--sp-6);
-}
-.infra-badge-card {
-  padding: var(--sp-8);
-  border: 1px solid var(--infra-line);
-  border-radius: var(--radius-lg);
-  background: rgba(255, 255, 255, 0.02);
-  transition: border-color 0.25s var(--ease-calm);
-}
-@media (hover: hover) {
-  .infra-badge-card:hover { border-color: rgba(140, 235, 170, 0.28); }
-}
-.infra-badge-card__icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: rgba(140, 235, 170, 0.12);
-  color: var(--mint);
-  font-size: var(--text-sm);
-  font-weight: 700;
-  margin-bottom: var(--sp-4);
-}
+
+
 /* Partner mark in place of the generic tick, where the org has a real one. */
-.infra-badge-card__logo {
-  display: flex;
-  align-items: center;
-  min-height: 32px;
-  margin-bottom: var(--sp-4);
-}
-.infra-badge-card__logo img {
-  display: block;
-  height: var(--logo-h, 26px);
-  width: auto;
-  max-width: 190px;
-  object-fit: contain;
-  object-position: left center;
-  filter: brightness(0) invert(1);
-  opacity: 0.85;
-}
-.infra-badge-card h3 {
-  font-size: var(--text-base);
-  font-weight: 600;
-  color: var(--white);
-  letter-spacing: -0.005em;
-  margin-bottom: var(--sp-2);
-}
-.infra-badge-card p {
-  font-size: var(--text-sm);
-  color: var(--infra-text-mute);
-  line-height: 1.55;
-}
-.infra-badge-card code {
-  font-family: var(--infra-mono);
-  font-size: 0.85em;
-  background: rgba(255, 255, 255, 0.06);
-  padding: 0.05em 0.3em;
-  border-radius: 3px;
-  color: var(--infra-text);
-}
+
 
 /* --- Metrics ------------------------------------------------ */
 .infra-metrics {
@@ -5859,8 +5797,7 @@ textarea.plushie-input {
 /* --- Responsive --------------------------------------------- */
 @media (max-width: 900px) {
   .infra-pillar-grid,
-  .infra-vertical-grid,
-  .infra-badge-grid {
+  .infra-vertical-grid {
     grid-template-columns: 1fr;
   }
   .infra-pillar {
@@ -6861,6 +6798,18 @@ textarea.plushie-input {
   transition: transform 1100ms var(--ease-calm);
 }
 .book-gate.is-open .book { transform: translateX(0) rotateX(5deg); }
+
+/* Chrome will not hit-test the AIKEI leaf inside the book's preserve-3d
+   context — every click over it lands on .book instead. This sits outside
+   that context and is positioned over the page by book-gate.js, but only
+   where the page itself proves unclickable. */
+.book__door {
+  position: absolute;
+  z-index: 4;
+  display: none;
+  border-radius: 3px 9px 9px 3px;
+}
+.book__door.is-active { display: block; }
 
 /* Page-block edges. Sit just outside the leaves so they read as
    the stacked paper of a real volume. */
