@@ -61,6 +61,8 @@ python scripts/generate-qr.py --list
 | `--interest` | No | `early-access` | Interest type(s). Comma-separated for multi. Valid: `early-access`, `event`, `partnership`, `licensing`, `general`. |
 | `--source` | No | `qr_<event-slug>` | Source tag for DB attribution. |
 | `--campaign` | No | — | Optional campaign identifier. |
+| `--url` | No | — | Encode this URL verbatim instead of building an interest-form URL. For standalone landing pages. |
+| `--brand` | No | `virwave` | Brand profile: `virwave` or `aikei`. Sets colours, module shape and centre logo. |
 | `--size` | No | `800` | Image size in pixels (square). |
 | `--format` | No | `png` | Output format: `png` or `webp`. |
 | `--list` | No | — | List all generated QR codes instead of generating. |
@@ -97,6 +99,39 @@ QR code's filename, URL, event code, source, campaign, and timestamp.
 | "QR for licensing inquiry at Health Tech Summit" | `--event "Health Tech Summit" --interest licensing` |
 | "General signup QR for a flyer" | `--event "Flyer General" --interest general` |
 | "What QR codes do we have?" | `--list` |
+
+### Standalone landing pages (`--url` + `--brand`)
+
+Not every QR points at the interest form. AIKEI has its own subdomain, its own
+design system and its own landing pages, so those codes encode the URL directly
+— the path *is* the attribution, and query params would only make the code
+denser to print.
+
+```bash
+.venv/bin/python scripts/generate-qr.py \
+  --event "AIKEI London" \
+  --url "https://aikei.virwave.com/london" \
+  --brand aikei \
+  --source qr_aikei_london \
+  --size 1200
+```
+
+`--event` is still required: it names the output file and the manifest record.
+`--interest` is ignored for URL building in this mode.
+
+| Brand | Modules | Colours | Centre logo |
+|-------|---------|---------|-------------|
+| `virwave` | Rounded | Navy `#0D2137` on off-white `#F8F8F6` | `assets/logo_virwave.avif`, circular |
+| `aikei` | Square | Ink `#171C1B` on paper `#F4F5F3` | `aikei-app/public/media/aikei-logo.png`, rectangular |
+
+AIKEI's profile is square-cornered because its stylesheet sets every radius to
+zero — a rounded QR would not look like the page it lands on.
+
+The logo loader trims each mark to its own artwork before centring it: it crops
+to the alpha bounding box, then cuts at the first run of empty rows. That drops
+both oversized transparent canvases and detached corner marks — the AIKEI PNG
+carries a Gemini watermark below the mascots that would otherwise ride into the
+QR centre.
 
 ### How tracking flows to the database
 
