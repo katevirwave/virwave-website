@@ -87,3 +87,19 @@ Rule: they sit in the shared "In good company" band, which claims association
 and nothing more. Never move that band under a heading like "Backed & built
 with", "Trusted by", or "Our clients". The same goes for UBS, which is
 Sebastian's former employer.
+
+## A QR code is not delivered until its destination is live
+
+The AIKEI London QR was generated, decoded and visually checked while the
+page it pointed at existed only as an uncommitted file in a worktree. Kate
+scanned it and got the app's 404. "Verified locally" was true and useless —
+a QR's whole job is to be scanned by someone who is not on localhost.
+
+Rule: when the deliverable is a code, link or address that someone will use
+from outside the repo, the work is not finished at "builds and renders". Take
+it through commit, push and deployment, confirm the real URL responds, and if
+the production merge is Kate's call, say plainly that the thing is not live
+yet rather than reporting the task as done.
+
+This applies to anything printed or handed out: QR codes, short links, email
+addresses in CTA copy, deep links, `.well-known` files.
