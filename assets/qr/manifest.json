@@ -20,5 +20,18 @@
     "url": "https://virwave.com/interest/?interest=early-access&source=qr_ucl_hatchery_networking&event=work-with-a-startup-networking-fair-ucl-hatchery-london-2026-03-25&campaign=ucl-hatchery-march",
     "size_px": 1200,
     "generated_at": "2026-03-25T13:31:55.379160+00:00"
+  },
+  {
+    "filename": "qr_aikei-london.png",
+    "event": "AIKEI London",
+    "event_code": "aikei-london",
+    "interest": "early-access",
+    "source": "qr_aikei_london",
+    "campaign": null,
+    "brand": "aikei",
+    "direct_url": true,
+    "url": "https://aikei.virwave.com/london",
+    "size_px": 1200,
+    "generated_at": "2026-09-02T18:01:40.266094+00:00"
   }
 ]
