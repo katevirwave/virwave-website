@@ -53,13 +53,72 @@ const STEPS = [
   },
 ];
 
+const PARTNERS = [
+  {
+    label: "Shape the packs",
+    body: "Contribute scenarios from what you have actually seen go wrong. They become versioned tests that every customer runs.",
+  },
+  {
+    label: "Adjudicate findings",
+    body: "Sit as a named reviewer on findings in your field, so a confirmed failure carries a person's judgement and not only a model's.",
+  },
+  {
+    label: "Hold the mapping",
+    body: "Keep findings honestly mapped to the codes, acts and standards your organisation helped write.",
+  },
+];
+
+const INVESTORS = [
+  {
+    label: "The gate is arriving",
+    body: "UK AADC, the Online Safety Act, the EU AI Act and SB 243 converge on one demand: evidence before release, not an apology after it.",
+  },
+  {
+    label: "The record compounds",
+    body: "Every run adds adjudicated findings and permanent regressions. A customer's test history is worth more to them at each release.",
+  },
+  {
+    label: "Engine-independent",
+    body: "Packs, adjudication and reports outlive any single evaluation model. The engines are swappable; the record is not.",
+  },
+];
+
+/**
+ * The scheduling link people book through. Until it lands, every booking CTA
+ * falls back to a tagged email so the page never ships a dead button — set
+ * this one constant and the partner and investor sections both pick it up.
+ */
+const CALENDAR_URL: string | null = null;
+
 /** Tagged so a reply from this page is attributable to the London handout. */
-const MAILTO =
-  "mailto:info@virwave.com" +
-  "?subject=" +
-  encodeURIComponent("AIKEI release test — London") +
-  "&body=" +
-  encodeURIComponent("Scanned the AIKEI code in London.\n\nProduct:\nAge band:\nMarket:\n\n");
+function mailto(subject: string, body: string) {
+  return (
+    "mailto:info@virwave.com?subject=" +
+    encodeURIComponent(subject) +
+    "&body=" +
+    encodeURIComponent(body)
+  );
+}
+
+/** The calendar once we have one, a pre-filled email until then. */
+function book(subject: string, body: string) {
+  return CALENDAR_URL ?? mailto(subject, body);
+}
+
+const MAILTO = book(
+  "AIKEI release test — London",
+  "Scanned the AIKEI code in London.\n\nProduct:\nAge band:\nMarket:\n\n",
+);
+
+const BOOK_PARTNER = book(
+  "AIKEI partnership — London",
+  "Scanned the AIKEI code in London.\n\nOrganisation:\nWhat you work on:\nWhat we might build together:\n\n",
+);
+
+const BOOK_INVESTOR = book(
+  "AIKEI investment — London",
+  "Scanned the AIKEI code in London.\n\nFund or angel:\nStage focus:\nWhat you would want to see:\n\n",
+);
 
 const btnPrimary =
   "cut-hover inline-block border border-teal bg-teal px-5 py-3 text-[15px] text-paper no-underline";
@@ -111,6 +170,18 @@ function London() {
               See the full site →
             </a>
           </div>
+        </section>
+
+        <div className="border-t border-rule" />
+
+        {/* The sentence to leave with. Centred and alone, like the positioning
+            line on the homepage — it carries the whole page if nothing else
+            gets read. */}
+        <section className="py-[72px] text-center md:py-[96px]">
+          <p className="mx-auto max-w-[24ch] font-display text-[28px] font-medium leading-[1.06] tracking-[-0.03em] text-ink md:text-[40px]">
+            In this great experiment of AI, we're pioneering the solution that brings{" "}
+            <span className="text-muted">humanity back into the conversation</span>.
+          </p>
         </section>
 
         <div className="border-t border-rule" />
@@ -176,6 +247,66 @@ function London() {
             COPPA and SB 243, with the pack version, evaluator version and timestamp that produced
             it. This is not legal advice — it is the evidence your counsel asks for.
           </p>
+        </section>
+
+        <div className="border-t border-rule" />
+
+        {/* For partners. */}
+        <section className="py-[72px] md:py-[96px]">
+          <p className="eyebrow">For partners</p>
+          <h2 className="mt-6 max-w-[22ch] text-[28px] md:text-[44px]">
+            The test is only as good as the people who{" "}
+            <span className="text-muted">know children</span>.
+          </h2>
+          <p className="mt-6 max-w-[58ch] text-muted">
+            Test packs encode what actually goes wrong between a child and a machine. That knowledge
+            does not come from a lab. It comes from the researchers, clinicians, educators and
+            safety organisations who have been watching it for years — and we would rather build the
+            packs with them than around them.
+          </p>
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {PARTNERS.map((p) => (
+              <div key={p.label} className="cut cut-hover px-5 py-6">
+                <p className="eyebrow">{p.label}</p>
+                <p className="mt-3 text-[15px] text-muted">{p.body}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-10">
+            <a href={BOOK_PARTNER} className={btnPrimary}>
+              Book time
+            </a>
+          </div>
+        </section>
+
+        <div className="border-t border-rule" />
+
+        {/* For investors. */}
+        <section className="py-[72px] md:py-[96px]">
+          <p className="eyebrow">For investors</p>
+          <h2 className="mt-6 max-w-[22ch] text-[28px] md:text-[44px]">
+            Child safety is becoming a release gate.{" "}
+            <span className="text-muted">We are building the gate.</span>
+          </h2>
+          <p className="mt-6 max-w-[58ch] text-muted">
+            The products children talk to are shipping faster than anyone can check them, and the
+            rules are landing on evidence rather than intent. AIKEI is built for that moment:
+            versioned packs, adjudicated findings, and a release record a company can put its name
+            to.
+          </p>
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {INVESTORS.map((i) => (
+              <div key={i.label} className="cut cut-hover px-5 py-6">
+                <p className="eyebrow">{i.label}</p>
+                <p className="mt-3 text-[15px] text-muted">{i.body}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-10">
+            <a href={BOOK_INVESTOR} className={btnPrimary}>
+              Book time
+            </a>
+          </div>
         </section>
 
         <div className="border-t border-rule" />
