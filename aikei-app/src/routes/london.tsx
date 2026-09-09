@@ -84,41 +84,32 @@ const INVESTORS = [
 ];
 
 /**
- * The scheduling link people book through. Until it lands, every booking CTA
- * falls back to a tagged email so the page never ships a dead button — set
- * this one constant and the partner and investor sections both pick it up.
+ * Kate's two booking schedules. Customers and partners share one — both
+ * conversations start from the same place, a product and what testing it
+ * would involve. Investors have their own.
+ *
+ * Canonical form, without the /u/0/ that Google's own share link carries:
+ * that segment means "first signed-in account" and can land a visitor with
+ * several Google accounts in the wrong one. Google redirects to this anyway.
  */
-const CALENDAR_URL: string | null = null;
+const BOOK_CUSTOMER =
+  "https://calendar.google.com/calendar/appointments/schedules/AcZssZ2P-1cukmh9S_2UzGVHoHvWDGndyP8FMBhm3ZZQ76PrZSTKZ7PYP2s9Ir5y4SxWp2AxaE5rU51C";
 
-/** Tagged so a reply from this page is attributable to the London handout. */
-function mailto(subject: string, body: string) {
-  return (
-    "mailto:info@virwave.com?subject=" +
-    encodeURIComponent(subject) +
-    "&body=" +
-    encodeURIComponent(body)
-  );
-}
+const BOOK_INVESTOR =
+  "https://calendar.google.com/calendar/appointments/schedules/AcZssZ0KS0BXMUn3EQlVYisWwS5Lc1p1rvydxXJ3cV53GbP79_BeurQRr7KaD-Z31woTtp-O20KOpAw_";
 
-/** The calendar once we have one, a pre-filled email until then. */
-function book(subject: string, body: string) {
-  return CALENDAR_URL ?? mailto(subject, body);
-}
+/** Booking opens in its own tab so the page survives behind it. */
+const external = { target: "_blank", rel: "noopener noreferrer" } as const;
 
-const MAILTO = book(
-  "AIKEI release test — London",
-  "Scanned the AIKEI code in London.\n\nProduct:\nAge band:\nMarket:\n\n",
-);
-
-const BOOK_PARTNER = book(
-  "AIKEI partnership — London",
-  "Scanned the AIKEI code in London.\n\nOrganisation:\nWhat you work on:\nWhat we might build together:\n\n",
-);
-
-const BOOK_INVESTOR = book(
-  "AIKEI investment — London",
-  "Scanned the AIKEI code in London.\n\nFund or angel:\nStage focus:\nWhat you would want to see:\n\n",
-);
+/**
+ * The written-word route, for people who would rather send a note than pick a
+ * slot. Tagged so a reply from this page is attributable to the London handout.
+ */
+const MAILTO =
+  "mailto:info@virwave.com?subject=" +
+  encodeURIComponent("AIKEI — London") +
+  "&body=" +
+  encodeURIComponent("Scanned the AIKEI code in London.\n\n");
 
 const btnPrimary =
   "cut-hover inline-block border border-teal bg-teal px-5 py-3 text-[15px] text-paper no-underline";
@@ -163,7 +154,7 @@ function London() {
             board or a regulator.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <a href={MAILTO} className={btnPrimary}>
+            <a href={BOOK_CUSTOMER} {...external} className={btnPrimary}>
               Book a release test
             </a>
             <a href="/#proof" className={btnSecondary}>
@@ -273,7 +264,7 @@ function London() {
             ))}
           </div>
           <div className="mt-10">
-            <a href={BOOK_PARTNER} className={btnPrimary}>
+            <a href={BOOK_CUSTOMER} {...external} className={btnPrimary}>
               Book time
             </a>
           </div>
@@ -303,7 +294,7 @@ function London() {
             ))}
           </div>
           <div className="mt-10">
-            <a href={BOOK_INVESTOR} className={btnPrimary}>
+            <a href={BOOK_INVESTOR} {...external} className={btnPrimary}>
               Book time
             </a>
           </div>
@@ -321,13 +312,10 @@ function London() {
             would run and what the report would cover.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <a href={MAILTO} className={btnPrimary}>
+            <a href={BOOK_CUSTOMER} {...external} className={btnPrimary}>
               Book a release test
             </a>
-            <a
-              href="mailto:info@virwave.com"
-              className="text-[15px] text-muted no-underline hover:text-ink"
-            >
+            <a href={MAILTO} className="text-[15px] text-muted no-underline hover:text-ink">
               info@virwave.com
             </a>
           </div>
