@@ -1,5 +1,6 @@
 import { createAdminClient } from '@/utils/supabase/admin'
 import { notFound } from 'next/navigation'
+import { getMonthlyTier, countMonthlyConversionsByCode, tierLabel } from '@/utils/tiers'
 
 export const revalidate = 0
 
@@ -12,13 +13,18 @@ export default async function AffiliateDetailPage({ params }: { params: { code: 
     .single()
   if (!profile) notFound()
 
+  const monthConversions = (await countMonthlyConversionsByCode(adminClient, [profile.code])).get(profile.code) ?? 0
+  const tier = profile.status === 'active'
+    ? tierLabel(getMonthlyTier(monthConversions, profile.tier, profile.tier_override))
+    : '—'
+
   // TODO: Phase 2 detail view — commission history, tier override, suspend/reactivate actions
   return (
     <div style={{ padding: 'var(--sp-8)' }}>
       <h1 style={{ color: 'var(--color-white-90)', marginBottom: 'var(--sp-4)' }}>
         {profile.full_name} ({profile.code})
       </h1>
-      <p style={{ color: 'var(--color-white-60)' }}>Status: {profile.status} · Tier: {profile.tier}</p>
+      <p style={{ color: 'var(--color-white-60)' }}>Status: {profile.status} · Tier this month: {tier} · {monthConversions} referrals this month</p>
       <p style={{ color: 'var(--color-white-40)', fontSize: '0.875rem', marginTop: 'var(--sp-6)' }}>
         Full detail view coming in a later task.
       </p>

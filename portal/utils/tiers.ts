@@ -75,3 +75,34 @@ export async function countMonthlyConversions(supabase: SupabaseClient): Promise
     .gt('gross_amount_usd', 0)
   return count ?? 0
 }
+
+// Admin version of countMonthlyConversions for many affiliates at once. Needs the
+// service-role client (RLS would limit it to one affiliate). Pages through rows so
+// PostgREST's row cap can't silently truncate the counts.
+export async function countMonthlyConversionsByCode(adminClient: SupabaseClient, codes: string[]): Promise<Map<string, number>> {
+  const counts = new Map<string, number>(codes.map(code => [code, 0]))
+  if (codes.length === 0) return counts
+  const PAGE = 1000
+  for (let from = 0; ; from += PAGE) {
+    const { data, error } = await adminClient
+      .from('affiliate_commission_events')
+      .select('affiliate_code')
+      .eq('event_month', currentMonth())
+      .is('payout_id', null)
+      .gt('gross_amount_usd', 0)
+      .in('affiliate_code', codes)
+      .order('id')
+      .range(from, from + PAGE - 1)
+    if (error) throw new Error(`Monthly conversion count failed: ${error.message}`)
+    for (const row of data ?? []) {
+      counts.set(row.affiliate_code, (counts.get(row.affiliate_code) ?? 0) + 1)
+    }
+    if (!data || data.length < PAGE) break
+  }
+  return counts
+}
+
+// Short label for admin tables: "Growth · 25%", marked when an admin set it by hand.
+export function tierLabel({ tier, isOverride }: MonthlyTier): string {
+  return `${tier.name} · ${tier.ratePct}%${isOverride ? ' (override)' : ''}`
+}
