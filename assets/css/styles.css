@@ -7587,3 +7587,314 @@ textarea.plushie-input {
   .book__gem-wrap::before { animation: none; opacity: 0.85; transform: translate(-50%, -50%); }
   .book-gate.is-open .book__leaf { animation: none; }
 }
+
+/* ============================================================
+   Home — user-first homepage (body.home-user)
+   Hero breath demo, store badges, screens, story, Claude, credentials,
+   footer with socials. Scoped so /investors keeps the infra look.
+   ============================================================ */
+
+.home-user {
+  --breath-in:  4s;
+  --breath-out: 6s;
+  --breath-cycle: 10s;
+}
+
+/* The second trust row on /investors sits under the first. */
+.infra-trust--history { margin-top: var(--sp-8); }
+
+/* --- Hero ---------------------------------------------------- */
+.user-hero { min-height: 92vh; }
+.user-hero__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: var(--sp-12);
+  align-items: center;
+}
+.user-hero .infra-hero__heading { max-width: 16ch; }
+.user-hero .infra-hero__sub { margin-bottom: var(--sp-8); }
+
+.store-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+}
+.store-badge {
+  display: inline-flex;
+  border-radius: var(--radius-lg);
+  transition: transform var(--dur-snappy) var(--ease-calm), opacity var(--dur-snappy) var(--ease-calm);
+}
+.store-badge img {
+  display: block;
+  height: 52px;
+  width: auto;
+}
+.store-badge:hover { transform: translateY(-1px); opacity: 0.9; }
+.store-badge:focus-visible { outline: 2px solid var(--mint); outline-offset: 3px; }
+
+/* --- Breath demo --------------------------------------------- */
+.breath-demo {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-6);
+}
+.breath-demo__stage {
+  position: relative;
+  width: min(340px, 72vw);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+}
+.breath-demo__aura {
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--phase-exhale) 0%, transparent 70%);
+  opacity: 0.18;
+  animation: breath-aura var(--breath-cycle) infinite;
+}
+.breath-demo__shape {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  animation: breath-scale var(--breath-cycle) infinite;
+}
+.breath-demo__shape circle {
+  fill: none;
+  stroke: var(--mint);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 0;
+  animation: breath-draw var(--breath-cycle) infinite;
+}
+.breath-demo__cue {
+  position: relative;
+  grid-area: 1 / 1;
+  font-size: var(--text-lg);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--white);
+  opacity: 0;
+}
+.breath-demo__cue--in  { animation: breath-cue-in  var(--breath-cycle) infinite; }
+.breath-demo__cue--out { animation: breath-cue-out var(--breath-cycle) infinite; }
+.breath-demo__cue--still { display: none; }
+.breath-demo__caption {
+  font-size: var(--text-sm);
+  color: var(--infra-text-mute);
+  text-align: center;
+}
+
+/* 0–40% is the 4s inhale, 40–100% the 6s exhale. No hold at either end. */
+@keyframes breath-scale {
+  0%   { transform: scale(0.72); animation-timing-function: cubic-bezier(0.37, 0, 0.63, 1); }
+  40%  { transform: scale(1);    animation-timing-function: cubic-bezier(0.37, 0, 0.63, 1); }
+  100% { transform: scale(0.72); }
+}
+@keyframes breath-draw {
+  0%   { stroke-dashoffset: 100; stroke: var(--phase-inhale); animation-timing-function: cubic-bezier(0.37, 0, 0.63, 1); }
+  40%  { stroke-dashoffset: 0;   stroke: var(--phase-exhale); animation-timing-function: cubic-bezier(0.37, 0, 0.63, 1); }
+  100% { stroke-dashoffset: -100; stroke: var(--phase-inhale); }
+}
+@keyframes breath-aura {
+  0%   { opacity: 0.08; transform: scale(0.7); animation-timing-function: cubic-bezier(0.37, 0, 0.63, 1); }
+  40%  { opacity: 0.24; transform: scale(1.05); animation-timing-function: cubic-bezier(0.37, 0, 0.63, 1); }
+  100% { opacity: 0.08; transform: scale(0.7); }
+}
+@keyframes breath-cue-in {
+  0%, 36% { opacity: 0.9; }
+  42%, 97% { opacity: 0; }
+  100% { opacity: 0.9; }
+}
+@keyframes breath-cue-out {
+  0%, 38% { opacity: 0; }
+  44%, 94% { opacity: 0.9; }
+  100% { opacity: 0; }
+}
+
+/* --- See it -------------------------------------------------- */
+.user-screens {
+  display: flex;
+  justify-content: center;
+  gap: var(--sp-8);
+  flex-wrap: wrap;
+}
+.user-screens__item {
+  margin: 0;
+  flex: 0 1 240px;
+}
+.user-screens__item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+}
+
+.user-note {
+  margin-top: var(--sp-8);
+  max-width: 60ch;
+  font-size: var(--text-base);
+  color: var(--infra-text-mute);
+}
+.infra-pillar a { color: var(--mint); }
+
+/* --- Story --------------------------------------------------- */
+.user-story {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: var(--sp-12);
+  align-items: center;
+}
+.user-story__talk {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--sp-3);
+  aspect-ratio: 16 / 10;
+  padding: var(--sp-8);
+  border: 1px solid var(--infra-line-2);
+  border-radius: var(--radius-lg);
+  background: var(--infra-surface);
+}
+.user-story__tedx {
+  height: 32px;
+  width: auto;
+  align-self: flex-start;
+  filter: brightness(0) invert(1);
+  opacity: 0.8;
+}
+.user-story__title {
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  color: var(--white);
+  margin: 0;
+}
+.user-story__meta {
+  font-size: var(--text-sm);
+  color: var(--infra-text-mute);
+  margin: 0;
+}
+.user-story__text h2 {
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--white);
+  margin-bottom: var(--sp-6);
+}
+.user-story__text p:not(.section-eyebrow) {
+  font-size: var(--text-lg);
+  color: var(--infra-text);
+  line-height: 1.6;
+  max-width: 60ch;
+}
+.user-story__text p + p { margin-top: var(--sp-4); }
+
+/* --- Try it in Claude ---------------------------------------- */
+.user-claude {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) auto;
+  gap: var(--sp-12);
+  align-items: center;
+}
+.user-claude h2 {
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--white);
+  margin-bottom: var(--sp-4);
+}
+.user-claude p:not(.section-eyebrow) {
+  font-size: var(--text-lg);
+  color: var(--infra-text-mute);
+  max-width: 60ch;
+  margin: 0;
+}
+.user-claude__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+/* --- Credentials: a still row, not a marquee ------------------ */
+.user-creds { padding-top: var(--sp-16); padding-bottom: var(--sp-16); }
+.user-creds__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-8) var(--sp-12);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.user-creds__row .infra-trust__logo { margin-right: 0; position: relative; }
+
+/* --- Footer -------------------------------------------------- */
+.user-footer__top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--sp-8);
+  padding-bottom: var(--sp-8);
+  margin-bottom: var(--sp-8);
+  border-bottom: 1px solid var(--border);
+}
+.user-footer__cta {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: var(--sp-4);
+}
+.social-links {
+  display: flex;
+  gap: var(--sp-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.social-links a {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  transition: color var(--dur-snappy) var(--ease-calm), border-color var(--dur-snappy) var(--ease-calm);
+}
+.social-links a:hover,
+.social-links a:focus-visible { color: var(--mint); border-color: var(--mint); }
+.social-links a::after { display: none; }
+.user-footer .footer-links { flex-wrap: wrap; row-gap: var(--sp-2); }
+.user-footer .footer-links a { white-space: nowrap; }
+
+/* --- Responsive ---------------------------------------------- */
+@media (max-width: 860px) {
+  .user-hero__inner,
+  .user-story,
+  .user-claude { grid-template-columns: 1fr; }
+  .user-hero { min-height: auto; }
+  .breath-demo__stage { width: min(240px, 60vw); }
+  .user-claude__actions { flex-direction: row; flex-wrap: wrap; }
+  .user-screens__item { flex-basis: 42%; }
+  .user-footer__top { flex-direction: column; align-items: flex-start; }
+}
+
+/* --- Reduced motion: a still shape with a single cue ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .breath-demo__aura,
+  .breath-demo__shape,
+  .breath-demo__shape circle,
+  .breath-demo__cue { animation: none; }
+  .breath-demo__shape circle { stroke: var(--mint); stroke-dashoffset: 0; }
+  .breath-demo__cue--in,
+  .breath-demo__cue--out { display: none; }
+  .breath-demo__cue--still { display: block; opacity: 0.9; font-size: var(--text-base); }
+  .store-badge { transition: none; }
+  .store-badge:hover { transform: none; }
+}
