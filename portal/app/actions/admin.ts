@@ -25,6 +25,16 @@ async function logAuditEvent(
   })
 }
 
+// Escapes values interpolated into email HTML — names and codes are user-supplied.
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 async function sendResendEmail(to: string, subject: string, text: string, html: string) {
   const RESEND_API_KEY = process.env.RESEND_API_KEY
   if (!RESEND_API_KEY) throw new Error('RESEND_API_KEY not configured')
@@ -59,14 +69,18 @@ export async function approveAffiliate(affiliateId: string, affiliateEmail: stri
     affiliateEmail,
     'Welcome to the VirWave Creator Program',
     `You're in!\n\nSign in at https://affiliates.virwave.com to access your dashboard.\n\nYour referral code: ${affiliateCode}\nYour referral link: https://virwave.com/ref/${affiliateCode}`,
-    `<p>You're in! <a href="https://affiliates.virwave.com">Sign in to your dashboard</a> to get started.</p><p>Your code: <strong>${affiliateCode}</strong></p>`
+    `<p>You're in! <a href="https://affiliates.virwave.com">Sign in to your dashboard</a> to get started.</p><p>Your code: <strong>${escapeHtml(affiliateCode)}</strong></p>`
   )
 
   revalidatePath('/admin/applications')
   revalidatePath('/admin/affiliates')
 }
 
-export async function rejectApplication(affiliateId: string, affiliateCode: string, reason: string) {
+// Bound with (affiliateId, affiliateCode); the form supplies the admin's written reason.
+export async function rejectApplication(affiliateId: string, affiliateCode: string, formData: FormData) {
+  const reason = String(formData.get('reason') ?? '').trim()
+  if (!reason) throw new Error('A rejection reason is required')
+
   const { user, adminClient } = await getAdminContext()
 
   const { error } = await adminClient.from('affiliate_profiles')
@@ -85,10 +99,14 @@ export async function suspendAffiliate(affiliateId: string, affiliateCode: strin
   // Guard: only suspend active/inactive/pending affiliates — prevents suspended→suspended
   // or terminated→suspended transitions that would allow reactivateAffiliate to restore a
   // terminated affiliate back to active.
-  await adminClient.from('affiliate_profiles')
+  const { data: updatedRows, error } = await adminClient.from('affiliate_profiles')
     .update({ status: 'suspended', suspended_at: new Date().toISOString(), notes: reason })
     .eq('id', affiliateId)
     .in('status', ['active', 'inactive', 'pending'])
+    .select('id')
+  if (error) throw new Error(`Suspend failed: ${error.message}`)
+  // No row changed — already suspended/terminated. Don't audit a suspension that didn't happen.
+  if (!updatedRows || updatedRows.length === 0) throw new Error('Suspend failed: affiliate is not in a suspendable state')
 
   await logAuditEvent(adminClient, user.id, user.email!, 'affiliate.suspend', 'affiliate', affiliateCode, { reason })
   revalidatePath('/admin/affiliates')
@@ -148,6 +166,9 @@ export async function markPayoutPaid(payoutId: string, affiliateCode: string, re
   // Notify affiliate by email that their payment is on its way
   const profile = (payout?.affiliate_profiles as unknown as { email: string; full_name: string } | null)
   if (profile?.email) {
+    const safeName = escapeHtml(profile.full_name ?? affiliateCode)
+    const safeMonth = escapeHtml(String(payout.payout_month))
+    const safeMethod = escapeHtml(payout.payout_method ?? 'the method on file')
     const paymentText = [
       `Hi ${profile.full_name ?? affiliateCode},`,
       ``,
@@ -165,7 +186,7 @@ export async function markPayoutPaid(payoutId: string, affiliateCode: string, re
       profile.email,
       'Your VirWave payment is on its way',
       paymentText,
-      `<p>Hi ${profile.full_name ?? affiliateCode},</p><p>Your payment of <strong>$${(payout.total_commission_usd ?? 0).toFixed(2)} USD</strong> for ${payout.payout_month} is on its way via ${payout.payout_method ?? 'the method on file'}.</p><p><a href="https://affiliates.virwave.com/payouts">View your payout history</a></p>`
+      `<p>Hi ${safeName},</p><p>Your payment of <strong>$${(payout.total_commission_usd ?? 0).toFixed(2)} USD</strong> for ${safeMonth} is on its way via ${safeMethod}.</p><p><a href="https://affiliates.virwave.com/payouts">View your payout history</a></p>`
     )
   }
 
@@ -190,7 +211,7 @@ export async function resendWelcomeEmail(affiliateEmail: string, affiliateCode: 
     affiliateEmail,
     'Your VirWave Affiliate Dashboard',
     `Sign in at https://affiliates.virwave.com to access your dashboard.\n\nYour referral code: ${affiliateCode}`,
-    `<p><a href="https://affiliates.virwave.com">Sign in to your dashboard</a> — your code is <strong>${affiliateCode}</strong>.</p>`
+    `<p><a href="https://affiliates.virwave.com">Sign in to your dashboard</a> — your code is <strong>${escapeHtml(affiliateCode)}</strong>.</p>`
   )
 
   const adminClient = createAdminClient()

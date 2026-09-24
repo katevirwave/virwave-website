@@ -31,7 +31,9 @@ export default async function ApplicationDetailPage({ params }: { params: { id: 
             Approve
           </button>
         </form>
-        <form action={rejectApplication.bind(null, app.id, app.code, 'Rejected via detail page')}>
+        <form action={rejectApplication.bind(null, app.id, app.code)} style={{ display: 'flex', gap: 'var(--sp-2)' }}>
+          <label htmlFor="reject-reason" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)' }}>Reason for rejecting</label>
+          <input id="reject-reason" type="text" name="reason" placeholder="Reason" required style={{ background: 'var(--glass-medium-bg)', color: 'var(--color-white-90)', border: '1px solid var(--glass-medium-border)', padding: 'var(--sp-2) var(--sp-3)', borderRadius: 'var(--radius)' }} />
           <button type="submit" style={{ background: 'var(--glass-medium-bg)', color: 'var(--color-amber-400)', border: '1px solid var(--color-amber-400)', padding: 'var(--sp-2) var(--sp-5)', borderRadius: 'var(--radius)', cursor: 'pointer' }}>
             Reject
           </button>
