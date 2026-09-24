@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light dark">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>VirWave Breathe</title>
+<style>
+.vw, .vw * { box-sizing: border-box; }
+body { margin: 0; background: #122B52; }
+.vw {
+  --vw-h: 100vh;
+  --vw-safe-t: env(safe-area-inset-top, 0px);
+  --vw-safe-b: env(safe-area-inset-bottom, 0px);
+  --vw-bar-b: calc(max(var(--vw-safe-b), 32px) + 8px);
+  --vw-pill-b: calc(var(--vw-bar-b) + 32px);
+  --vw-dock: calc(var(--vw-pill-b) + 64px);
+  --vw-e: min(100vw, calc((var(--vw-h) / 2 - var(--vw-dock)) / 0.5103), 480px);
+  --vw-shape: calc(var(--vw-e) * 0.55);
+  position: relative; overflow: hidden;
+  min-height: var(--vw-h);
+  color: #FFFFFF;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+@supports (height: 100dvh) {
+  .vw { --vw-h: 100dvh; }
+}
+/*
+ * A wide window is far taller in points than a phone, so the app's 40 px under the
+ * progress line reads as cramped there. Past phone widths the line keeps the same
+ * share of the height it has on the reference phone's safe area, or more.
+ */
+@media (min-width: 700px) {
+  .vw { --vw-bar-b: max(calc(var(--vw-safe-b) + 8px), 40px, calc(var(--vw-h) * 0.075)); }
+}
+/*
+ * In the chat (MCP Apps inline view) the session is a card, not a whole screen. The
+ * orb stays the hero: it is centred in the space above the controls and fills it,
+ * rather than being centred on a tall screen with empty sky above.
+ */
+.vw[data-display="inline"] {
+  --vw-top: 16px;
+  --vw-bar-b: 28px;
+  --vw-pill-b: calc(var(--vw-bar-b) + 48px);
+  --vw-e: min(calc(100vw - 32px), calc((var(--vw-h) - var(--vw-dock) - var(--vw-top)) / 1.0206), 480px);
+  border-radius: 16px;
+}
+.vw[data-display="inline"] .vw-stage, .vw[data-display="inline"] .vw-countdown, .vw[data-display="inline"] .vw-phase { top: var(--vw-top); bottom: var(--vw-dock); }
+/* A session with a hold note keeps the top of the card for it, so the note never sits on the orb. */
+.vw[data-display="inline"][data-note] { --vw-top: 96px; }
+/* The line under the pill hangs below it, so the pill never rides up over the orb. */
+.vw[data-display="inline"] .vw-under { position: absolute; top: 100%; left: 0; right: 0; margin-top: 8px; }
+.vw[data-display="inline"] .vw-complete { padding-top: 32px; padding-bottom: 32px; }
+.vw-layer { position: absolute; inset: 0; }
+/* Session background: sessionTokens.background, top-left to bottom-right, under the default dim. */
+.vw-bg { background: linear-gradient(var(--vw-bg-angle, 155.2deg), #122B52, #1A4A72, #0A7EA4); }
+.vw-dim { background: rgba(0, 0, 0, 0.6); opacity: 0.3; }
+.vw-session { transition: opacity 350ms cubic-bezier(0.32, 0, 0.67, 0), visibility 0s linear 350ms; }
+.vw[data-state="finished"] .vw-session { opacity: 0; visibility: hidden; }
+
+/* CinematicParticles: the field fills the screen, so the dots spread across it as the app's do. */
+.vw-particle { position: absolute; border-radius: 9999px; background: #FFFFFF; will-change: transform, opacity; }
+
+/* Stage: SessionAura (outer, mid, inner) + ShapeAura glow + the shape, centred on the screen. */
+.vw-stage { display: grid; place-items: center; pointer-events: none; }
+.vw-stage > * { grid-area: 1 / 1; }
+.vw-ring, .vw-glow { border-radius: 50%; overflow: hidden; will-change: transform, opacity; }
+.vw-ring-outer {
+  width: calc(var(--vw-e) * 0.9538); height: calc(var(--vw-e) * 0.9538);
+  background: linear-gradient(135deg, rgba(74, 144, 226, 0.3451) 50%, rgba(74, 144, 226, 0.1176) 75%, rgba(74, 144, 226, 0) 100%);
+  opacity: 0.62; transform: scale(0.94);
+}
+.vw-ring-mid { width: calc(var(--vw-e) * 0.8872); height: calc(var(--vw-e) * 0.8872); }
+.vw-sweep {
+  width: 100%; height: 100%; border-radius: 50%;
+  background: linear-gradient(90deg, rgba(74, 144, 226, 0) 0%, rgba(74, 144, 226, 0.2353) 25%, rgba(74, 144, 226, 0.3216) 50%, rgba(74, 144, 226, 0.2353) 75%, rgba(74, 144, 226, 0) 100%);
+  animation: vw-spin 20s linear infinite;
+}
+@keyframes vw-spin { to { transform: rotate(360deg); } }
+.vw-ring-inner {
+  width: calc(var(--vw-e) * 0.8205); height: calc(var(--vw-e) * 0.8205);
+  background: linear-gradient(180deg, rgba(74, 144, 226, 0.2824) 0%, rgba(74, 144, 226, 0.1176) 50%, rgba(74, 144, 226, 0) 100%);
+  opacity: 0.4; transform: scale(0.96);
+}
+.vw-glow {
+  width: calc(var(--vw-e) * 0.748); height: calc(var(--vw-e) * 0.748);
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.72) 46%, rgba(255, 255, 255, 0.56) 78%, rgba(255, 255, 255, 0) 100%);
+  opacity: 0.15; transform: scale(0.975);
+}
+.vw-orb { display: grid; place-items: center; }
+.vw-orb > * { grid-area: 1 / 1; }
+/* Positioned so it paints above the aura layers, which composite on their own. */
+.vw-shape { position: relative; z-index: 1; width: var(--vw-shape); height: var(--vw-shape); overflow: visible; }
+/* Matched sessions carry one drawing per stage shape; only the live stage's shows (app/session.tsx swaps the renderer). */
+.vw-shape:not([data-active]) { display: none; }
+.vw-shape path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.vw-base { stroke: #4A90E2; }
+.vw-draw, .vw-tail { stroke: #4A90E2; stroke-dasharray: 1 1; }
+/* At rest the full outline shows; the player clears it when a session starts. */
+.vw-draw { stroke-dashoffset: 0; }
+.vw-tail { stroke-dashoffset: 0; opacity: 0; }
+
+/* CountdownOverlay: 3, 2, 1 */
+.vw-countdown { display: grid; place-items: center; pointer-events: none; }
+.vw-countdown span {
+  font-size: 56px; font-weight: 100; line-height: 1; color: #FFFFFF;
+  font-variant-numeric: tabular-nums; opacity: 0;
+}
+.vw-countdown span.vw-tick { animation: vw-tick 870ms both; }
+@keyframes vw-tick {
+  0% { opacity: 0; transform: scale(0.88); animation-timing-function: cubic-bezier(0.33, 1, 0.68, 1); }
+  23% { opacity: 0.88; }
+  40% { transform: scale(1); }
+  77% { opacity: 0.88; animation-timing-function: cubic-bezier(0.32, 0, 0.67, 0); }
+  100% { opacity: 0; transform: scale(1); }
+}
+
+/* PhaseTextOverlay: centred on the shape, frosted pill behind it */
+.vw-phase {
+  display: grid; place-items: center; pointer-events: none;
+  opacity: 0; transition: opacity 350ms cubic-bezier(0.32, 0, 0.67, 0);
+}
+.vw[data-state="running"] .vw-phase { opacity: 1; transition-timing-function: cubic-bezier(0.33, 1, 0.68, 1); }
+.vw[data-state="paused"] .vw-phase { opacity: 0.55; }
+.vw-phase-card {
+  transition: opacity 350ms cubic-bezier(0.33, 1, 0.68, 1);
+  display: flex; flex-direction: column; align-items: center;
+  transform: translateY(calc(var(--vw-shape) * var(--vw-text-offset, 0)));
+  padding: 8px 16px; border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.06);
+}
+.vw-phase-card.vw-invert { flex-direction: column-reverse; }
+.vw-label {
+  font-size: 17px; letter-spacing: 2.5px; text-transform: uppercase; text-align: center;
+  color: #FFFFFF; opacity: 0.72;
+  margin-bottom: 8px; transform: translateY(-4px);
+  transition: opacity 75ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+.vw-invert .vw-label { margin-bottom: 0; margin-top: 8px; transform: translateY(4px); }
+.vw-label.vw-swap { opacity: 0; transition-timing-function: cubic-bezier(0.32, 0, 0.67, 0); }
+.vw-count {
+  font-size: 56px; line-height: 56px; font-weight: 100;
+  color: #FFFFFF; opacity: 0.88; font-variant-numeric: tabular-nums;
+}
+.vw[data-text="off"] .vw-label, .vw[data-count="off"] .vw-count { display: none; }
+.vw[data-text="off"][data-count="off"] .vw-phase-card { opacity: 0; transition: opacity 200ms cubic-bezier(0.32, 0, 0.67, 0); }
+
+/* Bottom controls: SessionControlPill, then the remaining time while paused */
+.vw-dock {
+  position: absolute; left: 0; right: 0; bottom: var(--vw-pill-b);
+  display: flex; flex-direction: column; align-items: center;
+  padding: 0 16px;
+}
+.vw-pill {
+  display: flex; align-items: center; border-radius: 9999px; overflow: hidden;
+  background: rgba(255, 255, 255, 0.12); color: #FFFFFF;
+  transition: opacity 120ms cubic-bezier(0.33, 1, 0.68, 1), visibility 0s;
+}
+.vw-pill[data-idle] { opacity: 0.35; transition: opacity 1200ms cubic-bezier(0.32, 0, 0.67, 0); }
+.vw-pill:has(:focus-visible) { opacity: 1; }
+.vw-btn {
+  position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  width: 64px; height: 48px; padding: 0; margin: 0;
+  border: 0; border-radius: 9999px; background: transparent; color: inherit;
+  font: inherit; cursor: pointer;
+}
+.vw-btn:focus-visible { outline: 2px solid #8CEBAA; outline-offset: -4px; }
+.vw-icon { display: block; transition: opacity 200ms cubic-bezier(0.42, 0, 0.58, 1), transform 200ms cubic-bezier(0.42, 0, 0.58, 1); }
+.vw-btn[aria-checked="false"] .vw-icon { opacity: 0.35; }
+.vw-stack { position: relative; width: 20px; height: 20px; }
+.vw-stack .vw-icon { position: absolute; inset: 0; }
+.vw-stack .vw-icon-play, .vw[data-state="paused"] .vw-stack .vw-icon-pause { opacity: 0; transform: scale(0.96); }
+.vw[data-state="paused"] .vw-stack .vw-icon-play { opacity: 1; transform: scale(1); }
+.vw-divider { width: 0.5px; height: 24px; background: currentColor; opacity: 0.3; flex: none; }
+.vw-begin { width: auto; padding: 0 24px 0 20px; font-size: 17px; font-weight: 600; letter-spacing: 0.2px; }
+.vw-pill-begin, .vw-pill-session { display: none; }
+.vw[data-state="ready"] .vw-pill-begin { display: flex; }
+.vw[data-state="running"] .vw-pill-session, .vw[data-state="paused"] .vw-pill-session { display: flex; }
+.vw-under {
+  margin: 12px 0 0; font-size: 20px; font-weight: 300; opacity: 0.94;
+  color: #FFFFFF; text-align: center; font-variant-numeric: tabular-nums;
+}
+.vw-under:empty { display: none; }
+/* Before a pattern with a long hold: a quiet safety line at the top, clear of the orb and the pill. */
+.vw-note {
+  position: absolute; top: calc(max(var(--vw-safe-t), 16px) + 16px); left: 0; right: 0;
+  margin: 0 auto; padding: 0 24px; max-width: calc(36ch + 48px); font-size: 13px; line-height: 1.5;
+  color: rgba(255, 255, 255, 0.80); text-align: center; text-wrap: balance;
+}
+.vw:not([data-state="ready"]) .vw-note { display: none; }
+
+/* SessionProgressBar: one segment per cycle (grouped past 8) */
+.vw-progress {
+  position: absolute; left: 50%; bottom: var(--vw-bar-b); transform: translateX(-50%);
+  width: calc(var(--vw-e) * 0.52); height: 3px;
+  display: flex; gap: 3px;
+  opacity: 0; transition: opacity 350ms cubic-bezier(0.32, 0, 0.67, 0);
+}
+.vw[data-state="running"] .vw-progress, .vw[data-state="paused"] .vw-progress { opacity: 1; transition-timing-function: cubic-bezier(0.33, 1, 0.68, 1); }
+.vw-seg { position: relative; flex: 1; height: 100%; overflow: hidden; background: rgba(255, 255, 255, 0.06); }
+.vw-seg:first-child { border-radius: 9999px 0 0 9999px; }
+.vw-seg:last-child { border-radius: 0 9999px 9999px 0; }
+.vw-seg:only-child { border-radius: 9999px; }
+.vw-seg i { position: absolute; inset: 0; background: rgba(255, 255, 255, 0.18); transform-origin: left; transform: scaleX(0); border-radius: inherit; }
+
+/* SessionCompleteOverlay (title, subtitle, and the primary action) */
+.vw-complete {
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  width: 100%; max-width: 400px; margin: 0 auto; padding: 48px 24px;
+  text-align: center; opacity: 0; visibility: hidden;
+  transition: opacity 350ms cubic-bezier(0.33, 1, 0.68, 1), visibility 0s linear 350ms;
+}
+.vw[data-state="finished"] .vw-complete { opacity: 1; visibility: visible; transition-delay: 350ms, 0s; }
+.vw-complete h2 {
+  margin: 0 0 8px; font-size: 34px; font-weight: 300; letter-spacing: 0.5px;
+  color: #FFFFFF;
+}
+.vw-complete p {
+  margin: 0 0 32px; font-size: 13px; letter-spacing: 0.3px; opacity: 0.75;
+  color: rgba(255, 255, 255, 0.80);
+}
+.vw-cta {
+  width: 100%; padding: 12px 24px; border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.30); background: rgba(255, 255, 255, 0.20); color: #FFFFFF;
+  font: inherit; font-size: 20px; font-weight: 600; cursor: pointer;
+}
+.vw-cta:focus-visible { outline: 2px solid #8CEBAA; outline-offset: 3px; }
+/* Get the app: a quiet text link, styled like the app's "Just breathe" (app/begin.tsx). */
+.vw-store {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 48px;
+  margin-top: 24px; padding: 0 16px; border-radius: 9999px;
+  font-size: 13px; font-weight: 300; letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.80); text-decoration: none;
+}
+.vw-store:hover { text-decoration: underline; text-underline-offset: 3px; }
+.vw-store:focus-visible { outline: 2px solid #8CEBAA; outline-offset: 2px; }
+
+.vw-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* Reduced motion: the app's still aura, no drift, no rotation, instant fades. */
+@media (prefers-reduced-motion: reduce) {
+  .vw-sweep { animation-play-state: paused; }
+  .vw-countdown span.vw-tick { animation: none; opacity: 1; }
+  .vw-session, .vw-phase, .vw-phase-card, .vw-label, .vw-pill, .vw-pill[data-idle], .vw-icon, .vw-progress, .vw-complete { transition: none !important; }
+  .vw-pill[data-idle] { opacity: 1; }
+}
+
+html, body { margin: 0; background: #122B52; }
+.vw[data-display="fullscreen"] { border-radius: 0; }
+.vw-note:empty { display: none; }
+/* Clear of the expand control in the corner. */
+.vw[data-display="inline"] .vw-note { padding-left: 64px; padding-right: 64px; max-width: calc(36ch + 128px); }
+/* When there is no session to show (the tool call failed or was cancelled), one quiet line says so. */
+.vw[data-state] .vw-note.vw-note-status { display: block; top: auto; bottom: calc(var(--vw-pill-b) + 16px); }
+/* Expand: a glass disc in the pill's language, in the top corner, with the app's 48 px hit target. */
+.vw-expand {
+  position: absolute; top: calc(var(--vw-safe-t) + 8px); right: 8px; z-index: 2;
+  display: grid; place-items: center; width: 48px; height: 48px; padding: 0; margin: 0;
+  border: 0; border-radius: 9999px; background: transparent; color: #FFFFFF; cursor: pointer;
+  transition: opacity 120ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+.vw-expand[hidden] { display: none; }
+.vw-expand > span { position: relative; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 9999px; background: rgba(255, 255, 255, 0.12); }
+.vw-expand .vw-icon { position: absolute; }
+.vw-expand .vw-icon-collapse, .vw[data-display="fullscreen"] .vw-expand .vw-icon-expand { opacity: 0; }
+.vw[data-display="fullscreen"] .vw-expand .vw-icon-collapse { opacity: 1; }
+.vw-expand[data-idle] { opacity: 0.35; transition: opacity 1200ms cubic-bezier(0.32, 0, 0.67, 0); }
+.vw-expand:focus-visible { opacity: 1; outline: 2px solid #8CEBAA; outline-offset: -4px; }
+@media (prefers-reduced-motion: reduce) {
+  .vw-expand, .vw-expand[data-idle] { transition: none !important; opacity: 1; }
+}
+</style>
+</head>
+<body>
+<main class="vw" data-vw-root data-embed="app" data-version="1.2.0" data-display="inline" data-state="waiting" data-text="on" data-count="on">
+  <h1 class="vw-sr">VirWave Breathe</h1>
+  <div class="vw-layer vw-bg" aria-hidden="true"></div>
+  <div class="vw-layer vw-dim" aria-hidden="true"></div>
+  <div class="vw-layer vw-session" data-vw="session">
+    <div class="vw-layer vw-particles" aria-hidden="true"><i class="vw-particle" data-vw="particle" style="left: 10%; top: 14%; width: 2px; height: 2px; opacity: 0.32"></i><i class="vw-particle" data-vw="particle" style="left: 22%; top: 30%; width: 4px; height: 4px; opacity: 0.4"></i><i class="vw-particle" data-vw="particle" style="left: 38%; top: 12%; width: 2px; height: 2px; opacity: 0.3"></i><i class="vw-particle" data-vw="particle" style="left: 51%; top: 26%; width: 4px; height: 4px; opacity: 0.38"></i><i class="vw-particle" data-vw="particle" style="left: 65%; top: 8%; width: 2px; height: 2px; opacity: 0.28"></i><i class="vw-particle" data-vw="particle" style="left: 74%; top: 22%; width: 4px; height: 4px; opacity: 0.42"></i><i class="vw-particle" data-vw="particle" style="left: 86%; top: 15%; width: 4px; height: 4px; opacity: 0.36"></i><i class="vw-particle" data-vw="particle" style="left: 12%; top: 44%; width: 2px; height: 2px; opacity: 0.3"></i><i class="vw-particle" data-vw="particle" style="left: 29%; top: 52%; width: 4px; height: 4px; opacity: 0.38"></i><i class="vw-particle" data-vw="particle" style="left: 47%; top: 42%; width: 2px; height: 2px; opacity: 0.28"></i><i class="vw-particle" data-vw="particle" style="left: 60%; top: 56%; width: 4px; height: 4px; opacity: 0.34"></i><i class="vw-particle" data-vw="particle" style="left: 82%; top: 48%; width: 2px; height: 2px; opacity: 0.3"></i></div>
+    <section class="vw-layer vw-stage" role="img" aria-label="Breathing session." data-vw="stage">
+      <div class="vw-orb" aria-hidden="true">
+        <div class="vw-ring vw-ring-outer" data-vw="aura-outer"></div>
+        <div class="vw-ring vw-ring-mid" data-vw="aura-mid"><div class="vw-sweep"></div></div>
+        <div class="vw-ring vw-ring-inner" data-vw="aura-inner"></div>
+        <div class="vw-glow" data-vw="aura-glow"></div>
+      </div>
+      <svg class="vw-shape" data-shape="box" viewBox="0 0 100 100" aria-hidden="true" focusable="false" data-label="Box shape. The outline draws itself once per breath cycle." data-text-offset="0">
+      <path class="vw-base" d="M 14 14 L 86 14 L 86 86 L 14 86 L 14 14" stroke-width="1.95" opacity="0.38"/>
+      <path class="vw-tail" data-vw="tail" d="M 14 14 L 86 14 L 86 86 L 14 86 L 14 14" pathLength="1" stroke-width="2.78"/>
+      <path class="vw-draw" data-vw="draw" d="M 14 14 L 86 14 L 86 86 L 14 86 L 14 14" pathLength="1" stroke-width="2.78"/>
+      </svg>
+      <svg class="vw-shape" data-shape="triangle" viewBox="0 0 100 100" aria-hidden="true" focusable="false" data-label="Triangle shape. The outline draws itself once per breath cycle." data-text-offset="0.07">
+      <path class="vw-base" d="M 50 3.812 L 90 73.094 L 10 73.094 L 50 3.812" stroke-width="1.39" opacity="0.18"/>
+      <path class="vw-tail" data-vw="tail" d="M 50 3.812 L 90 73.094 L 10 73.094 L 50 3.812" pathLength="1" stroke-width="2.78"/>
+      <path class="vw-draw" data-vw="draw" d="M 50 3.812 L 90 73.094 L 10 73.094 L 50 3.812" pathLength="1" stroke-width="2.78"/>
+      </svg>
+      <svg class="vw-shape" data-shape="circle" viewBox="0 0 100 100" aria-hidden="true" focusable="false" data-label="Circle shape. The ring draws itself once per breath cycle." data-text-offset="0">
+      <path class="vw-base" d="M 97.22 50 A 47.22 47.22 0 1 1 2.78 50 A 47.22 47.22 0 1 1 97.22 50" stroke-width="1.39" opacity="0.18"/>
+      <path class="vw-tail" data-vw="tail" d="M 97.22 50 A 47.22 47.22 0 1 1 2.78 50 A 47.22 47.22 0 1 1 97.22 50" pathLength="1" stroke-width="2.78"/>
+      <path class="vw-draw" data-vw="draw" d="M 97.22 50 A 47.22 47.22 0 1 1 2.78 50 A 47.22 47.22 0 1 1 97.22 50" pathLength="1" stroke-width="2.78"/>
+      </svg>
+      <svg class="vw-shape" data-shape="focus-point" viewBox="0 0 100 100" aria-hidden="true" focusable="false" data-label="Focus point shape. A soft point crosses a line as you breathe in and comes back as you breathe out." data-text-offset="0.34">
+      <defs><radialGradient id="vw-glow-focus-point" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#4A90E2" stop-opacity="1"/><stop offset="100%" stop-color="#4A90E2" stop-opacity="0"/></radialGradient></defs>
+      <line x1="16" y1="50" x2="84" y2="50" stroke="#4A90E2" stroke-width="1.39" stroke-opacity="0.16" stroke-linecap="round"/>
+      <circle data-vw="point" cx="22.63" cy="50" opacity="1" r="17.347" fill="url(#vw-glow-focus-point)"/>
+      <circle data-vw="point" cx="22.63" cy="50" opacity="1" r="6.672" fill="#4A90E2"/>
+      </svg>
+      <svg class="vw-shape" data-shape="infinity" viewBox="0 0 100 100" aria-hidden="true" focusable="false" data-label="Infinity shape. A soft point travels a figure-eight, once around per breath cycle." data-text-offset="0.34">
+      <defs><radialGradient id="vw-glow-infinity" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#4A90E2" stop-opacity="1"/><stop offset="100%" stop-color="#4A90E2" stop-opacity="0"/></radialGradient></defs>
+      <path d="M 89.00 50.00 L 88.84 52.03 L 88.37 54.01 L 87.60 55.88 L 86.57 57.60 L 85.31 59.14 L 83.86 60.46 L 82.27 61.56 L 80.57 62.43 L 78.81 63.08 L 77.02 63.51 L 75.23 63.74 L 73.45 63.78 L 71.71 63.66 L 70.02 63.40 L 68.38 63.00 L 66.81 62.49 L 65.30 61.89 L 63.86 61.21 L 62.47 60.46 L 61.14 59.65 L 59.87 58.79 L 58.65 57.90 L 57.47 56.97 L 56.33 56.02 L 55.22 55.04 L 54.14 54.05 L 53.09 53.05 L 52.05 52.04 L 51.02 51.02 L 50.00 50.00 L 48.98 48.98 L 47.95 47.96 L 46.91 46.95 L 45.86 45.95 L 44.78 44.96 L 43.67 43.98 L 42.53 43.03 L 41.35 42.10 L 40.13 41.21 L 38.86 40.35 L 37.53 39.54 L 36.14 38.79 L 34.70 38.11 L 33.19 37.51 L 31.62 37.00 L 29.98 36.60 L 28.29 36.34 L 26.55 36.22 L 24.77 36.26 L 22.98 36.49 L 21.19 36.92 L 19.43 37.57 L 17.73 38.44 L 16.14 39.54 L 14.69 40.86 L 13.43 42.40 L 12.40 44.12 L 11.63 45.99 L 11.16 47.97 L 11.00 50.00 L 11.16 52.03 L 11.63 54.01 L 12.40 55.88 L 13.43 57.60 L 14.69 59.14 L 16.14 60.46 L 17.73 61.56 L 19.43 62.43 L 21.19 63.08 L 22.98 63.51 L 24.77 63.74 L 26.55 63.78 L 28.29 63.66 L 29.98 63.40 L 31.62 63.00 L 33.19 62.49 L 34.70 61.89 L 36.14 61.21 L 37.53 60.46 L 38.86 59.65 L 40.13 58.79 L 41.35 57.90 L 42.53 56.97 L 43.67 56.02 L 44.78 55.04 L 45.86 54.05 L 46.91 53.05 L 47.95 52.04 L 48.98 51.02 L 50.00 50.00 L 51.02 48.98 L 52.05 47.96 L 53.09 46.95 L 54.14 45.95 L 55.22 44.96 L 56.33 43.98 L 57.47 43.03 L 58.65 42.10 L 59.87 41.21 L 61.14 40.35 L 62.47 39.54 L 63.86 38.79 L 65.30 38.11 L 66.81 37.51 L 68.38 37.00 L 70.02 36.60 L 71.71 36.34 L 73.45 36.22 L 75.23 36.26 L 77.02 36.49 L 78.81 36.92 L 80.57 37.57 L 82.27 38.44 L 83.86 39.54 L 85.31 40.86 L 86.57 42.40 L 87.60 44.12 L 88.37 45.99 L 88.84 47.97 L 89.00 50.00 Z" fill="none" stroke="#4A90E2" stroke-width="1.39" stroke-opacity="0.16" stroke-linecap="round"/>
+      <circle data-vw="point" cx="82.565" cy="50" opacity="1" r="17.347" fill="url(#vw-glow-infinity)"/>
+      <circle data-vw="point" cx="82.565" cy="50" opacity="1" r="6.672" fill="#4A90E2"/>
+      </svg>
+      <svg class="vw-shape" data-shape="ripple" viewBox="0 0 100 100" aria-hidden="true" focusable="false" data-label="Ripple shape. Rings spread out from a still centre and fade, once per breath cycle." data-text-offset="0.34">
+      <circle data-vw="ring" cx="50" cy="50" r="4.448" stroke-opacity="0.9" fill="none" stroke="#4A90E2" stroke-width="2.224"/>
+      <circle data-vw="ring" cx="50" cy="50" r="13.111" stroke-opacity="0.675" fill="none" stroke="#4A90E2" stroke-width="2.224"/>
+      <circle data-vw="ring" cx="50" cy="50" r="21.774" stroke-opacity="0.45" fill="none" stroke="#4A90E2" stroke-width="2.224"/>
+      <circle data-vw="ring" cx="50" cy="50" r="30.437" stroke-opacity="0.225" fill="none" stroke="#4A90E2" stroke-width="2.224"/>
+      <circle cx="50" cy="50" r="4.448" fill="#4A90E2" fill-opacity="1"/>
+      </svg>
+      <svg class="vw-shape" data-shape="color-field" viewBox="0 0 100 100" aria-hidden="true" focusable="false" data-label="Colour field shape. Soft colour swells and settles, once per breath cycle." data-text-offset="0">
+      <defs><radialGradient id="vw-glow-color-field" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#4A90E2" stop-opacity="0.85"/><stop offset="60%" stop-color="#4A90E2" stop-opacity="0.35"/><stop offset="100%" stop-color="#4A90E2" stop-opacity="0"/></radialGradient></defs>
+      <circle data-vw="field" cx="34" cy="40" r="26" opacity="0.42" fill="url(#vw-glow-color-field)"/>
+      <circle data-vw="field" cx="68" cy="56" r="28.837" opacity="0.559" fill="url(#vw-glow-color-field)"/>
+      <circle data-vw="field" cx="46" cy="67" r="23.163" opacity="0.281" fill="url(#vw-glow-color-field)"/>
+      </svg>
+    </section>
+    <div class="vw-layer vw-countdown" aria-hidden="true"><span data-vw="countdown"></span></div>
+    <div class="vw-layer vw-phase" aria-hidden="true">
+      <div class="vw-phase-card" data-vw="phase-card" style="--vw-text-offset: 0">
+        <span class="vw-label" data-vw="label"></span>
+        <span class="vw-count" data-vw="count"></span>
+      </div>
+    </div>
+    <p class="vw-note" data-vw="note"></p>
+    <div class="vw-dock">
+      <div class="vw-pill vw-pill-begin">
+        <button type="button" class="vw-btn vw-begin" data-vw="begin"><svg class="vw-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M7 4.5L19.5 12L7 19.5V4.5Z" fill="currentColor"/></svg><span>Begin</span></button>
+      </div>
+      <div class="vw-pill vw-pill-session" data-vw="pill" role="group" aria-label="Session controls">
+        <button type="button" class="vw-btn" data-vw="toggle" aria-label="Pause session"><span class="vw-stack"><svg class="vw-icon vw-icon-pause" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><rect x="6" y="4" width="4" height="16" rx="2" fill="currentColor"/><rect x="14" y="4" width="4" height="16" rx="2" fill="currentColor"/></svg><svg class="vw-icon vw-icon-play" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M7 4.5L19.5 12L7 19.5V4.5Z" fill="currentColor"/></svg></span></button>
+        <span class="vw-divider" aria-hidden="true"></span>
+        <button type="button" class="vw-btn" data-vw="end" aria-label="End session"><svg class="vw-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><line x1="5.5" y1="5.5" x2="18.5" y2="18.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="18.5" y1="5.5" x2="5.5" y2="18.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <span class="vw-divider" aria-hidden="true"></span>
+        <button type="button" class="vw-btn" data-vw="text" role="switch" aria-checked="true" aria-label="Phase text"><svg class="vw-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M4 7h16M12 7v11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+        <span class="vw-divider" aria-hidden="true"></span>
+        <button type="button" class="vw-btn" data-vw="count-toggle" role="switch" aria-checked="true" aria-label="Countdown numbers"><svg class="vw-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M5 9h14M5 15h14M9 4v16M15 4v16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+      </div>
+      <p class="vw-under" data-vw="under" data-ready=""></p>
+    </div>
+    <div class="vw-progress" role="progressbar" aria-label="Session progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="vw-seg"><i data-vw="seg"></i></span><span class="vw-seg"><i data-vw="seg"></i></span><span class="vw-seg"><i data-vw="seg"></i></span><span class="vw-seg"><i data-vw="seg"></i></span><span class="vw-seg"><i data-vw="seg"></i></span><span class="vw-seg"><i data-vw="seg"></i></span><span class="vw-seg"><i data-vw="seg"></i></span><span class="vw-seg"><i data-vw="seg"></i></span></div>
+  </div>
+  <section class="vw-layer vw-complete" data-vw="complete" aria-labelledby="vw-complete-title">
+    <h2 id="vw-complete-title" data-vw="complete-title">Well done</h2>
+    <p data-vw="complete-subtitle">That was time you gave yourself</p>
+    <button type="button" class="vw-cta" data-vw="again">Breathe again</button>
+    <a class="vw-store" data-vw="store" href="https://apps.apple.com/app/id6738364276" target="_blank" rel="noopener" aria-label="Get the VirWave app on the App Store (opens in a new tab)">Get the VirWave app</a>
+  </section>
+  <button type="button" class="vw-expand" data-vw="expand" aria-label="Expand session to full screen" hidden><span><svg class="vw-icon vw-icon-expand" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M14.5 4.5h5v5M9.5 19.5h-5v-5M19.5 4.5l-6 6M4.5 19.5l6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="vw-icon vw-icon-collapse" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M19.5 9.5h-5v-5M4.5 14.5h5v5M14.5 9.5l5.5-5.5M9.5 14.5L4 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
+  <p class="vw-sr" data-vw="live" aria-live="polite"></p>
+  <script>"use strict";(()=>{var Dt=Object.defineProperty;var Gt=(e,n,o)=>n in e?Dt(e,n,{enumerable:!0,configurable:!0,writable:!0,value:o}):e[n]=o;var P=(e,n,o)=>Gt(e,typeof n!="symbol"?n+"":n,o);var we={min:340,max:420,perWidth:.55};function Qe(e,n){let o=Math.round(Math.min(we.max,Math.max(we.min,e*we.perWidth)));return n&&n>0?Math.min(o,n):o}function ze(e,n){if(e.length===0)return null;let o=0;for(let l=0;l<e.length;l+=1){let p=e[l];if(n<o+p.seconds)return{index:l,segment:p,startedAt:o};o+=p.seconds}let i=e.length-1,c=e[i];return{index:i,segment:c,startedAt:o-c.seconds}}function et({phase:e,isPostExhaleHold:n,phaseDurationMs:o}){"worklet";return e==="inhale"?{target:"expanded",durationMs:Math.max(1,Math.round(o)),easingMode:"breath"}:e==="exhale"?{target:"contracted",durationMs:Math.max(1,Math.round(o)),easingMode:"breath"}:{target:e==="hold"&&!n?"expanded":"contracted",durationMs:500,easingMode:"settle"}}var ee=class{constructor(n,o={}){P(this,"config");P(this,"callbacks");P(this,"_status","idle");P(this,"_phaseIndex",0);P(this,"_cycle",1);P(this,"_elapsed",0);P(this,"_phaseElapsed",0);P(this,"_lastTickTime",0);P(this,"_animFrameId",null);P(this,"tick",()=>{var p,f,m,a,r,g,d,x;if(this._status!=="running")return;let n=performance.now(),o=(n-this._lastTickTime)/1e3,i=Math.min(o,.25);this._lastTickTime=n,this._elapsed+=i,this._phaseElapsed+=i;let c=this.config.breakdown.phases,l=c[this._phaseIndex];if(l&&this._phaseElapsed>=l.duration){if(this._phaseElapsed-=l.duration,this._phaseIndex++,this._phaseIndex>=c.length&&(this._phaseIndex=0,(f=(p=this.callbacks).onCycleComplete)==null||f.call(p,this._cycle),this._cycle++,this._cycle>this.config.cycles)){this.stop(),(a=(m=this.callbacks).onSessionComplete)==null||a.call(m);return}let A=c[this._phaseIndex];(g=(r=this.callbacks).onPhaseChange)==null||g.call(r,A,this._phaseIndex,this._cycle)}(x=(d=this.callbacks).onTick)==null||x.call(d,this.state),this._animFrameId=requestAnimationFrame(this.tick)});this.config=n,this.callbacks=o}get state(){var i;let n=this.config.breakdown.phases[this._phaseIndex],o=(i=n==null?void 0:n.duration)!=null?i:1;return{status:this._status,phaseIndex:this._phaseIndex,phase:n!=null?n:{name:"Inhale",duration:4,type:"inhale"},phaseProgress:Math.min(this._phaseElapsed/o,1),phaseSecondsLeft:Math.max(0,Math.ceil(o-this._phaseElapsed)),cycle:this._cycle,elapsed:this._elapsed,totalDuration:this.config.breakdown.cycleDuration*this.config.cycles}}start(){var o,i;if(this._status==="running")return;this._status="running",this._lastTickTime=performance.now();let n=this.config.breakdown.phases[this._phaseIndex];n&&((i=(o=this.callbacks).onPhaseChange)==null||i.call(o,n,this._phaseIndex,this._cycle)),this.tick()}pause(){this._status==="running"&&(this._status="paused",this._animFrameId!==null&&(cancelAnimationFrame(this._animFrameId),this._animFrameId=null))}resume(){this._status==="paused"&&(this._status="running",this._lastTickTime=performance.now(),this.tick())}resetToCycleStart(){var o,i;this._phaseIndex=0,this._phaseElapsed=0;let n=this.config.breakdown.phases[0];n&&((i=(o=this.callbacks).onPhaseChange)==null||i.call(o,n,0,this._cycle))}stop(){this._status="finished",this._animFrameId!==null&&(cancelAnimationFrame(this._animFrameId),this._animFrameId=null)}correctForBackground(){this._status==="running"&&(this._lastTickTime=performance.now())}};function tt(e){return e==="paused"?{label:"Resume session",hint:"Continues guided breathing from the current phase"}:{label:"Pause session",hint:"Temporarily pauses guided breathing"}}function Ee(e){let n=Math.max(0,Math.floor(e)),o=Math.floor(n/60),i=n%60;return`${o}:${i.toString().padStart(2,"0")}`}var te={controlHide:1200,controlReveal:120,normal:200,phaseFade:150,screenTransition:350,slow:350};var nt={controlIdleDelay:2500,controlIdleOpacity:.35};var T={outerScaleMin:.94,outerScaleMax:1.07,outerOpacityMin:.62,outerOpacityMax:.88,innerScaleMin:.96,innerScaleMax:1.05,innerOpacityMin:.4,innerOpacityMax:.58};var Vt="6738364276",Nt="com.virwave.virwave",Wt=`https://apps.apple.com/app/id${Vt}`,qt=`https://play.google.com/store/apps/details?id=${Nt}`,Ut={store:"App Store",onStore:"on the App Store",url:Wt},ot={store:"Google Play",onStore:"on Google Play",url:qt};function st(e){return/Android/i.test(e)?ot:/iPhone|iPad|iPod|Macintosh|Mac OS X/i.test(e)?Ut:ot}var Xt="Get the VirWave app",rt=e=>`${Xt} ${e.onStore} (opens in a new tab)`;var Yt="2026-01-26",Le={expand:"Expand session to full screen",collapse:"Return session to the chat"};function at(e,n,{target:o=window.parent}={}){if(!o||o===window)return Promise.resolve(null);let i=1,c=new Map,l=a=>o.postMessage({jsonrpc:"2.0",...a},"*"),p=(a,r)=>new Promise((g,d)=>{let x=i++;c.set(x,{resolve:g,reject:d}),l({id:x,method:a,params:r})}),f=(a,r)=>l({method:a,...r===void 0?{}:{params:r}}),m={hostContext:{},hostCapabilities:{},openLink:a=>p("ui/open-link",{url:a}),requestDisplayMode:a=>p("ui/request-display-mode",{mode:a}).then(r=>r==null?void 0:r.mode),sizeChanged:(a,r)=>f("ui/notifications/size-changed",{width:a,height:r})};return window.addEventListener("message",a=>{var g,d;if(a.source!==o)return;let r=a.data;if(!(!r||r.jsonrpc!=="2.0")){if(r.method===void 0){let x=r.id===void 0?void 0:c.get(r.id);if(!x)return;c.delete(r.id),r.error?x.reject(new Error((g=r.error.message)!=null?g:"The host declined.")):x.resolve(r.result);return}switch(r.method){case"ui/notifications/tool-result":n.onToolResult((d=r.params)!=null?d:{});break;case"ui/notifications/tool-cancelled":n.onToolCancelled();break;case"ui/notifications/host-context-changed":Object.assign(m.hostContext,r.params),n.onHostContextChanged(m.hostContext);break;case"ui/resource-teardown":n.onTeardown(),r.id!==void 0&&l({id:r.id,result:{}});break;case"ping":r.id!==void 0&&l({id:r.id,result:{}});break;default:r.id!==void 0&&l({id:r.id,error:{code:-32601,message:`Method not found: ${r.method}`}})}}}),p("ui/initialize",{appInfo:e,appCapabilities:{availableDisplayModes:["inline","fullscreen"]},protocolVersion:Yt}).then(a=>{var g,d;let r=a!=null?a:{};return m.hostContext=(g=r.hostContext)!=null?g:{},m.hostCapabilities=(d=r.hostCapabilities)!=null?d:{},f("ui/notifications/initialized"),m}).catch(()=>null)}function Kt(e){let n=e.replace(/-/g,"+").replace(/_/g,"/"),o=n+"=".repeat((4-n.length%4)%4),i=atob(o),c=new Uint8Array(i.length);for(let l=0;l<i.length;l++)c[l]=i.charCodeAt(l);return c}function it(e){let o=new URLSearchParams(e.replace(/^#/,"")).get("s");if(!o)return null;try{return JSON.parse(new TextDecoder().decode(Kt(o)))}catch{return null}}var jt=["focus-point","infinity","ripple","color-field"];function ut(e){return jt.includes(e)}var Ln=1/6,ct=e=>Number(e.toFixed(3));function dt(e,n,o){return o<=0?0:Math.min(1,Math.max(0,(e+n)/o))}function pt(e,n,o){return o<=0?0:(e+n)/o}var Jt=2.4,Zt=2.6,Qt=.16,zt=.5;function en(e,n=100){let o=n*.16,i=e*Jt;return{padding:o,travel:n-o*2,centerY:n/2,pointRadius:i,haloRadius:i*Zt,trackWidth:e*zt,trackOpacity:Qt}}function mt(e,n,o,i=100){let{padding:c,travel:l,centerY:p}=en(n.strokeWidth,i),f=n.strokeOpacity;if(o)return{cx:c+l/2,cy:p,opacity:f};let m=(1-Math.cos(2*Math.PI*e))/2,a=l*(.35+.65*n.motionIntensity),r=(l-a)/2;return{cx:c+r+a*m,cy:p,opacity:f}}function tn(e,n){let o=1+Math.sin(e)*Math.sin(e);return{x:n*Math.cos(e)/o,y:n*Math.sin(e)*Math.cos(e)/o}}function ht(e,n,o,i=100){let c=i/2,l=i/2*.78,p=n.strokeOpacity;if(o)return{cx:c,cy:c,opacity:p};let f=e*Math.PI*2,{x:m,y:a}=tn(f,l*(.45+.55*n.motionIntensity));return{cx:c+m,cy:c+a,opacity:p}}var lt=4,nn=1.6,on=.8;function sn(e,n=100){return{center:n/2,maxRadius:n/2*.92,coreRadius:e*nn,ringWidth:e*on}}function ft(e,n,o,i=100){let{maxRadius:c,coreRadius:l}=sn(n.strokeWidth,i);return Array.from({length:lt},(p,f)=>{let m=f/lt;if(o)return{r:l+(c-l)*m,strokeOpacity:n.strokeOpacity*(1-m)};let a=(e+m)%1,r=c*(.5+.5*n.motionIntensity);return{r:l+(r-l)*a,strokeOpacity:n.strokeOpacity*(1-a)*.9}})}var Me=[{x:-.16,y:-.1},{x:.18,y:.06},{x:-.04,y:.17}];function rn(e=100){let n=e/2;return{baseRadius:e/2*.52,fields:Me.map(o=>({cx:ct(n+e*o.x),cy:ct(n+e*o.y)}))}}function yt(e,n,o,i=100){let{baseRadius:c}=rn(i);return Me.map((l,p)=>{let f=p/Me.length;if(o)return{r:c,opacity:n.strokeOpacity*.5};let m=Math.sin((e+f)*Math.PI*2),a=.18*n.motionIntensity;return{r:c*(1+m*a),opacity:n.strokeOpacity*(.42+.16*m)}})}var an="opacity 2500ms cubic-bezier(0.16, 1, 0.3, 1)",cn=.002,ne={scaleMin:.975,scaleMax:1.015,opacityMin:.15,opacityMax:.35},ln=te.screenTransition*3,gt=8e3,V=e=>1-Math.pow(1-e,3),ve=e=>e*e*e;function oe(e,n){let o=e.duration<=0?1:Math.min(1,Math.max(0,(n-e.start)/e.duration));return e.from+(e.to-e.from)*e.ease(o)}var N=(e,n,o)=>e+(n-e)*o;function Pe(e,n,o={}){var je,Je,Ze;let{breakdown:i,cycles:c,startDelay:l,style:p}=n,f=(je=n.stages)!=null?je:[],m=(Je=n.timerSeconds)!=null?Je:0,a=i.phases,r=i.cycleDuration*c,g=m>0?m:r,d=t=>e.querySelector(`[data-vw="${t}"]`),x=t=>Array.from(e.querySelectorAll(`[data-vw="${t}"]`)),A=Array.from(e.querySelectorAll("svg.vw-shape")).map(t=>({svg:t,shape:t.dataset.shape,draw:t.querySelector('[data-vw="draw"]'),tail:t.querySelector('[data-vw="tail"]'),points:Array.from(t.querySelectorAll('[data-vw="point"]')),rings:Array.from(t.querySelectorAll('[data-vw="ring"]')),fields:Array.from(t.querySelectorAll('[data-vw="field"]'))})),w=t=>{var s;return(s=A.find(u=>u.shape===t))!=null?s:A[0]},S=w(n.shape),$=d("stage"),Ie=d("phase-card"),W=d("store"),St=x("particle"),Te=x("seg"),Ce=d("aura-outer"),wt=d("aura-mid"),ke=d("aura-inner"),_e=d("aura-glow"),C=d("countdown"),k=d("label"),Et=d("count"),Lt=d("live"),q=d("under"),Fe=d("pill"),se=e.querySelector(".vw-progress"),Oe=d("begin"),re=d("toggle"),Mt=d("end"),ae=d("text"),ie=d("count-toggle"),Re=d("again"),j=e.querySelector('[data-vw="expand"]'),vt=d("complete-title"),At=d("complete-subtitle"),Pt=(Ze=q.dataset.ready)!=null?Ze:"",I=window.matchMedia("(prefers-reduced-motion: reduce)"),E="ready",b=null,U=null,ce=0,le=0,ue=0,de=null,Be=0,J=null,Z={from:0,to:0,start:0,duration:0,ease:V},pe=!1,me={from:1,to:1,start:0,duration:0,ease:V};function L(t,s){t.textContent!==s&&(t.textContent=s)}function Q(t){L(Lt,t)}function He(t,s,u){let h=performance.now();Z={from:oe(Z,h),to:t,start:h,duration:s,ease:u}}function $e(t){Z={from:t,to:t,start:0,duration:0,ease:V}}function It(t){let s=performance.now(),u=oe(me,s);me=I.matches?{from:t,to:t,start:0,duration:0,ease:V}:{from:u,to:t,start:s,duration:ln,ease:t>u?V:ve}}function Tt(t){let s=oe(me,t),u=I.matches,h=u?0:oe(Z,t),y=u||!pe?0:1-h;Ce.style.transform=`scale(${N(T.outerScaleMin,T.outerScaleMax,h).toFixed(4)})`,Ce.style.opacity=(N(T.outerOpacityMin,T.outerOpacityMax,h)*s).toFixed(4),ke.style.transform=`scale(${N(T.innerScaleMin,T.innerScaleMax,y).toFixed(4)})`,ke.style.opacity=(N(T.innerOpacityMin,T.innerOpacityMax,y)*s).toFixed(4),wt.style.opacity=s.toFixed(4),_e.style.transform=`scale(${N(ne.scaleMin,ne.scaleMax,h).toFixed(4)})`,_e.style.opacity=(N(ne.opacityMin,ne.opacityMax,h)*s).toFixed(4)}let De=St.map((t,s)=>{let u=s*.618033988749895%1,h=(F,O,v)=>Math.min(Math.max(F,O),v),y=parseFloat(t.style.left),M=parseFloat(t.style.top);return t.style.left=`${h(y+(Math.random()*2-1)*5,2,96).toFixed(1)}%`,t.style.top=`${h(M+(Math.random()*2-1)*4,2,94).toFixed(1)}%`,{node:t,opacity:parseFloat(t.style.opacity),phaseOffset:u,speedMul:.85+u*.15,travelY:4+u*8,travelX:2*(.5+u),opacityPulse:.04+u*.08}}),Ct=performance.now();function kt(t){if(I.matches){for(let y of De)y.node.style.transform="none",y.node.style.opacity=String(y.opacity);return}let s=(t-Ct)%(gt*2)/gt,u=s<=1?s:2-s,h=Math.PI*2;for(let y of De){let M=u*y.speedMul*h+y.phaseOffset*h,F=Math.sin(M)*y.travelY,O=Math.sin(M+Math.PI/2)*y.travelX,v=(Math.sin(M+Math.PI)+1)*.5;y.node.style.transform=`translate(${O.toFixed(2)}px, ${F.toFixed(2)}px)`,y.node.style.opacity=(y.opacity+y.opacityPulse*v).toFixed(3)}}function Ge(t){Tt(t),kt(t),requestAnimationFrame(Ge)}function X(t){ce=t;let{draw:s}=S;if(s){if(I.matches){s.style.strokeDashoffset="0",s.style.opacity="1";return}s.style.strokeDashoffset=String(1-t),s.style.opacity=t<cn?"0":"1"}}function _(t,s,u){t.setAttribute(s,String(Number(u.toFixed(3))))}function D(t,s){let{shape:u,points:h,rings:y,fields:M}=S;if(!ut(u))return;let F=pt(t,s,a.length),O=I.matches;if(u==="focus-point"||u==="infinity"){let v=(u==="focus-point"?mt:ht)(F,p,O);for(let R of h)_(R,"cx",v.cx),_(R,"cy",v.cy),_(R,"opacity",v.opacity)}else u==="ripple"?ft(F,p,O).forEach((v,R)=>{let B=y[R];B&&(_(B,"r",v.r),_(B,"stroke-opacity",v.strokeOpacity))}):yt(F,p,O).forEach((v,R)=>{let B=M[R];B&&(_(B,"r",v.r),_(B,"opacity",v.opacity))})}function Ve(t){Be=t;let s=Math.min(1,Math.max(0,t/r));Ne(s),E==="paused"&&L(q,Ee(g-t))}function Ne(t){let s=Te.length;Te.forEach((h,y)=>{let M=Math.min(1,Math.max(0,t*s-y));h.style.transform=`scaleX(${M.toFixed(4)})`});let u=String(Math.round(t*100));se&&se.getAttribute("aria-valuenow")!==u&&se.setAttribute("aria-valuenow",u)}let he=null,fe=!1;function Y(t,s){(t==="text"?ae:ie).setAttribute("aria-checked",String(s)),e.dataset[t]=s?"on":"off"}function We(t){var u,h;let s=w(t);s!==S&&(S.svg.removeAttribute("data-active"),s.svg.setAttribute("data-active",""),S=s,$.setAttribute("aria-label",(u=s.svg.dataset.label)!=null?u:""),Ie.style.setProperty("--vw-text-offset",(h=s.svg.dataset.textOffset)!=null?h:"0"),Ie.classList.toggle("vw-invert",t==="triangle"),X(ce),D(le,ue))}function _t(t){if(f.length===0||E!=="running")return;let s=ze(f,t);if(!s||he===s.index)return;he=s.index;let{shape:u,counted:h}=f[s.index];We(u),fe||(Y("text",h),Y("count",h))}function Ft(){he=null,fe=!1;let t=f[0];t&&(We(t.shape),Y("text",t.counted),Y("count",t.counted))}let ye=null;function Ot(t){if(ye&&clearTimeout(ye),I.matches||!k.textContent){k.classList.remove("vw-swap"),L(k,t);return}k.classList.add("vw-swap"),ye=setTimeout(()=>{L(k,t),k.classList.remove("vw-swap")},te.phaseFade/2)}function z(){J&&clearTimeout(J),J=null,delete Fe.dataset.idle,j&&delete j.dataset.idle,!(E!=="running"||I.matches)&&(J=setTimeout(()=>{E==="running"&&(Fe.dataset.idle="",j&&(j.dataset.idle=""))},nt.controlIdleDelay))}let qe=!1;function G(t){let s=document.activeElement,u=qe||s!==null&&s!==document.body&&e.contains(s);E=t,e.dataset.state=t;let h=tt(t==="paused"?"paused":"running");re.setAttribute("aria-label",h.label),t==="ready"?L(q,Pt):t==="paused"?L(q,Ee(r-Be)):L(q,""),z(),qe=t==="countdown"&&u;let y=e.dataset.embed!=="app"||document.hasFocus();(u||t==="finished")&&y&&t!=="countdown"&&(t==="ready"?Oe:t==="finished"?Re:re).focus({preventScroll:!0})}function Rt(t){if(le=t.phaseIndex,ue=t.phaseProgress,m>0&&t.elapsed>=m){Ne(1),ge(!0);return}_t(t.elapsed),X(dt(t.phaseIndex,t.phaseProgress,a.length)),D(t.phaseIndex,t.phaseProgress),L(Et,String(Math.max(1,t.phaseSecondsLeft))),Ve(t.elapsed)}function Bt(){let{tail:t}=S;!t||I.matches||(t.style.transition="none",t.style.opacity="1",t.getBoundingClientRect(),t.style.transition=an,t.style.opacity="0")}function Ht(t){Ot(t.name),Q(`${t.name}, ${t.duration} seconds.`);let s=et({phase:t.type,isPostExhaleHold:de==="exhale",phaseDurationMs:t.duration*1e3});de=t.type,pe=!0,He(s.target==="expanded"?1:0,s.durationMs,s.easingMode==="breath"?V:ve)}function ge(t){b==null||b.stop(),b=null,be(),L(vt,t?"Well done":"Session ended"),L(At,t?"That was time you gave yourself":"Every breath counts"),G("finished"),Q(t?"Session complete.":"Session ended.")}function $t(){return new ee({breakdown:i,cycles:c,startDelay:l},{onPhaseChange:Ht,onCycleComplete:Bt,onSessionComplete:()=>ge(!0),onTick:Rt})}function be(){U!==null&&cancelAnimationFrame(U),U=null,C.classList.remove("vw-tick"),L(C,"")}function Ue(t){be(),G("countdown"),Q(`Starting in ${l} seconds.`);let s=performance.now(),u=-1,h=()=>{let y=l-(performance.now()-s)/1e3;if(y<=0){U=null,C.classList.remove("vw-tick"),L(C,""),t();return}let M=Math.ceil(y);M!==u&&(u=M,C.classList.remove("vw-tick"),L(C,String(M)),C.getBoundingClientRect(),C.classList.add("vw-tick")),U=requestAnimationFrame(h)};h()}function Xe(){de=null,$e(0),G("running")}function xe(){b==null||b.stop(),b=$t(),Ft(),L(k,""),X(0),D(0,0),Ve(0),$e(0),pe=!1,It(1),Ue(()=>{Xe(),b==null||b.start()})}function K(){b&&(b.pause(),G("paused"),He(0,te.controlHide,ve),Q("Paused."))}function Ye(){Ue(()=>{b&&(Xe(),b.resetToCycleStart(),b.resume())})}function Ke(t,s){Y(s,t.getAttribute("aria-checked")!=="true"),fe=!0,z()}Oe.addEventListener("click",xe),Re.addEventListener("click",xe),re.addEventListener("click",()=>{E==="running"?K():E==="paused"&&Ye()}),Mt.addEventListener("click",()=>ge(!1)),ae.addEventListener("click",()=>Ke(ae,"text")),ie.addEventListener("click",()=>Ke(ie,"count"));for(let t of["pointermove","pointerdown","keydown","focusin"])e.addEventListener(t,z,{passive:!0});document.addEventListener("keydown",t=>{if(t.code!=="Space")return;let s=t.target;s&&s.closest("button, a, input, textarea, select")||(t.preventDefault(),E==="ready"||E==="finished"?xe():E==="running"?K():E==="paused"&&Ye())}),document.addEventListener("visibilitychange",()=>{document.visibilityState==="hidden"&&(E==="running"?K():E==="countdown"&&(be(),b&&b.state.elapsed>0?K():(b==null||b.stop(),b=null,G("ready"),X(1),D(0,0))))}),I.addEventListener("change",()=>{X(ce),D(le,ue),z()});let Se=()=>{let t=180-Math.atan(e.clientWidth/Math.max(1,e.clientHeight))*180/Math.PI;e.style.setProperty("--vw-bg-angle",`${t.toFixed(1)}deg`)};if(window.addEventListener("resize",Se,{passive:!0}),typeof ResizeObserver!="undefined"&&new ResizeObserver(Se).observe(e),Se(),W){let t=st(navigator.userAgent);W.href=t.url,W.setAttribute("aria-label",rt(t));let{openLink:s}=o;s&&W.addEventListener("click",u=>{u.preventDefault(),s(W.href).catch(()=>{})})}return G("ready"),D(0,0),requestAnimationFrame(Ge),{pause(){E==="running"&&K()}}}function bt(e){var i,c;let n=e==null?void 0:e.virwaveSession,o=(c=(i=n==null?void 0:n.config)==null?void 0:i.breakdown)==null?void 0:c.phases;return n&&Array.isArray(o)&&o.length>0&&n.config.cycles>0?n:null}function xt(e,n){var a,r,g,d,x,A;let o=w=>e.querySelector(`[data-vw="${w}"]`),{config:i,guidance:c}=n;document.title=n.title;let l=e.querySelector("h1");l&&(l.textContent=n.title),e.dataset.text=c.text?"on":"off",e.dataset.count=c.count?"on":"off",(a=o("text"))==null||a.setAttribute("aria-checked",String(c.text)),(r=o("count-toggle"))==null||r.setAttribute("aria-checked",String(c.count));let p=o("under");p&&(p.dataset.ready=n.readyLine,p.textContent=n.readyLine);let f=o("note");f&&(f.classList.remove("vw-note-status"),f.textContent=(g=n.note)!=null?g:"",n.note?e.dataset.note="":delete e.dataset.note);let m=Array.from(e.querySelectorAll(".vw-seg"));m.slice(Math.max(1,Math.min(i.cycles,m.length))).forEach(w=>w.remove());for(let w of Array.from(e.querySelectorAll("svg.vw-shape"))){if(w.dataset.shape!==i.shape){w.removeAttribute("data-active");continue}w.setAttribute("data-active",""),(x=o("stage"))==null||x.setAttribute("aria-label",(d=w.dataset.label)!=null?d:"");let S=o("phase-card");S==null||S.style.setProperty("--vw-text-offset",(A=w.dataset.textOffset)!=null?A:"0"),S==null||S.classList.toggle("vw-invert",i.shape==="triangle")}}function un(e){var m;let n=null,o=null,i="",c=e.querySelector('[data-vw="expand"]'),l=e.querySelector('[data-vw="note"]');function p(a){var w,S;let r=a.displayMode==="fullscreen",g=(w=a.containerDimensions)!=null?w:{};e.dataset.display=r?"fullscreen":"inline";let x=r||typeof g.height=="number"?null:Qe(window.innerWidth,g.maxHeight);e.style.setProperty("--vw-h",x===null?"100vh":`${x}px`);let A=a.safeAreaInsets;if(A&&(e.style.setProperty("--vw-safe-t",`${A.top}px`),e.style.setProperty("--vw-safe-b",`${A.bottom}px`)),c){let $=((S=a.availableDisplayModes)!=null?S:[]).includes("fullscreen");c.hidden=!$&&!r||!n,c.setAttribute("aria-label",r?Le.collapse:Le.expand)}if(x!==null&&n){let $=`${window.innerWidth}x${x}`;$!==i&&(i=$,n.sizeChanged(window.innerWidth,x))}else i=""}function f(a){!l||o||(l.classList.add("vw-note-status"),l.textContent=a)}c==null||c.addEventListener("click",()=>{if(!n)return;let a=e.dataset.display==="fullscreen"?"inline":"fullscreen";n.requestDisplayMode(a).then(r=>{n&&r&&p(Object.assign(n.hostContext,{displayMode:r}))}).catch(()=>{})}),window.addEventListener("resize",()=>{var a;return p((a=n==null?void 0:n.hostContext)!=null?a:{})},{passive:!0}),p({}),at({name:"VirWave Breathe",version:(m=e.dataset.version)!=null?m:"0.0.0"},{onToolResult(a){if(o)return;let r=a.isError?null:bt(a.structuredContent);if(!r){f("No session to show this time.");return}xt(e,r);let g=n;o=Pe(e,r.config,{openLink:g!=null&&g.hostCapabilities.openLinks?d=>g.openLink(d):void 0})},onToolCancelled:()=>f("No session to show this time."),onHostContextChanged:a=>p(a),onTeardown:()=>o==null?void 0:o.pause()}).then(a=>{if(n=a,a){p(a.hostContext);return}p({displayMode:"fullscreen"});let r=bt({virwaveSession:it(window.location.hash)});if(!r){f("Start a session from your assistant, and it will appear here.");return}xt(e,r),o=Pe(e,r.config,{})})}var Ae=document.currentScript,H=Ae==null?void 0:Ae.closest("[data-vw-root]");if((H==null?void 0:H.dataset.embed)==="app")un(H);else if(H){let e=H.querySelector('script[type="application/json"]');e!=null&&e.textContent&&Pe(H,JSON.parse(e.textContent))}})();
+</script>
+</main>
+</body>
+</html>
