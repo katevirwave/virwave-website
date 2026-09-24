@@ -41,7 +41,9 @@ export default async function ApplicationsPage() {
               <form action={approveAffiliate.bind(null, app.id, app.email, app.code)}>
                 <button type="submit" className={styles.approveBtn}>Approve</button>
               </form>
-              <form action={rejectApplication.bind(null, app.id, app.code, 'Rejected by admin')}>
+              <form action={rejectApplication.bind(null, app.id, app.code)} className={styles.rejectForm}>
+                <label htmlFor={`reject-reason-${app.id}`} className={styles.srOnly}>Reason for rejecting {app.full_name}</label>
+                <input id={`reject-reason-${app.id}`} type="text" name="reason" placeholder="Reason" required className={styles.reasonInput} />
                 <button type="submit" className={styles.rejectBtn}>Reject</button>
               </form>
             </div>

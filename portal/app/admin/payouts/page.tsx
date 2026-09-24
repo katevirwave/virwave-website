@@ -4,8 +4,9 @@ import styles from './payouts.module.css'
 
 export const revalidate = 0
 
-// Cursor-based pagination — never offset
-export default async function AdminPayoutsPage({ searchParams }: { searchParams: { cursor?: string } }) {
+// Cursor-based pagination — never offset. The cursor is the last row's (payout_month, id),
+// matching the sort order so pages neither skip nor repeat rows.
+export default async function AdminPayoutsPage({ searchParams }: { searchParams: { month?: string; id?: string } }) {
   const adminClient = createAdminClient()
   let query = adminClient
     .from('affiliate_payouts')
@@ -13,8 +14,10 @@ export default async function AdminPayoutsPage({ searchParams }: { searchParams:
     .order('payout_month', { ascending: false })
     .order('id', { ascending: false })
     .limit(50)
-  if (searchParams.cursor) {
-    query = query.lt('created_at', searchParams.cursor)
+  const { month, id } = searchParams
+  // Both values go into a PostgREST filter string — allow only month/uuid characters.
+  if (month && id && /^[\w-]+$/.test(month) && /^[\w-]+$/.test(id)) {
+    query = query.or(`payout_month.lt.${month},and(payout_month.eq.${month},id.lt.${id})`)
   }
   const { data: payouts } = await query
 
@@ -68,7 +71,7 @@ export default async function AdminPayoutsPage({ searchParams }: { searchParams:
         </tbody>
       </table>
       {lastRow && (
-        <a href={`/admin/payouts?cursor=${encodeURIComponent((lastRow as { created_at: string }).created_at)}`} className={styles.nextPage}>
+        <a href={`/admin/payouts?month=${encodeURIComponent(lastRow.payout_month)}&id=${encodeURIComponent(lastRow.id)}`} className={styles.nextPage}>
           Next page →
         </a>
       )}

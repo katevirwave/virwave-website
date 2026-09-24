@@ -13,3 +13,6 @@
 .detailLink { color: var(--color-teal-400); font-size: 0.875rem; text-decoration: none; }
 .approveBtn { padding: var(--sp-1) var(--sp-4); background: var(--color-teal-400); color: #fff; border: none; border-radius: var(--radius); font-size: 0.875rem; cursor: pointer; }
 .rejectBtn { padding: var(--sp-1) var(--sp-4); background: transparent; color: var(--color-amber-400); border: 1px solid var(--color-amber-400); border-radius: var(--radius); font-size: 0.875rem; cursor: pointer; }
+.rejectForm { display: flex; gap: var(--sp-2); align-items: center; }
+.reasonInput { padding: var(--sp-1) var(--sp-3); background: var(--glass-medium-bg); border: 1px solid var(--glass-medium-border); border-radius: var(--radius); color: var(--color-white-90); font-size: 0.875rem; }
+.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
