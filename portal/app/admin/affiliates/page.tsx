@@ -1,6 +1,7 @@
 import { createAdminClient } from '@/utils/supabase/admin'
 import Link from 'next/link'
 import styles from './affiliates.module.css'
+import { getMonthlyTier, countMonthlyConversionsByCode, tierLabel } from '@/utils/tiers'
 
 export const revalidate = 0
 
@@ -17,7 +18,7 @@ export default async function AdminAffiliatesPage({ searchParams }: { searchPara
   const adminClient = createAdminClient()
   let query = adminClient
     .from('affiliate_stats_mv')
-    .select('code, full_name, status, tier, this_month_net_usd, lifetime_net_usd, last_commission_at')
+    .select('code, full_name, status, tier, tier_override, this_month_net_usd, lifetime_net_usd, last_commission_at')
     .order('lifetime_net_usd', { ascending: false })
     .order('code', { ascending: true })
     .limit(50)
@@ -31,6 +32,10 @@ export default async function AdminAffiliatesPage({ searchParams }: { searchPara
 
   const { data: affiliates } = await query
   const lastRow = affiliates && affiliates.length === 50 ? affiliates[affiliates.length - 1] : null
+
+  // The mv's tier column is the stored profile tier, which only changes on override.
+  // Work out this month's tier the way settlement will, from live event counts.
+  const monthConversions = await countMonthlyConversionsByCode(adminClient, (affiliates ?? []).map(a => a.code))
 
   return (
     <div className={`${styles.page} page-enter`}>
@@ -48,7 +53,7 @@ export default async function AdminAffiliatesPage({ searchParams }: { searchPara
       <table className={styles.table}>
         <thead>
           <tr>
-            <th>Code</th><th>Name</th><th>Status</th><th>Tier</th>
+            <th>Code</th><th>Name</th><th>Status</th><th>Tier this month</th><th>Referrals</th>
             <th>This month</th><th>Lifetime</th><th>Last commission</th>
           </tr>
         </thead>
@@ -58,7 +63,9 @@ export default async function AdminAffiliatesPage({ searchParams }: { searchPara
               <td><Link href={`/admin/affiliates/${a.code}`} className={styles.link}>{a.code}</Link></td>
               <td>{a.full_name}</td>
               <td><span style={{ color: STATUS_COLORS[a.status] ?? 'inherit', textTransform: 'capitalize' }}>{a.status}</span></td>
-              <td style={{ textTransform: 'capitalize' }}>{a.tier}</td>
+              {/* Settlement only pays tiers to active affiliates */}
+              <td>{a.status === 'active' ? tierLabel(getMonthlyTier(monthConversions.get(a.code) ?? 0, a.tier, a.tier_override)) : '—'}</td>
+              <td>{monthConversions.get(a.code) ?? 0}</td>
               <td>${(a.this_month_net_usd ?? 0).toFixed(2)}</td>
               <td>${(a.lifetime_net_usd ?? 0).toFixed(2)}</td>
               <td>{a.last_commission_at ? new Date(a.last_commission_at).toLocaleDateString() : '—'}</td>
