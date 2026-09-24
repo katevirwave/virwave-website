@@ -2,21 +2,19 @@ import { createSupabaseServerClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import styles from './dashboard.module.css'
 import { CopyReferralLink } from '@/components/CopyReferralLink'
+import { getMonthlyTier, countMonthlyConversions } from '@/utils/tiers'
 
 export default async function DashboardPage() {
   const supabase = createSupabaseServerClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/')
 
-  const [profileRes, statsRes, tierRes] = await Promise.all([
+  const [profileRes, statsRes, monthConversions] = await Promise.all([
     supabase.from('affiliate_profiles').select('code, tier, tier_override, payout_details, full_name, status, needs_rc_grant').eq('user_id', user.id).single(),
     // Lifetime + current month earnings — .single() unwraps the RETURNS TABLE row from array
     supabase.rpc('get_affiliate_dashboard_stats').single(),
-    // Conversions this month for tier progress
-    supabase.from('affiliate_commission_events')
-      .select('*', { count: 'exact', head: true })
-      .eq('event_month', new Date().toISOString().slice(0, 7))
-      .is('payout_id', null),
+    // Conversions this month, counted the way settlement counts them — drives the tier
+    countMonthlyConversions(supabase),
   ])
 
   const profile = profileRes.data
@@ -31,12 +29,11 @@ export default async function DashboardPage() {
 
   type DashboardStats = { this_month_net: number; lifetime_net: number; active_subscribers: number; attributed_users: number; all_time_conversions: number; conversion_rate: number; last_conversion_at: string | null }
   const stats: DashboardStats = (statsRes.data as DashboardStats | null) ?? { this_month_net: 0, lifetime_net: 0, active_subscribers: 0, attributed_users: 0, all_time_conversions: 0, conversion_rate: 0, last_conversion_at: null }
-  const monthConversions = tierRes.count ?? 0
   const daysSinceLastConversion = stats.last_conversion_at
     ? Math.floor((Date.now() - new Date(stats.last_conversion_at).getTime()) / 86_400_000)
     : 999  // never converted — treat as inactive
   const nextPayoutDate = getNextPayoutDate()
-  const tierInfo = getTierInfo(profile.tier, monthConversions, profile.tier_override)
+  const { tier, next, toNext, isOverride } = getMonthlyTier(monthConversions, profile.tier, profile.tier_override)
 
   return (
     <div className={`${styles.page} page-enter`}>
@@ -89,24 +86,26 @@ export default async function DashboardPage() {
         </div>
       )}
 
-      {/* Tier progress — hidden at partner tier (max tier, no further progression) */}
-      {profile.tier_override ? (
-        <div className={styles.tierCustom}>Custom tier · {getTierRate(profile.tier)}% commission</div>
-      ) : profile.tier === 'partner' ? (
-        <div className={styles.tierCustom}>Partner tier · {getTierRate(profile.tier)}% commission · top tier</div>
+      {/* Tier — the tier this month's referrals have reached, which is the rate settlement pays */}
+      {isOverride ? (
+        <div className={styles.tierCustom}>{tier.name} tier · {tier.ratePct}% commission · set by the VirWave team</div>
+      ) : !next ? (
+        <div className={styles.tierCustom}>{tier.name} tier this month · {tier.ratePct}% commission on every referral · top tier</div>
       ) : (
         <section className={styles.tierBlock} aria-label="Tier progress">
-          <div className={styles.tierLabel}>{capitalize(profile.tier)} tier · {getTierRate(profile.tier)}% commission</div>
+          <div className={styles.tierLabel}>{tier.name} tier this month · {tier.ratePct}% commission on every referral</div>
           <div className={styles.progressTrack} role="progressbar"
             aria-valuenow={monthConversions}
-            aria-valuemax={tierInfo.target}
-            aria-label={`${monthConversions} of ${tierInfo.target} conversions for ${capitalize(tierInfo.nextTier)} tier`}
+            aria-valuemin={0}
+            aria-valuemax={next.minConversions}
+            aria-label={`${monthConversions} of ${next.minConversions} referrals for ${next.name} tier`}
           >
-            <div className={styles.progressFill} style={{ width: `${Math.min(100, (monthConversions / tierInfo.target) * 100)}%` }} />
+            <div className={styles.progressFill} style={{ width: `${Math.min(100, (monthConversions / next.minConversions) * 100)}%` }} />
           </div>
           <div className={styles.progressCaption}>
-            {monthConversions} conversions this month · {Math.max(0, tierInfo.target - monthConversions)} to {capitalize(tierInfo.nextTier)} ({tierInfo.nextRate}%)
+            {monthConversions} of {next.minConversions} referrals this month · {toNext} more for {next.name} ({next.ratePct}% on all of them)
           </div>
+          <div className={styles.progressCaption}>Tiers are worked out each month and start fresh on the 1st.</div>
         </section>
       )}
 
@@ -121,17 +120,17 @@ export default async function DashboardPage() {
       {/* Tier perks — show what they've unlocked and what's next */}
       <section className={styles.perksBlock} aria-label="Your affiliate perks">
         <div className={styles.perksTitle}>Your perks</div>
-        <ul className={styles.perksList} aria-label={`${capitalize(profile.tier)} tier perks`}>
-          {TIER_PERKS[profile.tier as keyof typeof TIER_PERKS]?.map(perk => (
+        <ul className={styles.perksList} aria-label={`${tier.name} tier perks`}>
+          {tier.perks.map(perk => (
             <li key={perk} className={styles.perkItem}>
               <span className={styles.perkCheck} aria-hidden="true">✓</span>
               <span>{perk}</span>
             </li>
           ))}
         </ul>
-        {profile.tier !== 'partner' && !profile.tier_override && (
+        {next && (
           <div className={styles.perksNext}>
-            Unlock more at {capitalize(tierInfo.nextTier)}: {TIER_NEXT_PERKS[tierInfo.nextTier as keyof typeof TIER_NEXT_PERKS]}
+            Unlock more at {next.name}: {next.unlocks}
           </div>
         )}
       </section>
@@ -155,24 +154,3 @@ function getNextPayoutDate(): string {
   return lastOfMonth.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
-const TIER_PERKS = {
-  starter: ['Free VirWave Premium', '15% commission on every referral', 'Affiliate dashboard + analytics'],
-  growth:  ['Free VirWave Premium', '25% commission on every referral', 'Affiliate dashboard + analytics', 'Early access to new features'],
-  partner: ['Free VirWave Premium', '40% commission on every referral', 'Affiliate dashboard + analytics', 'Early access to new features', 'Co-marketing opportunities with VirWave'],
-}
-const TIER_NEXT_PERKS = {
-  growth:  '25% commission + early feature access',
-  partner: '40% commission + co-marketing',
-}
-
-function getTierRate(tier: string): number {
-  return tier === 'partner' ? 40 : tier === 'growth' ? 25 : 15
-}
-
-function getTierInfo(tier: string, conversions: number, override: boolean) {
-  if (tier === 'starter') return { target: 10, nextTier: 'growth', nextRate: 25 }
-  if (tier === 'growth') return { target: 50, nextTier: 'partner', nextRate: 40 }
-  return { target: conversions, nextTier: 'partner', nextRate: 40 }
-}
-
-function capitalize(s: string) { return s.charAt(0).toUpperCase() + s.slice(1) }

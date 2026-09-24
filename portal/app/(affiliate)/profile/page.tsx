@@ -2,18 +2,24 @@ import { createSupabaseServerClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { PayoutForm } from './PayoutForm'
 import styles from './profile.module.css'
+import { getMonthlyTier, countMonthlyConversions } from '@/utils/tiers'
 
 export default async function ProfilePage({ searchParams }: { searchParams: { setup?: string } }) {
   const supabase = createSupabaseServerClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/')
 
-  const { data: profile } = await supabase
-    .from('affiliate_profiles')
-    .select('code, full_name, email, platform, audience_size, tier, payout_method, payout_details')
-    .single()
+  const [{ data: profile }, monthConversions] = await Promise.all([
+    supabase
+      .from('affiliate_profiles')
+      .select('code, full_name, email, platform, audience_size, tier, tier_override, payout_method, payout_details')
+      .single(),
+    countMonthlyConversions(supabase),
+  ])
 
   if (!profile) redirect('/')
+
+  const { tier } = getMonthlyTier(monthConversions, profile.tier, profile.tier_override)
 
   const isSetup = searchParams.setup === 'payout'
   const hasPayoutDetails = profile.payout_details && Object.keys(profile.payout_details).length > 0
@@ -40,7 +46,7 @@ export default async function ProfilePage({ searchParams }: { searchParams: { se
           <span className={styles.infoLabel}>Name</span><span className={styles.infoValue}>{profile.full_name}</span>
           <span className={styles.infoLabel}>Email</span><span className={styles.infoValue}>{profile.email}</span>
           <span className={styles.infoLabel}>Affiliate code</span><span className={styles.infoValue}>{profile.code}</span>
-          <span className={styles.infoLabel}>Tier</span><span className={styles.infoValue} style={{ textTransform: 'capitalize' }}>{profile.tier}</span>
+          <span className={styles.infoLabel}>Tier this month</span><span className={styles.infoValue}>{tier.name} · {tier.ratePct}% commission</span>
         </div>
       </section>
 
