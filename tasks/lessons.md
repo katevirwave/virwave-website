@@ -103,3 +103,8 @@ yet rather than reporting the task as done.
 
 This applies to anything printed or handed out: QR codes, short links, email
 addresses in CTA copy, deep links, `.well-known` files.
+
+
+## 2026-09-25 — Expired sign-in recovery
+
+Show expired sign-in as its own focused recovery state, with a clear reason and one fresh retry action. Clear expired PKCE and assistant authorization context; never exchange an expired code or reuse an old assistant connection. Preserve provider callbacks in their original tab.

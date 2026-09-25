@@ -6,6 +6,8 @@ Deployed on 25 September 2026 after Sebastian's approval. Kate's `/breathe` is u
 
 ## Timeout recovery — 25 September follow-up
 
+Live verification: commit `1efb515`, all 15 website tests passed with zero skips, independent specialist review found no blocker, and production browser verified the recovery screen and retry. Production HTML, both auth scripts, and CSS match tested bytes. Current production deployment is `dpl_FAmyHfcBQjbtujCZKBXMV9vky2UP` (`https://virwave-website-eupgiauy9-vir-wave.vercel.app`), promoted from the successfully verified GitHub preview `dpl_FQGnHurjSvNGMTTiQtFmC6CFcSaU`. The direct CLI deployment was blocked by commit-author permissions; the normal public-GitHub integration and promotion succeeded without changing identities or access controls. Rollback is the prior account deployment `dpl_2JZ1hqVEC2ABcLAY6yCmSg6fBqUo`.
+
 Sebastian requested a dedicated timeout screen instead of the ordinary welcome/login form with a warning. The account page now hides the form, focuses a "Sign-in timed out" heading, explains what happened, and offers one "Try again" button to return to fresh sign-in. Assistant connections must restart in the originating app. Both Supabase `bad_oauth_state` and a locally expired valid PKCE attempt use this state; expired state is removed and never exchanged or reused. No provider, callback, scope, or shared Auth setting changes.
 
 Google's exact original teal app icon is now verified, published, and visually checked on a fresh chooser. A fresh Google login returned successfully to `/account`. Apple real sign-in remains in user handoff. Website branch was pushed publicly with Sebastian's explicit authorization; no main merge.
