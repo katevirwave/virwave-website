@@ -1,7 +1,30 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "rewrites": [
+    { "source": "/connect", "destination": "/account" },
+    { "source": "/mcp", "destination": "https://xswebtvkueusdaeboizp.supabase.co/functions/v1/breathe-connected" },
+    { "source": "/mcp/.well-known/oauth-protected-resource", "destination": "https://xswebtvkueusdaeboizp.supabase.co/functions/v1/breathe-connected/.well-known/oauth-protected-resource" },
+    { "source": "/.well-known/oauth-protected-resource/mcp", "destination": "https://xswebtvkueusdaeboizp.supabase.co/functions/v1/breathe-connected/.well-known/oauth-protected-resource" }
+  ],
   "redirects": [
+    {
+      "source": "/",
+      "has": [{ "type": "query", "key": "error_code", "value": "bad_oauth_state" }],
+      "destination": "/account",
+      "permanent": false
+    },
+    {
+      "source": "/connect",
+      "missing": [{ "type": "query", "key": "login_state" }],
+      "destination": "/account",
+      "permanent": false
+    },
+    {
+      "source": "/pages/privacy-policy",
+      "destination": "/privacy",
+      "permanent": true
+    },
     {
       "source": "/ref/:code",
       "destination": "/ref?code=:code",
@@ -65,6 +88,32 @@
           "key": "Referrer-Policy",
           "value": "strict-origin-when-cross-origin"
         }
+      ]
+    },
+    {
+      "source": "/(account|connect)/:path*",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store" },
+        { "key": "Referrer-Policy", "value": "no-referrer" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        { "key": "Content-Security-Policy", "value": "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self' https://xswebtvkueusdaeboizp.supabase.co; base-uri 'none'; form-action 'self'; frame-ancestors 'none'" }
+      ]
+    },
+    {
+      "source": "/.well-known/oauth-protected-resource/:path*",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store" },
+        { "key": "Vercel-CDN-Cache-Control", "value": "no-store" }
+      ]
+    },
+    {
+      "source": "/mcp/:path*",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store" },
+        { "key": "Vercel-CDN-Cache-Control", "value": "no-store" },
+        { "key": "Referrer-Policy", "value": "no-referrer" },
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
       ]
     }
   ]

@@ -5,6 +5,68 @@
    ============================================================ */
 
 /* --- Reset & Base ------------------------------------------ */
+/* Account connection: quiet, keyboard-first, and independent of marketing JS. */
+.connect-page { min-height: 100vh; font-weight: 400; padding: var(--sp-12) var(--sp-4) var(--sp-6); background: var(--navy-deep); }
+.connect-brand, .connect-footer { max-width: 28rem; margin: auto; }
+.connect-brand { padding-bottom: var(--sp-8); text-align: center; }
+.connect-brand a { display: inline-flex; align-items: center; gap: var(--sp-3); color: var(--white); font-size: var(--text-2xl); font-weight: 600; text-decoration: none; }
+.connect-brand img { border-radius: var(--radius-lg); }
+.connect-panel { max-width: 28rem; margin: 0 auto; padding: var(--sp-8); background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+.connect-panel h1 { font-size: var(--text-3xl); font-weight: 600; letter-spacing: -.025em; line-height: 1.2; color: var(--white); text-align: center; }
+.connect-panel p, .connect-panel ul { margin-top: var(--sp-4); }
+.connect-panel #connect-intro { text-align: center; margin-top: var(--sp-2); color: var(--text-muted); font-size: var(--text-sm); }
+.connect-panel label { display: block; margin-top: var(--sp-4); }
+.connect-panel input:not([type="checkbox"]) { width: 100%; min-height: 48px; padding: var(--sp-3); margin-top: var(--sp-2); color: var(--white); background: var(--navy-deep); border: 1px solid var(--gray-400); border-radius: var(--radius); font: inherit; }
+.connect-panel button { min-height: 48px; padding: var(--sp-3) var(--sp-4); color: var(--white); background: var(--navy); border: 1px solid var(--gray-400); border-radius: var(--radius); font: inherit; cursor: pointer; transition: border-color var(--dur-snappy), background-color var(--dur-snappy); }
+.connect-panel form button { width: 100%; margin-top: var(--sp-6); }
+.connect-panel .connect-primary { color: var(--navy-deep); background: var(--mint); border-color: var(--mint); font-weight: 600; }
+.connect-panel button:disabled { opacity: .65; cursor: wait; }
+.connect-panel button:not(:disabled):hover { border-color: var(--mint); }
+.connect-panel .connect-primary:not(:disabled):hover { background: var(--mint-soft); }
+.connect-page :focus-visible { outline: 3px solid var(--mint); outline-offset: 3px; }
+/* Announce the new view without drawing a control outline around its heading. */
+.connect-panel h1:focus, .connect-panel h2:focus { outline: none; }
+.connect-page a { color: var(--mint); text-underline-offset: 3px; }
+.connect-panel .connect-check { display: flex; align-items: center; gap: var(--sp-3); min-height: 48px; cursor: pointer; }
+.connect-check input { width: 1.25rem; height: 1.25rem; accent-color: var(--mint); }
+.connect-panel .connect-small { font-size: var(--text-sm); }
+.connect-panel #connect-email-hint, .connect-panel #connect-code-hint { margin-top: var(--sp-2); color: var(--text-muted); }
+.connect-providers { display: grid; gap: var(--sp-3); margin-top: var(--sp-6); }
+.connect-panel .connect-provider { display: flex; align-items: center; position: relative; justify-content: center; width: 100%; background: var(--white-pure); color: var(--black); border-color: var(--white-pure); font-weight: 600; }
+.connect-provider img { position: absolute; left: var(--sp-4); object-fit: contain; }
+.connect-panel #connect-apple { color: var(--oauth-black); }
+.connect-panel #connect-apple img { height: 100%; width: auto; left: var(--sp-2); }
+.connect-divider { display: flex; align-items: center; gap: var(--sp-3); margin-top: var(--sp-3); color: var(--text-muted); font-size: var(--text-sm); }
+.connect-divider::before, .connect-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.connect-panel .connect-switch { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 0 var(--sp-1); margin-top: var(--sp-3); font-size: var(--text-sm); }
+.connect-panel .connect-text-button { padding: 0 var(--sp-1); background: none; border: 0; color: var(--mint); text-decoration: underline; text-underline-offset: 3px; }
+.connect-panel .connect-legal { text-align: center; color: var(--text-muted); margin-top: var(--sp-2); }
+.connect-panel #connect-otp { text-align: center; letter-spacing: .3em; font-size: var(--text-2xl); }
+.connect-panel #connect-email-label { overflow-wrap: anywhere; }
+.connect-actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-6); }
+.connect-panel ul { padding-left: var(--sp-6); }
+.connect-panel .connect-grants { list-style: none; padding: 0; }
+.connect-grants li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--sp-4); align-items: center; margin: var(--sp-6) 0; }
+.connect-panel .connect-account-email { text-align: center; overflow-wrap: anywhere; color: var(--text-muted); font-size: var(--text-sm); margin-top: var(--sp-2); }
+.connect-account-intro { text-align: center; }
+.connect-panel .connect-launch { display: flex; align-items: center; justify-content: center; min-height: 48px; padding: var(--sp-3) var(--sp-4); margin-top: var(--sp-6); border-radius: var(--radius); text-decoration: none; }
+.connect-setup { margin-top: var(--sp-3); }
+.connect-setup summary { display: list-item; padding: var(--sp-3) var(--sp-4); min-height: 48px; cursor: pointer; color: var(--mint); border: 1px solid var(--border); border-radius: var(--radius); }
+.connect-setup > a { display: inline-flex; align-items: center; min-height: 48px; }
+.connect-connections { border-top: 1px solid var(--border); margin-top: var(--sp-8); padding-top: var(--sp-6); }
+.connect-connections h2 { font-size: var(--text-base); font-weight: 600; }
+.connect-connections .connect-small { color: var(--text-muted); }
+.connect-disconnect { width: 100%; display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+.connect-disconnect p { width: 100%; margin-top: 0; font-size: var(--text-sm); }
+#connect-signout { display: block; margin: var(--sp-6) auto 0; }
+.connect-footer { display: flex; justify-content: center; flex-wrap: wrap; gap: var(--sp-6); padding-top: var(--sp-4); font-size: var(--text-sm); }
+.connect-footer a { display: inline-flex; align-items: center; min-height: 48px; color: var(--text-muted); }
+.connect-panel [hidden] { display: none !important; }
+#connect-status { overflow-wrap: anywhere; font-size: var(--text-sm); }
+#connect-status:empty { margin: 0; }
+#connect-status[role="alert"] { padding: var(--sp-3); border-left: 3px solid var(--mint); background: var(--navy-deep); }
+@media (max-width: 480px) { .connect-page { padding-top: var(--sp-6); } .connect-panel { padding: var(--sp-6); } }
+@media (prefers-reduced-motion: reduce) { .connect-panel button { transition: none; } }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -19,6 +81,7 @@
   /* Neutrals */
   --white:       #F8F8F6;
   --white-pure:  #FFFFFF;
+  --oauth-black: #000000;
   --off-white:   #F2F2F0;
   --gray-100:    #E8E8E6;
   --gray-200:    #D4D4D2;

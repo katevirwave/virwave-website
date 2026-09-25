@@ -1,0 +1,17 @@
+# This project serves the static website only. The two apps deploy separately.
+portal/
+aikei-app/
+# Never publish agent material, backend source, tests, or operator notes.
+.claude/
+.github/
+docs/
+tasks/
+tests/
+scripts/
+supabase/
+CLAUDE.md
+README.md
+*.code-workspace
+.env*
+.secrets/
+node_modules/
