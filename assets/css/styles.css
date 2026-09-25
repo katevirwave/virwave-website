@@ -43,6 +43,7 @@
 .connect-panel .connect-legal { text-align: center; color: var(--text-muted); margin-top: var(--sp-2); }
 .connect-panel #connect-otp { text-align: center; letter-spacing: .3em; font-size: var(--text-2xl); }
 .connect-panel #connect-email-label { overflow-wrap: anywhere; }
+.connect-recovery { display: grid; gap: var(--sp-6); }
 .connect-actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-6); }
 .connect-panel ul { padding-left: var(--sp-6); }
 .connect-panel .connect-grants { list-style: none; padding: 0; }

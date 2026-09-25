@@ -142,12 +142,42 @@ test('account page: signup, code, consent, removal, mobile, and no credential pe
     // Supabase cannot recover an expired provider state, so it falls back to
     // Site URL. Route that exact error to sign-in without trusting its payload.
     await page.goto(`${origin}/?error=invalid_request&error_code=bad_oauth_state&error_description=untrusted-copy&code=never-exchange`);
-    await page.getByText('Sign-in timed out. Please try again. To connect an assistant, restart from its app.', { exact: true }).waitFor();
+    await page.getByRole('heading', { name: 'Sign-in timed out', exact: true }).waitFor();
+    assert.equal(await page.getByRole('region', { name: 'Sign in or create an account', exact: true }).isVisible(), false);
+    assert.equal(await page.locator('#connect-title').evaluate((element) => element === document.activeElement), true);
+    for (const width of [320, 768, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+    }
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+    await page.evaluate(() => { document.documentElement.style.fontSize = ''; });
+    if (process.env.VIRWAVE_TIMEOUT_SCREENSHOT) await page.screenshot({ path: process.env.VIRWAVE_TIMEOUT_SCREENSHOT, fullPage: true });
+    await page.getByRole('button', { name: 'Try again', exact: true }).click();
+    await page.getByRole('heading', { name: 'Welcome back', exact: true }).waitFor();
+    assert.equal(await page.getByRole('region', { name: 'Sign-in recovery', exact: true }).isVisible(), false);
     assert.equal(page.url(), `${origin}/account`);
     assert.equal(await page.getByRole('button', { name: 'Continue with Google', exact: true }).isEnabled(), true);
     assert.equal(await page.evaluate(() => sessionStorage.getItem('virwave-connect-pkce')), null);
     assert.equal(requests.filter((r) => r.path.endsWith('/token')).length, exchanges);
     assert.equal(await page.getByText('untrusted-copy', { exact: true }).count(), 0);
+    // A valid callback that outlived this tab's PKCE attempt uses the same recovery screen.
+    const expiredReturn = await page.evaluate(async () => {
+      const { startProviderLogin } = await import('/assets/js/connect-auth.mjs');
+      const url = await startProviderLogin('https://xswebtvkueusdaeboizp.supabase.co', 'apple', `${location.origin}/account`, 'abcdefghijklmnopqrstuvwxyz012345');
+      const pending = JSON.parse(sessionStorage.getItem('virwave-connect-pkce'));
+      pending.createdAt = Date.now() - 601_000;
+      sessionStorage.setItem('virwave-connect-pkce', JSON.stringify(pending));
+      return new URL(url).searchParams.get('redirect_to');
+    });
+    await page.goto(`${expiredReturn}&code=never-exchange`);
+    await page.getByRole('heading', { name: 'Sign-in timed out', exact: true }).waitFor();
+    assert.equal(page.url(), `${origin}/account`);
+    assert.equal(requests.filter((r) => r.path.endsWith('/token')).length, exchanges);
+    assert.equal(await page.evaluate(() => sessionStorage.getItem('virwave-connect-pkce')), null);
+    await page.getByRole('button', { name: 'Try again', exact: true }).click();
+    await page.getByRole('button', { name: 'Continue with Apple', exact: true }).waitFor();
     previousConsent = true;
     await page.goto(`${origin}/account?authorization_id=${id}`);
     await page.getByLabel('Email address', { exact: true }).fill('a@example.com');

@@ -46,8 +46,11 @@ export function consumeProviderReturn(callback, storage = sessionStorage) {
   const url = new URL(callback);
   const address = new URL(url); address.search = ''; address.hash = '';
   if (!pending || pending.callback !== address.href || pending.state !== url.searchParams.get('login_state') ||
-      (!url.searchParams.get('code') && !url.searchParams.get('error')) || Date.now() - pending.createdAt > 600_000 || Date.now() < pending.createdAt) {
+      (!url.searchParams.get('code') && !url.searchParams.get('error')) || !Number.isFinite(pending.createdAt) || Date.now() < pending.createdAt) {
     throw new Error('Restart sign-in from this page. The return could not be verified.');
+  }
+  if (Date.now() - pending.createdAt > 600_000) {
+    throw Object.assign(new Error('Restart sign-in from this page. The sign-in attempt has expired.'), { code: 'provider_login_expired' });
   }
   if (url.searchParams.has('error')) return { authorizationId: pending.authorizationId, error: true, code: null };
   return { ...pending, code: url.searchParams.get('code') };

@@ -9,7 +9,7 @@ let client, configuration, email, createUser = false, busy = false, resendAt = 0
 if (arrivalUrl.searchParams.has('code') || arrivalUrl.searchParams.has('error') || arrivalUrl.searchParams.has('error_code')) history.replaceState(null, '', location.pathname);
 function status(message, error = false) { el('status').textContent = message; el('status').setAttribute('role', error ? 'alert' : 'status'); }
 function show(name, title) {
-  for (const section of ['login', 'code', 'consent', 'manage']) el(section).hidden = section !== name;
+  for (const section of ['login', 'code', 'consent', 'manage', 'expired']) el(section).hidden = section !== name;
   el('title').textContent = title;
   el('title').focus();
 }
@@ -20,6 +20,16 @@ function showLogin() {
   el('mode').textContent = createUser ? 'Sign in' : 'Create an account';
   status('');
 }
+function showExpired() {
+  clearProviderLogin();
+  authorizationId = null; approvedReturn = null; createUser = false;
+  client?.forget();
+  history.replaceState(null, '', '/account');
+  el('intro').hidden = true;
+  show('expired', 'Sign-in timed out');
+  status('');
+}
+el('restart').addEventListener('click', showLogin);
 el('mode').addEventListener('click', () => { createUser = !createUser; showLogin(); });
 async function action(work) {
   if (busy) return;
@@ -27,7 +37,10 @@ async function action(work) {
   document.querySelectorAll('button').forEach((button) => { button.disabled = true; });
   status('Please wait…');
   try { await work(); }
-  catch (error) { status(error.message || 'Unable to continue. Please try again.', true); }
+  catch (error) {
+    if (error.code === 'provider_login_expired') showExpired();
+    else status(error.message || 'Unable to continue. Please try again.', true);
+  }
   finally { busy = false; document.querySelectorAll('button').forEach((button) => { button.disabled = false; }); }
 }
 function returnToHost(value) {
@@ -136,9 +149,8 @@ void action(async () => {
     if (settings.external?.[provider] === true) { el(provider).hidden = false; el('providers').hidden = false; }
   }
   if (arrivalUrl.searchParams.get('error_code') === 'bad_oauth_state') {
-    clearProviderLogin();
-    authorizationId = null;
-    throw new Error('Sign-in timed out. Please try again. To connect an assistant, restart from its app.');
+    showExpired();
+    return;
   }
   if (arrivalUrl.searchParams.has('code') || arrivalUrl.searchParams.has('error')) {
     const pending = consumeProviderReturn(arrivalUrl);

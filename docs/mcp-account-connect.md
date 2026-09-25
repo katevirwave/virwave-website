@@ -4,6 +4,12 @@ Branch: `codex/mcp-account-connect`, based on upstream `96795a7`.
 Companion app branch: `codex/mcp-online-trial`.
 Deployed on 25 September 2026 after Sebastian's approval. Kate's `/breathe` is unchanged. The homepage now exposes Account in its header/footer and Get the app opens the existing App Store listing directly. Source changes remain in this isolated branch and must be integrated before the next routine main-branch deployment. See the companion production rollout record for the current deployment ID.
 
+## Timeout recovery — 25 September follow-up
+
+Sebastian requested a dedicated timeout screen instead of the ordinary welcome/login form with a warning. The account page now hides the form, focuses a "Sign-in timed out" heading, explains what happened, and offers one "Try again" button to return to fresh sign-in. Assistant connections must restart in the originating app. Both Supabase `bad_oauth_state` and a locally expired valid PKCE attempt use this state; expired state is removed and never exchanged or reused. No provider, callback, scope, or shared Auth setting changes.
+
+Google's exact original teal app icon is now verified, published, and visually checked on a fresh chooser. A fresh Google login returned successfully to `/account`. Apple real sign-in remains in user handoff. Website branch was pushed publicly with Sebastian's explicit authorization; no main merge.
+
 ## Small implementation
 
 Latest follow-up: an expired Google provider state was observed returning to the site root. The exact `error_code=bad_oauth_state` fallback now redirects to `/account`, clears stale PKCE state and URL parameters, does not exchange a supplied code, and displays fixed retry instructions. The user's fresh Google sign-in completed successfully. All 15 website tests passed with the browser test enabled; an independent specialist found no blocker. Production deployment `dpl_2JZ1hqVEC2ABcLAY6yCmSg6fBqUo` was verified with a synthetic expiry return. No shared Auth configuration changed for this recovery.
