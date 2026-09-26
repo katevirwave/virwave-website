@@ -32,6 +32,8 @@ test('account page: signup, code, consent, removal, mobile, and no credential pe
   let previousConsent = false;
   let grantsUnavailable = false;
   const id = '11111111-1111-4111-8111-111111111111';
+  let consentClient = { id, name: 'Test host' };
+  let consentScope = 'email';
   try {
     await page.route('**/_supabase.json', (route) => route.fulfill({ json: { url: 'https://xswebtvkueusdaeboizp.supabase.co', anonKey: 'public' } }));
     await page.route('https://xswebtvkueusdaeboizp.supabase.co/**', async (route) => {
@@ -41,7 +43,7 @@ test('account page: signup, code, consent, removal, mobile, and no credential pe
       if (path.endsWith('/settings')) body = { external: { apple: true, google: true } };
       if (path.endsWith('/verify') || path.endsWith('/token')) body = { access_token: 'secret-page-token', user: { id, email: 'a@example.com', is_anonymous: false } };
       if (path.endsWith('/user')) body = { id, email: 'a@example.com', is_anonymous: false };
-      if (path.endsWith(`/authorizations/${id}`)) body = { authorization_id: id, client: { id, name: 'Test host' }, scope: 'email', redirect_uri: 'https://host.example/callback' };
+      if (path.endsWith(`/authorizations/${id}`)) body = { authorization_id: id, client: consentClient, scope: consentScope, redirect_uri: 'https://host.example/callback' };
       if (previousConsent && path.endsWith(`/authorizations/${id}`)) body = { redirect_url: 'https://host.example/callback?code=previous-consent' };
       if (path.endsWith('/consent')) body = { redirect_url: 'https://host.example/callback?code=one-use' };
       if (path.endsWith('/grants')) {
@@ -72,7 +74,9 @@ test('account page: signup, code, consent, removal, mobile, and no credential pe
     await page.getByRole('button', { name: 'Send code', exact: true }).click();
     await page.getByLabel('Email code', { exact: true }).fill('123456');
     await page.getByRole('button', { name: 'Verify code', exact: true }).click();
-    await page.getByRole('heading', { name: 'Connect Test host' }).waitFor();
+    await page.getByRole('heading', { name: 'Connect your assistant' }).waitFor();
+    await page.getByText(/Requesting app: Test host/).waitFor();
+    assert.equal(await page.locator('#connect-client-note').isVisible(), true);
     assert.equal(requests.find((r) => r.path.endsWith('/otp')).body.create_user, true);
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
     assert.equal(await page.evaluate(() => JSON.stringify([localStorage, sessionStorage]).includes('secret-page-token')), false);
@@ -182,6 +186,57 @@ test('account page: signup, code, consent, removal, mobile, and no credential pe
     assert.equal(await page.evaluate(() => sessionStorage.getItem('virwave-connect-pkce')), null);
     await page.getByRole('button', { name: 'Try again', exact: true }).click();
     await page.getByRole('button', { name: 'Continue with Apple', exact: true }).waitFor();
+    // Brand identity follows only exact reviewed IDs, and every scope stays visible.
+    for (const [clientId, expectedName] of [['0836fb27-5e44-4ae9-820f-17ccab4c8bc9', 'Claude'], ['e8accebc-63e7-418d-b5c4-3ccc0854b7e8', 'ChatGPT'], [id, null]]) {
+      consentClient = { id: clientId, name: expectedName ? 'Untrusted supplied name' : 'ChatGPT' };
+      consentScope = expectedName ? 'email offline_access' : 'email offline_access unknown:<img> profile openid';
+      await page.goto(`${origin}/account?authorization_id=${id}`);
+      await page.getByLabel('Email address', { exact: true }).fill('a@example.com');
+      await page.getByRole('button', { name: 'Send code', exact: true }).click();
+      await page.getByLabel('Email code', { exact: true }).fill('123456');
+      await page.getByRole('button', { name: 'Verify code', exact: true }).click();
+      await page.getByRole('heading', { name: expectedName ? `Connect to ${expectedName}` : 'Connect your assistant', exact: true }).waitFor();
+      assert.equal(await page.locator('#connect-title').evaluate((element) => element === document.activeElement), true);
+      const brand = page.locator('#connect-consent-brand img');
+      await brand.evaluate((image) => image.decode());
+      assert.equal(await brand.getAttribute('src'), '/assets/icon.png');
+      assert.ok(await brand.evaluate((image) => image.naturalWidth > 0 && image.getBoundingClientRect().top >= 0 && image.getBoundingClientRect().bottom < innerHeight), 'Logo stays visible when consent heading receives focus');
+      assert.equal(await page.getByLabel('I am 13 or older', { exact: true }).isChecked(), false);
+      assert.equal(await page.getByLabel('I accept the Privacy Policy', { exact: true }).isChecked(), false);
+      await page.getByText('See your email address to identify your VirWave account', { exact: true }).waitFor();
+      await page.getByText('Keep VirWave connected without asking you to sign in each time', { exact: true }).waitFor();
+      await page.getByText(/This connection can also view account details and change profile information/).waitFor();
+      await page.getByText(/Connecting does not sign you up for research or marketing, or change your existing choices/).waitFor();
+      assert.equal(await page.locator('#connect-consent details').count(), 0, 'Residual access warning cannot be hidden in a disclosure');
+      assert.equal(await page.locator('#connect-consent').innerText().then((text) => /Supabase|MCP practice|offline_access/.test(text)), false);
+      if (!expectedName) {
+        await page.getByText(/Requesting app: ChatGPT/).waitFor();
+        await page.getByText('Additional permission requested: unknown:<img>. Only continue if you understand this access.', { exact: true }).waitFor();
+        assert.equal(await page.locator('#connect-scopes img').count(), 0, 'Unknown scope is escaped as text');
+        assert.equal(await page.locator('#connect-scopes li').count(), 5);
+      }
+      for (const width of [320, 390, 768, 1440]) {
+        await page.setViewportSize({ width, height: 900 });
+        assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'Consent fits viewport');
+      }
+      await page.setViewportSize({ width: 320, height: 900 });
+      await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'Consent supports 200% text at 320px');
+      await page.evaluate(() => { document.documentElement.style.fontSize = ''; });
+      if (expectedName === 'ChatGPT' && process.env.VIRWAVE_CONSENT_DESKTOP_SCREENSHOT) {
+        await page.setViewportSize({ width: 1440, height: 1200 });
+        await page.screenshot({ path: process.env.VIRWAVE_CONSENT_DESKTOP_SCREENSHOT, fullPage: true });
+      }
+      if (expectedName === 'Claude' && process.env.VIRWAVE_CONSENT_SCREENSHOT) {
+        await page.setViewportSize({ width: 390, height: 844 });
+        await page.screenshot({ path: process.env.VIRWAVE_CONSENT_SCREENSHOT, fullPage: true });
+      }
+      const beforeDecisions = requests.filter((request) => request.path.endsWith('/consent')).length;
+      await page.getByRole('button', { name: 'Cancel', exact: true }).click();
+      await page.waitForURL('https://host.example/callback?code=one-use');
+      assert.equal(requests.filter((request) => request.path.endsWith('/consent')).length, beforeDecisions + 1);
+      assert.equal(requests.filter((request) => request.path.endsWith('/consent')).at(-1).body.action, 'deny');
+    }
     previousConsent = true;
     await page.goto(`${origin}/account?authorization_id=${id}`);
     await page.getByLabel('Email address', { exact: true }).fill('a@example.com');
@@ -189,6 +244,7 @@ test('account page: signup, code, consent, removal, mobile, and no credential pe
     await page.getByLabel('Email code', { exact: true }).fill('123456');
     await page.getByRole('button', { name: 'Verify code', exact: true }).click();
     await page.getByRole('heading', { name: 'Connect your assistant' }).waitFor();
+    await page.getByText('No permission details were provided. Read the account access information below before continuing.', { exact: true }).waitFor();
     await page.getByLabel('I am 13 or older', { exact: true }).check();
     await page.getByLabel('I accept the Privacy Policy', { exact: true }).check();
     await page.getByRole('button', { name: 'Allow connection', exact: true }).click();

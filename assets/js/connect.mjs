@@ -11,7 +11,11 @@ function status(message, error = false) { el('status').textContent = message; el
 function show(name, title) {
   for (const section of ['login', 'code', 'consent', 'manage', 'expired']) el(section).hidden = section !== name;
   el('title').textContent = title;
-  el('title').focus();
+  document.body.classList.toggle('connect-consent-view', name === 'consent');
+  el('consent-brand').hidden = name !== 'consent';
+  el('title').focus({ preventScroll: name === 'consent' });
+  // Bring the card's brand and heading into view together after code entry.
+  if (name === 'consent') el('main').scrollIntoView({ block: 'start', behavior: 'instant' });
 }
 function showLogin() {
   show('login', createUser ? 'Create your account' : 'Welcome back');
@@ -48,6 +52,38 @@ function returnToHost(value) {
   client.forget();
   location.assign(target.href);
 }
+// Display names are bound to reviewed public client IDs, never a supplied name.
+const assistantNames = new Map([
+  ['0836fb27-5e44-4ae9-820f-17ccab4c8bc9', 'Claude'],
+  ['e8accebc-63e7-418d-b5c4-3ccc0854b7e8', 'ChatGPT'],
+]);
+const permissionDescriptions = new Map([
+  ['email', 'See your email address to identify your VirWave account'],
+  ['offline_access', 'Keep VirWave connected without asking you to sign in each time'],
+  ['openid', 'Identify your signed-in VirWave account'],
+  ['profile', 'See your basic profile information'],
+]);
+function describeConnection(details) {
+  const assistant = assistantNames.get(details.client?.id);
+  el('client-note').hidden = Boolean(assistant);
+  el('client-note').textContent = details.client?.id
+    ? `Requesting app: ${details.client.name || 'Unnamed app'}. We haven’t identified this connection as Claude or ChatGPT. Continue only if you recognise it.`
+    : 'Your assistant’s name and requested permissions were not provided for this existing connection. Continue only if you recognise the request you started.';
+  const scopes = typeof details.scope === 'string' ? details.scope.trim().split(/\s+/).filter(Boolean) : [];
+  el('scopes').replaceChildren();
+  for (const scope of [...new Set(scopes)]) {
+    const item = document.createElement('li');
+    // Preserve unrecognised permissions visibly; never infer a lesser permission.
+    item.textContent = permissionDescriptions.get(scope) || `Additional permission requested: ${scope}. Only continue if you understand this access.`;
+    el('scopes').append(item);
+  }
+  if (!scopes.length) {
+    const item = document.createElement('li');
+    item.textContent = 'No permission details were provided. Read the account access information below before continuing.';
+    el('scopes').append(item);
+  }
+  return assistant ? `Connect to ${assistant}` : 'Connect your assistant';
+}
 async function signedIn(user) {
   el('intro').hidden = true;
   if (authorizationId) {
@@ -58,9 +94,8 @@ async function signedIn(user) {
     if (!approvedReturn && (!details.client?.id || details.authorization_id !== authorizationId)) throw new Error('Restart this connection from your assistant.');
     el('user').textContent = user.email;
     el('age').checked = false; el('privacy').checked = false;
-    el('scopes').textContent = details.scope || 'Email';
-    show('consent', `Connect ${details.client?.name || 'your assistant'}`);
-    status('Read the access details before you continue.');
+    show('consent', describeConnection(details));
+    status('');
   } else {
     el('account-email').textContent = user.email;
     show('manage', 'Your account');

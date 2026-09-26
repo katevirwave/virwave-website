@@ -14,6 +14,7 @@
 <body class="connect-page">
   <header class="connect-brand"><a href="/" aria-label="VirWave home"><img src="/assets/icon.png" width="48" height="48" alt="">VirWave</a></header>
   <main class="connect-panel" id="connect-main">
+    <div id="connect-consent-brand" class="connect-consent-brand" hidden><img src="/assets/icon.png" width="48" height="48" alt=""><span>VirWave</span></div>
     <h1 id="connect-title" tabindex="-1">Welcome back</h1>
     <p id="connect-intro">One account for your VirWave practice.</p>
     <p id="connect-status" role="status" aria-live="polite"></p>
@@ -47,16 +48,28 @@
       </form>
       <div class="connect-actions"><button id="connect-resend" type="button">Resend code</button><button id="connect-change" type="button">Change email</button></div>
     </section>
-    <section id="connect-consent" hidden aria-label="Connection permissions">
-      <p>Signed in as <span id="connect-user"></span>.</p>
-      <ul><li>Prepare the breathing sessions supported by VirWave.</li><li>Save played sessions to your account, marked as MCP practice.</li></ul>
-      <p class="connect-small">Requested sign-in information: <span id="connect-scopes"></span>.</p>
-      <p>This connection uses a Supabase account credential. It can also access account details and may allow account changes. Only connect an assistant you trust.</p>
-      <p>Connecting does not give research or advertising consent. You can remove the connection from this page at any time.</p>
-      <label class="connect-check"><input id="connect-age" type="checkbox"> I am 13 or older</label>
-      <label class="connect-check"><input id="connect-privacy" type="checkbox"> I accept the Privacy Policy</label>
-      <p class="connect-small"><a href="/privacy/" target="_blank" rel="noopener noreferrer">Read the Privacy Policy</a>. These declarations are saved to your account, as in the app.</p>
-      <div class="connect-actions"><button id="connect-allow" type="button" class="connect-primary">Allow connection</button><button id="connect-deny" type="button">Cancel connection</button></div>
+    <section id="connect-consent" class="connect-consent" hidden aria-label="Connection permissions">
+      <p class="connect-consent-account">Using <span id="connect-user"></span></p>
+      <p id="connect-client-note" class="connect-consent-secondary" hidden></p>
+      <div class="connect-consent-purpose">
+        <h2>Your breathing practice, in your chat.</h2>
+        <ul><li><strong>Prepare a breathing session</strong><span>Choose from the sessions supported by VirWave.</span></li><li><strong>Save the time you practise</strong><span>Keep played sessions in your VirWave account.</span></li></ul>
+      </div>
+      <section class="connect-consent-permissions" aria-labelledby="connect-permissions-title">
+        <h2 id="connect-permissions-title">What you’re allowing</h2>
+        <ul id="connect-scopes"></ul>
+      </section>
+      <aside class="connect-consent-warning" aria-labelledby="connect-access-title">
+        <h2 id="connect-access-title">Account access</h2>
+        <p>This connection can also view account details and change profile information. Depending on your account’s security settings, it may also be able to change sign-in details. Only connect an assistant you trust.</p>
+      </aside>
+      <p class="connect-consent-secondary">Connecting does not sign you up for research or marketing, or change your existing choices. Disconnect at any time from <a href="/account" target="_blank" rel="noopener noreferrer">your VirWave account</a>.</p>
+      <div class="connect-consent-declarations">
+        <label class="connect-check"><input id="connect-age" type="checkbox"> <span>I am 13 or older</span></label>
+        <label class="connect-check"><input id="connect-privacy" type="checkbox"> <span>I accept the Privacy Policy</span></label>
+        <p class="connect-consent-secondary"><a href="/privacy/" target="_blank" rel="noopener noreferrer">Read the Privacy Policy</a>. These choices are saved to your account.</p>
+      </div>
+      <div class="connect-actions"><button id="connect-allow" type="button" class="connect-primary">Allow connection</button><button id="connect-deny" type="button">Cancel</button></div>
     </section>
     <section id="connect-manage" hidden aria-label="Your account">
       <p id="connect-account-email" class="connect-account-email"></p>

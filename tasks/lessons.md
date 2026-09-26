@@ -112,3 +112,7 @@ Show expired sign-in as its own focused recovery state, with a clear reason and 
 ## 2026-09-26 — Account actions should show the product and lead to setup
 
 Use existing breathing artwork to make the app download action tangible. Assistant setup belongs in a self-service guide with host-specific next steps, not an email link. Distinguish a verified public install destination from a private test connection; show accurate preview availability until installation has been proved.
+
+## 2026-09-27 — Consent must read like the product, not its protocol
+
+Keep the original logo inside the consent card and preserve it when focus moves to the heading. Identify known assistants by exact reviewed client IDs, translate known scopes into plain language, and retain honest unknown-permission fallbacks. Do not trade readable account-access warnings or explicit unchecked declarations for a cleaner layout. Research and advertising choices belong in their own account flow; never invent consent storage or fold those choices into assistant authorization.
