@@ -61,13 +61,16 @@
     <section id="connect-manage" hidden aria-label="Your account">
       <p id="connect-account-email" class="connect-account-email"></p>
       <p class="connect-account-intro">Your next breath, in the app or your assistant.</p>
-      <a class="connect-launch connect-primary" href="https://apps.apple.com/app/id6738364276">Get the app</a>
-      <details id="connect-setup" class="connect-setup">
-        <summary>Use with an assistant</summary>
-        <p>Account-linked connections are currently in testing.</p>
-        <p class="connect-small">If you have a VirWave connector, start the connection in your assistant. Sign in with this account, approve access, and return to your chat.</p>
-        <a href="mailto:info@virwave.com?subject=VirWave%20assistant%20setup">Get setup help</a>
-      </details>
+      <a class="connect-app-card" href="https://apps.apple.com/app/id6738364276" aria-label="Get the app">
+        <span class="connect-app-copy"><span class="connect-eyebrow">A little space to breathe</span><strong>Make a moment<br>your own.</strong><span class="connect-app-caption">Your breathing practice, always with you.</span><span class="connect-app-action">Get the app <span aria-hidden="true">↗</span></span></span>
+        <span class="connect-app-art" aria-hidden="true"><img src="/assets/img/app-screens/2.png" width="1242" height="2688" alt="" loading="lazy" decoding="async"></span>
+      </a>
+      <section id="connect-setup" class="connect-assistants" aria-labelledby="connect-assistants-title">
+        <h2 id="connect-assistants-title">A breathing break, right in your chat.</h2>
+        <p class="connect-small">Choose your assistant to see how to connect VirWave.</p>
+        <div class="connect-assistant-links"><a href="/assistants#chatgpt"><span>ChatGPT</span><span aria-hidden="true">↗</span></a><a href="/assistants#claude"><span>Claude</span><span aria-hidden="true">↗</span></a></div>
+        <p class="connect-small connect-preview-note">Account connections are in preview. See the guide for availability.</p>
+      </section>
       <section class="connect-connections" aria-labelledby="connect-connections-title">
         <h2 id="connect-connections-title" tabindex="-1">Connected assistants</h2>
         <p id="connect-grants-status" class="connect-small" role="status" aria-live="polite"></p>

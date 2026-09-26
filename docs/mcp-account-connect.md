@@ -64,3 +64,9 @@ The page reuses the site's navy/mint design, exact app icon and official provide
 The website's existing `/assets/icon.png` is byte-for-byte identical to `virwave_v3/assets/icon.png`. The connected MCP advertises this VirWave app icon; no replacement artwork was generated.
 
 Routing uses [Vercel's existing external rewrite support](https://vercel.com/docs/routing/rewrites). It does not replace authorization in Supabase or guarantee that the deployed route has been tested.
+
+## 26 September — Account next steps candidate
+
+The signed-in page now uses the existing breathing phone artwork in its App Store card and offers ChatGPT/Claude guide links. `/assistants` explains the connection flow, preview availability, server address, a first breathing prompt, and removal of access. The assistant setup email CTA is removed. The new private ChatGPT connection is registered, but no public installation link is advertised. Claude account testing remains deferred. Auth runtime, consent, routing, and deployment settings are unchanged.
+
+All 15 website tests pass with zero skips, including the local Chromium account flow, artwork loading, guide links, 320–1440 widths, 200% text, and existing authentication/recovery checks. Research and scope: [assistant onboarding](2026-09-26-assistant-onboarding.md). These presentation changes are reviewed source awaiting production promotion; publication is not claimed here.

@@ -96,12 +96,16 @@ test('account page: signup, code, consent, removal, mobile, and no credential pe
     await page.getByRole('heading', { name: 'Your account', exact: true }).waitFor();
     assert.equal(await page.getByRole('region', { name: 'Your account', exact: true }).getByText('a@example.com', { exact: true }).isVisible(), true);
     assert.equal(await page.getByRole('link', { name: 'Get the app', exact: true }).getAttribute('href'), 'https://apps.apple.com/app/id6738364276');
-    await page.getByText('Use with an assistant', { exact: true }).click();
-    await page.getByText('Account-linked connections are currently in testing.', { exact: true }).waitFor();
+    assert.equal(await page.getByRole('link', { name: 'ChatGPT', exact: true }).getAttribute('href'), '/assistants#chatgpt');
+    assert.equal(await page.getByRole('link', { name: 'Claude', exact: true }).getAttribute('href'), '/assistants#claude');
+    assert.equal(await page.locator('#connect-setup a[href^="mailto:"]').count(), 0);
+    await page.locator('.connect-app-art img').evaluate((image) => image.decode());
+    assert.ok(await page.locator('.connect-app-art img').evaluate((image) => image.naturalWidth > 0));
     for (const width of [320, 768, 1440]) {
       await page.setViewportSize({ width, height: 900 });
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
     }
+    await page.setViewportSize({ width: 390, height: 844 });
     if (process.env.VIRWAVE_ACCOUNT_SCREENSHOT) await page.screenshot({ path: process.env.VIRWAVE_ACCOUNT_SCREENSHOT, fullPage: true });
     await page.setViewportSize({ width: 375, height: 812 });
     await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
@@ -194,6 +198,23 @@ test('account page: signup, code, consent, removal, mobile, and no credential pe
     await page.getByRole('navigation', { name: 'Main navigation', exact: true }).getByRole('link', { name: 'Account', exact: true }).click();
     await page.waitForURL(`${origin}/account`);
     await page.getByRole('heading', { name: 'Welcome back', exact: true }).waitFor();
+    await page.goto(`${origin}/assistants#chatgpt`);
+    await page.getByRole('heading', { name: 'VirWave + ChatGPT', exact: true }).waitFor();
+    assert.equal(await page.locator('script').count(), 0, 'Guide must not load account authentication runtime');
+    assert.equal(await page.locator('a[href^="mailto:"]').count(), 0, 'Assistant setup must not send users to email');
+    assert.equal(await page.getByRole('link', { name: 'Open ChatGPT apps', exact: true }).getAttribute('href'), 'https://chatgpt.com/plugins');
+    await page.getByText('https://virwave.com/mcp', { exact: true }).waitFor();
+    for (const width of [320, 390, 768, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'Guide must fit narrow screens');
+    }
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'Guide must support large text');
+    await page.evaluate(() => { document.documentElement.style.fontSize = ''; });
+    await page.getByRole('link', { name: 'Claude', exact: true }).click();
+    assert.equal(new URL(page.url()).hash, '#claude');
+    if (process.env.VIRWAVE_GUIDE_SCREENSHOT) await page.screenshot({ path: process.env.VIRWAVE_GUIDE_SCREENSHOT, fullPage: true });
     await page.goto(`${origin}/`);
     const appLink = page.getByRole('link', { name: 'Get the app', exact: true });
     assert.equal(await appLink.getAttribute('href'), 'https://apps.apple.com/app/id6738364276');

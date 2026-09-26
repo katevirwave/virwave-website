@@ -50,10 +50,42 @@
 .connect-grants li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--sp-4); align-items: center; margin: var(--sp-6) 0; }
 .connect-panel .connect-account-email { text-align: center; overflow-wrap: anywhere; color: var(--text-muted); font-size: var(--text-sm); margin-top: var(--sp-2); }
 .connect-account-intro { text-align: center; }
-.connect-panel .connect-launch { display: flex; align-items: center; justify-content: center; min-height: 48px; padding: var(--sp-3) var(--sp-4); margin-top: var(--sp-6); border-radius: var(--radius); text-decoration: none; }
-.connect-setup { margin-top: var(--sp-3); }
-.connect-setup summary { display: list-item; padding: var(--sp-3) var(--sp-4); min-height: 48px; cursor: pointer; color: var(--mint); border: 1px solid var(--border); border-radius: var(--radius); }
-.connect-setup > a { display: inline-flex; align-items: center; min-height: 48px; }
+.connect-app-card { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 40%; isolation: isolate; overflow: hidden; min-height: 13rem; margin-top: var(--sp-6); border: 1px solid var(--teal); border-radius: var(--radius-lg); background: linear-gradient(125deg, var(--navy-warm), var(--navy-deep)); text-decoration: none; transition: border-color var(--dur-snappy), box-shadow var(--dur-snappy); }
+.connect-app-card:hover { border-color: var(--mint); box-shadow: 0 0 24px var(--border); }
+.connect-app-copy { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; padding: var(--sp-6) 0 var(--sp-6) var(--sp-6); }
+.connect-eyebrow { font-size: .625rem; line-height: 1.5; letter-spacing: .08em; text-transform: uppercase; color: var(--mint); }
+.connect-app-copy strong { margin-top: var(--sp-3); font-size: var(--text-2xl); font-weight: 600; line-height: 1.15; letter-spacing: -.025em; color: var(--white); }
+.connect-app-caption { margin-top: var(--sp-3); color: var(--text); font-size: var(--text-xs); line-height: 1.5; }
+.connect-app-action { color: var(--mint); display: inline-flex; gap: var(--sp-3); align-items: center; min-height: 48px; margin-top: var(--sp-3); font-size: var(--text-sm); font-weight: 600; }
+.connect-app-art { position: relative; align-self: stretch; overflow: hidden; }
+.connect-app-art img { position: absolute; width: 175%; max-width: none; height: 100%; object-fit: cover; object-position: center; left: -25%; opacity: .9; mask-image: linear-gradient(to right, transparent, black 28%); }
+.connect-assistants { margin-top: var(--sp-8); }
+.connect-assistants h2 { color: var(--white); font-size: var(--text-base); font-weight: 600; line-height: 1.4; }
+.connect-panel .connect-assistants p { margin-top: var(--sp-2); }
+.connect-assistant-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-3); margin-top: var(--sp-4); }
+.connect-assistant-links a { display: flex; justify-content: space-between; align-items: center; gap: var(--sp-2); min-height: 56px; padding: var(--sp-3); border: 1px solid var(--border); border-radius: var(--radius); background: var(--navy-deep); color: var(--white); text-decoration: none; transition: border-color var(--dur-snappy); }
+.connect-assistant-links a:hover { border-color: var(--mint); }
+.connect-assistant-links a > :last-child { color: var(--mint); }
+.connect-panel .connect-preview-note { color: var(--text-muted); font-size: var(--text-xs); }
+.assistant-guide { max-width: 46rem; margin: 0 auto; }
+.assistant-guide-header { text-align: center; padding: var(--sp-4) var(--sp-4) var(--sp-8); }
+.assistant-guide-header h1 { margin-top: var(--sp-3); font-size: clamp(2rem, 5vw, 3rem); line-height: 1.12; letter-spacing: -.03em; font-weight: 600; color: var(--white); }
+.assistant-guide-header p { margin: var(--sp-4) auto 0; max-width: 34rem; }
+.assistant-guide-header nav { display: flex; justify-content: center; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-6); }
+.assistant-guide-header nav a { display: flex; align-items: center; min-height: 48px; padding: var(--sp-2) var(--sp-6); border: 1px solid var(--border); border-radius: var(--radius); text-decoration: none; }
+.assistant-guide-card { scroll-margin-top: var(--sp-6); margin-top: var(--sp-4); padding: var(--sp-8); border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--bg-surface); }
+.assistant-guide-card h2 { color: var(--white); font-weight: 600; font-size: var(--text-2xl); }
+.assistant-guide-card h3 { font-weight: 600; font-size: var(--text-base); margin-top: var(--sp-6); }
+.assistant-guide-card p { margin-top: var(--sp-3); }
+.assistant-guide-card ol { padding-left: var(--sp-6); margin-top: var(--sp-6); }
+.assistant-guide-card li + li { margin-top: var(--sp-3); }
+.assistant-guide-status { display: inline-block; color: var(--mint); font-size: var(--text-xs); text-transform: uppercase; letter-spacing: .08em; margin-bottom: var(--sp-3); }
+.assistant-guide-actions { display: flex; flex-wrap: wrap; gap: var(--sp-4); margin-top: var(--sp-4); }
+.assistant-guide-actions a { display: inline-flex; align-items: center; min-height: 48px; }
+.assistant-guide-url { display: block; margin-top: var(--sp-3); padding: var(--sp-4); border: 1px solid var(--border); border-radius: var(--radius); background: var(--navy-deep); color: var(--mint); font-family: var(--font-mono); overflow-wrap: anywhere; user-select: all; }
+.assistant-guide-quote { margin-top: var(--sp-4); padding-left: var(--sp-4); border-left: 2px solid var(--mint); font-size: var(--text-lg); color: var(--white); }
+@media (max-width: 360px) { .connect-app-card { grid-template-columns: minmax(0, 1fr) 32%; } .connect-app-copy { padding-left: var(--sp-4); } .connect-app-copy strong { font-size: var(--text-xl); } .connect-assistant-links { grid-template-columns: 1fr; } .assistant-guide-card { padding: var(--sp-6); } }
+@media (prefers-reduced-motion: reduce) { .connect-app-card, .connect-assistant-links a { transition: none; } }
 .connect-connections { border-top: 1px solid var(--border); margin-top: var(--sp-8); padding-top: var(--sp-6); }
 .connect-connections h2 { font-size: var(--text-base); font-weight: 600; }
 .connect-connections .connect-small { color: var(--text-muted); }

@@ -108,3 +108,7 @@ addresses in CTA copy, deep links, `.well-known` files.
 ## 2026-09-25 — Expired sign-in recovery
 
 Show expired sign-in as its own focused recovery state, with a clear reason and one fresh retry action. Clear expired PKCE and assistant authorization context; never exchange an expired code or reuse an old assistant connection. Preserve provider callbacks in their original tab.
+
+## 2026-09-26 — Account actions should show the product and lead to setup
+
+Use existing breathing artwork to make the app download action tangible. Assistant setup belongs in a self-service guide with host-specific next steps, not an email link. Distinguish a verified public install destination from a private test connection; show accurate preview availability until installation has been proved.

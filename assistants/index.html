@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="description" content="Bring a VirWave breathing break into your chat. Connection guides for ChatGPT and Claude.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'">
+  <title>VirWave in your assistant — Connection guide</title>
+  <link rel="icon" href="/assets/favicon.png">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body class="connect-page">
+  <header class="connect-brand"><a href="/" aria-label="VirWave home"><img src="/assets/icon.png" width="48" height="48" alt="">VirWave</a></header>
+  <main class="assistant-guide">
+    <header class="assistant-guide-header">
+      <span class="connect-eyebrow">A pause in your conversation</span>
+      <h1>Your next breath.<br>Right here in your chat.</h1>
+      <p>VirWave brings guided breathing into your assistant. Choose your app below for setup and current availability.</p>
+      <nav aria-label="Choose your assistant"><a href="#chatgpt">ChatGPT</a><a href="#claude">Claude</a></nav>
+    </header>
+    <section class="assistant-guide-card" id="chatgpt" aria-labelledby="chatgpt-title">
+      <span class="assistant-guide-status">Connection preview</span>
+      <h2 id="chatgpt-title">VirWave + ChatGPT</h2>
+      <p>We’re finishing setup for the account-connected version of VirWave. A public install link is not available yet.</p>
+      <p>If you already use VirWave Breathe, you can keep using it. That existing app is separate from this new account connection.</p>
+      <h3>How connecting will work</h3>
+      <ol><li>Open VirWave from ChatGPT’s apps or plugins and choose to connect.</li><li>Sign in to VirWave, review the requested access, and approve the connection.</li><li>Return to your chat and ask for a breathing break.</li></ol>
+      <div class="assistant-guide-actions"><a href="https://chatgpt.com/plugins" target="_blank" rel="noopener noreferrer">Open ChatGPT apps <span aria-hidden="true">↗</span></a></div>
+    </section>
+    <section class="assistant-guide-card" id="claude" aria-labelledby="claude-title">
+      <span class="assistant-guide-status">Connection preview</span>
+      <h2 id="claude-title">VirWave + Claude</h2>
+      <p>Account-connected setup is in preview. If you have a test invitation, follow these steps.</p>
+      <ol><li>In Claude, open <strong>Settings → Connectors</strong>. Choose to add a custom connector if your account has that option.</li><li>Use the VirWave server address below. Preview testers may also need the client settings supplied with their invitation.</li><li>Sign in to VirWave and approve access. Return to Claude and enable the connector in your chat.</li></ol>
+      <div class="assistant-guide-actions"><a href="https://claude.ai/" target="_blank" rel="noopener noreferrer">Open Claude <span aria-hidden="true">↗</span></a><a href="https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp" target="_blank" rel="noopener noreferrer">Claude’s connector guide</a></div>
+    </section>
+    <section class="assistant-guide-card" aria-labelledby="server-title">
+      <h2 id="server-title">Connecting a custom assistant?</h2>
+      <p>This is VirWave’s account-connected MCP server address. Your assistant must support remote connections and VirWave sign-in. An address alone does not complete setup.</p>
+      <code class="assistant-guide-url">https://virwave.com/mcp</code>
+      <p>Preview access is still being tested. If your assistant asks for a client ID you haven’t been given, setup is not available for your account yet.</p>
+    </section>
+    <section class="assistant-guide-card" aria-labelledby="first-breath-title">
+      <h2 id="first-breath-title">Once you’re connected</h2>
+      <p>Try a simple request:</p>
+      <blockquote class="assistant-guide-quote">“Start a two-minute breathing break with VirWave.”</blockquote>
+      <p>When the breathing player appears, press Begin to start. Account-connected sessions can be saved to your VirWave practice history.</p>
+      <h3>You’re in control</h3>
+      <p>Review the permissions before connecting. You can remove an assistant’s access from <a href="/account">your VirWave account</a>. Your app access and saved sessions stay.</p>
+    </section>
+  </main>
+  <footer class="connect-footer"><a href="/account">Your account</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a></footer>
+</body>
+</html>
