@@ -80,3 +80,13 @@ The GitHub commit status tied that source to READY preview `dpl_GWvLTYedRT1BtvhH
 The original logo now remains inside the consent card when its heading receives focus. Both exact registered ChatGPT and Claude clients get a clear heading and readable purpose/permission rows. Unknown clients and permissions retain truthful fallbacks. The independently reviewed account-access warning remains visible, and age/privacy declarations remain unchecked. Research/marketing preferences are not added or changed. [Design and test details](2026-09-27-consent-design.md) records the implementation-time checks.
 
 All **15 website tests passed, zero skipped**, after the final copy correction. Independent authentication/copy review found no blockers; the parent visually checked synthetic mobile and desktop consent screens. No real Kate/Claude login or new grant was performed for this release. The temporary loopback fixture was stopped after review. This consent presentation release is not proof of a public assistant listing or Claude account acceptance.
+
+### Consent provider icons (2026-09-27)
+
+The consent header identifies the destination with an unchanged official provider icon beside the VirWave identity and a neutral link symbol. Provider icons use the same reviewed client-ID mapping as the heading; unknown clients receive no provider icon. These identify the requested connection, not a commercial partnership.
+
+Asset provenance:
+- `assets/img/partners/claude-icon.svg`: unchanged `ClaudeIcon-Rounded.svg` from the official [Anthropic press kit](https://www.anthropic.com/press-kit), downloaded 2026-09-27.
+- `assets/img/partners/chatgpt-icon.webp`: unchanged image linked from [OpenAI’s official ChatGPT icon help page](https://help.openai.com/en/articles/7905742-what-does-the-official-chatgpt-ios-app-icon-look-like), downloaded 2026-09-27. ChatGPT and its logo belong to OpenAI; follow [OpenAI brand guidance](https://openai.com/brand/). Claude and its logo belong to Anthropic.
+
+No external image requests, consent changes, or new authentication settings.

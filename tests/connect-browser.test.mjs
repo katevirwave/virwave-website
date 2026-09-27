@@ -19,7 +19,7 @@ test('account page: signup, code, consent, removal, mobile, and no credential pe
     const pathname = decodeURIComponent(rewrite?.destination || requestUrl.pathname);
     const file = resolve(root, '.' + (pathname.endsWith('/') ? pathname + 'index.html' : extname(pathname) ? pathname : pathname + '/index.html'));
     if (!file.startsWith(root)) { res.writeHead(403).end(); return; }
-    try { res.setHeader('Content-Type', ({ '.html': 'text/html', '.mjs': 'text/javascript', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.avif': 'image/avif' })[extname(file)] || 'application/octet-stream'); res.end(await readFile(file)); }
+    try { res.setHeader('Content-Type', ({ '.html': 'text/html', '.mjs': 'text/javascript', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.avif': 'image/avif', '.webp': 'image/webp' })[extname(file)] || 'application/octet-stream'); res.end(await readFile(file)); }
     catch { res.writeHead(404).end(); }
   });
   await new Promise((done) => server.listen(0, '127.0.0.1', done));
@@ -197,9 +197,16 @@ test('account page: signup, code, consent, removal, mobile, and no credential pe
       await page.getByRole('button', { name: 'Verify code', exact: true }).click();
       await page.getByRole('heading', { name: expectedName ? `Connect to ${expectedName}` : 'Connect your assistant', exact: true }).waitFor();
       assert.equal(await page.locator('#connect-title').evaluate((element) => element === document.activeElement), true);
-      const brand = page.locator('#connect-consent-brand img');
+      const brand = page.locator('#connect-consent-brand > img');
       await brand.evaluate((image) => image.decode());
       assert.equal(await brand.getAttribute('src'), '/assets/icon.png');
+      assert.equal(await page.locator('#connect-assistant-brand').isVisible(), Boolean(expectedName));
+      if (expectedName) {
+        const providerIcon = page.locator('#connect-assistant-icon');
+        assert.equal(await providerIcon.getAttribute('src'), expectedName === 'Claude' ? '/assets/img/partners/claude-icon.svg' : '/assets/img/partners/chatgpt-icon.webp');
+        await providerIcon.evaluate((image) => image.decode());
+        assert.ok(await providerIcon.evaluate((image) => image.naturalWidth > 0));
+      } else assert.equal(await page.locator('#connect-assistant-icon').getAttribute('src'), null);
       assert.ok(await brand.evaluate((image) => image.naturalWidth > 0 && image.getBoundingClientRect().top >= 0 && image.getBoundingClientRect().bottom < innerHeight), 'Logo stays visible when consent heading receives focus');
       assert.equal(await page.getByLabel('I am 13 or older', { exact: true }).isChecked(), false);
       assert.equal(await page.getByLabel('I accept the Privacy Policy', { exact: true }).isChecked(), false);
@@ -227,9 +234,9 @@ test('account page: signup, code, consent, removal, mobile, and no credential pe
         await page.setViewportSize({ width: 1440, height: 1200 });
         await page.screenshot({ path: process.env.VIRWAVE_CONSENT_DESKTOP_SCREENSHOT, fullPage: true });
       }
-      if (expectedName === 'Claude' && process.env.VIRWAVE_CONSENT_SCREENSHOT) {
+      if (expectedName && process.env.VIRWAVE_CONSENT_SCREENSHOT) {
         await page.setViewportSize({ width: 390, height: 844 });
-        await page.screenshot({ path: process.env.VIRWAVE_CONSENT_SCREENSHOT, fullPage: true });
+        await page.screenshot({ path: process.env.VIRWAVE_CONSENT_SCREENSHOT.replace('.png', `-${expectedName.toLowerCase()}.png`), fullPage: true });
       }
       const beforeDecisions = requests.filter((request) => request.path.endsWith('/consent')).length;
       await page.getByRole('button', { name: 'Cancel', exact: true }).click();

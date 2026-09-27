@@ -65,6 +65,11 @@ const permissionDescriptions = new Map([
 ]);
 function describeConnection(details) {
   const assistant = assistantNames.get(details.client?.id);
+  // Only reviewed client IDs may display a provider's official icon.
+  el('assistant-brand').hidden = !assistant;
+  if (assistant) el('assistant-icon').src = assistant === 'Claude'
+    ? '/assets/img/partners/claude-icon.svg' : '/assets/img/partners/chatgpt-icon.webp';
+  else el('assistant-icon').removeAttribute('src');
   el('client-note').hidden = Boolean(assistant);
   el('client-note').textContent = details.client?.id
     ? `Requesting app: ${details.client.name || 'Unnamed app'}. We haven’t identified this connection as Claude or ChatGPT. Continue only if you recognise it.`

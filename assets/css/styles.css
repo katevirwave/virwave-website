@@ -47,8 +47,11 @@
 .connect-consent-view > .connect-brand { display: none; }
 .connect-consent-view .connect-panel { max-width: 36rem; scroll-margin-top: var(--sp-4); }
 .connect-consent-view .connect-panel h1 { text-align: left; font-size: clamp(2rem, 5vw, 2.5rem); margin-top: var(--sp-6); }
-.connect-consent-brand { display: flex; align-items: center; gap: var(--sp-3); color: var(--mint); font-size: 1.25rem; font-weight: 600; }
+.connect-consent-brand { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-3); color: var(--mint); font-size: 1.25rem; font-weight: 600; }
 .connect-consent-brand img { flex: none; width: 48px; height: 48px; border-radius: var(--radius-lg); }
+.connect-assistant-brand { display: inline-flex; align-items: center; gap: var(--sp-4); margin-left: var(--sp-1); }
+.connect-brand-link { flex: none; color: var(--text-muted); }
+.connect-assistant-brand img { width: 40px; height: 40px; border-radius: var(--radius); object-fit: contain; }
 .connect-consent { font-size: 1rem; line-height: 1.6; overflow-wrap: anywhere; }
 .connect-panel .connect-consent-account { margin-top: var(--sp-2); color: var(--text); font-size: .9375rem; }
 .connect-consent h2 { color: var(--white); font-size: 1rem; font-weight: 600; line-height: 1.5; }
