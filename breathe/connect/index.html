@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="base-path" content="/">
+
+  <title>Add VirWave Breathe to Claude — VirWave</title>
+  <meta name="description" content="Add VirWave Breathe to Claude in one minute: calm, animated breathing sessions in your chat. Free, no account.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="/assets/favicon.png" type="image/png">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/assets/css/styles.css">
+
+  <style>
+    /* Light page: off-white with VirWave navy text and teal/mint accents. */
+    body.vw-light { background: #F7F6F2; color: #0D2137; }
+    body.vw-light .legal-page, body.vw-light .legal-page p, body.vw-light .legal-page li { color: #0D2137; }
+    body.vw-light .legal-page h1, body.vw-light .legal-page h2, body.vw-light .legal-page h3 { color: #0D2137; }
+    body.vw-light .legal-page .legal-meta { color: rgba(13, 33, 55, 0.7); }
+    body.vw-light .legal-page a { color: #0A7EA4; }
+    body.vw-light .legal-page hr { border-color: rgba(13, 33, 55, 0.12); }
+    .vw-card { background: #FFFFFF; border: 1px solid rgba(13, 33, 55, 0.10); border-radius: 16px; padding: 24px; margin: 24px 0; box-shadow: 0 1px 2px rgba(13, 33, 55, 0.04); }
+    .vw-url { display: flex; gap: 8px; align-items: stretch; flex-wrap: wrap; }
+    .vw-url code { flex: 1 1 260px; font-size: 15px; padding: 12px 14px; border-radius: 10px; background: #EEF7F9; color: #0D2137; word-break: break-all; border: 1px solid rgba(10, 126, 164, 0.25); }
+    .vw-btn { min-height: 48px; padding: 0 20px; border-radius: 999px; border: 0; background: #0A7EA4; color: #FFFFFF; font-weight: 600; font-size: 15px; cursor: pointer; }
+    .vw-btn:focus-visible { outline: 3px solid #8CEBAA; outline-offset: 2px; }
+    .vw-steps li { margin-bottom: 10px; }
+    .vw-note { background: #EFFAF3; border-left: 4px solid #8CEBAA; padding: 12px 16px; border-radius: 8px; }
+    .vw-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 15px; }
+    .vw-table th, .vw-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid rgba(13, 33, 55, 0.12); vertical-align: top; }
+    .vw-table th { background: #EEF7F9; }
+  </style>
+</head>
+<body class="vw-light">
+
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <!-- ========== Navigation ========== -->
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo" aria-label="VirWave home">
+        <img src="/assets/logo_virwave.avif" alt="" width="32" height="32">
+        VirWave
+      </a>
+
+      <button id="nav-toggle" class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+
+      <ul id="nav-links" class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/archetypes/">World</a></li>
+        <li data-nav="blog"><a href="/blog/">Blog</a></li>
+        <li data-nav="events"><a href="/events/">Events</a></li>
+        <li data-nav="products"><a href="/products/">Products</a></li>
+        <li><a href="/#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <!-- ========== Add VirWave Breathe ========== -->
+  <main id="main-content" class="legal-page">
+    <div class="container" style="max-width: 720px;">
+
+      <h1>Add VirWave Breathe to Claude</h1>
+      <p class="legal-meta">Free &middot; No account &middot; No personal data stored</p>
+
+      <p>Ask for a breathing break and a calm, animated VirWave session appears right in your chat. It waits for you to press Begin, paces your breath, and works on the web, the desktop app, and your phone.</p>
+
+      <div class="vw-card" aria-labelledby="vw-url-label">
+        <p id="vw-url-label"><strong>Your connector address</strong></p>
+        <div class="vw-url">
+          <code id="vw-endpoint">https://xswebtvkueusdaeboizp.supabase.co/functions/v1/breathe</code>
+          <button type="button" class="vw-btn" id="vw-copy" aria-describedby="vw-copy-status">Copy address</button>
+        </div>
+        <p id="vw-copy-status" role="status" aria-live="polite" style="margin: 8px 0 0; min-height: 1.4em;"></p>
+      </div>
+
+      <h2>Add it in one minute</h2>
+      <ol class="vw-steps">
+        <li>Open <a href="https://claude.ai/customize" target="_blank" rel="noopener">Claude<span class="sr-only"> (opens in new tab)</span></a> on the web or in the desktop app, and go to <strong>Customize &rarr; Connectors</strong>.</li>
+        <li>Select <strong>+</strong>, then <strong>Add custom connector</strong>.</li>
+        <li>Name it <strong>VirWave Breathe</strong>, paste the address above, and select <strong>Add</strong>. Leave the OAuth settings empty.</li>
+        <li>In any chat, say <em>&ldquo;Let&rsquo;s breathe&rdquo;</em> or <em>&ldquo;I need a breathing break&rdquo;</em>. The first time, Claude asks you to connect or allow VirWave Breathe.</li>
+      </ol>
+      <p>Once it&rsquo;s added, it&rsquo;s there on your phone too: open the Claude app and ask for a breathing break.</p>
+      <p class="vw-note">On Claude&rsquo;s free plan you can add one custom connector. Pro, Max, Team, and Enterprise can add more.</p>
+
+      <h2>Using ChatGPT?</h2>
+      <p>VirWave Breathe for ChatGPT is on its way. In the meantime, the <a id="vw-app-link" href="https://virwave.com/ref">VirWave app</a> has every breathing session, on iPhone and Android.</p>
+
+      <h2>Your privacy</h2>
+      <p>VirWave Breathe needs no account and stores no personal data. We count anonymous usage, such as which assistant connected and which session ran, and never your IP address, device, identity, or how you said you feel. Read the <a href="/privacy/#breathe">privacy policy</a>.</p>
+      <p>Sessions are for relaxing and resetting. They are not medical care. If you feel lightheaded, stop and breathe normally.</p>
+
+    </div>
+  </main>
+
+  <!-- ========== Footer ========== -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copy">&copy; 2026 VirWave OAM. All rights reserved.</p>
+      <nav aria-label="Footer">
+      <ul class="footer-links">
+        <li><a href="/privacy/">Privacy Policy</a></li>
+        <li><a href="/terms/">Terms of Service</a></li>
+        <li data-nav="blog"><a href="/blog/">Blog</a></li>
+        <li><a href="/">Home</a></li>
+      </ul>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var ENDPOINT = 'https://xswebtvkueusdaeboizp.supabase.co/functions/v1/breathe';
+      var params = new URLSearchParams(window.location.search);
+      var raw = (params.get('ref') || params.get('code') || '').trim().toUpperCase();
+      var code = /^[A-Z0-9]{3,20}$/.test(raw) ? raw : '';
+      var address = code ? ENDPOINT + '?ref=' + code : ENDPOINT;
+      document.getElementById('vw-endpoint').textContent = address;
+      if (code) document.getElementById('vw-app-link').href = 'https://virwave.com/ref/' + code;
+      var button = document.getElementById('vw-copy');
+      var status = document.getElementById('vw-copy-status');
+      button.addEventListener('click', function () {
+        function done(ok) { status.textContent = ok ? 'Copied. Paste it into Claude.' : 'Select the address above and copy it.'; }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(address).then(function () { done(true); }, function () { done(false); });
+        } else { done(false); }
+      });
+    })();
+  </script>
+
+  <!-- Scripts -->
+  <script src="/assets/js/main.js"></script>
+</body>
+</html>

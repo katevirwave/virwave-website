@@ -68,9 +68,65 @@ export async function approveAffiliate(affiliateId: string, affiliateEmail: stri
   await sendResendEmail(
     affiliateEmail,
     'Welcome to the VirWave Creator Program',
-    `You're in!\n\nSign in at https://affiliates.virwave.com to access your dashboard.\n\nYour referral code: ${affiliateCode}\nYour referral link: https://virwave.com/ref/${affiliateCode}`,
+    `You're in!\n\nSign in at https://affiliates.virwave.com to access your dashboard.\n\nYour referral code: ${affiliateCode}\nYour app link: https://virwave.com/ref/${affiliateCode}\nYour VirWave Breathe for Claude link: https://virwave.com/breathe/connect?ref=${affiliateCode}\n\nPlease read the Creator Affiliate Terms before you post: https://virwave.com/affiliates/terms`,
     `<p>You're in! <a href="https://affiliates.virwave.com">Sign in to your dashboard</a> to get started.</p><p>Your code: <strong>${escapeHtml(affiliateCode)}</strong></p>`
   )
+
+  revalidatePath('/admin/applications')
+  revalidatePath('/admin/affiliates')
+}
+
+// Bulk approval for launch volume (hundreds of applications). Approves up to
+// BATCH_LIMIT of the oldest pending applications in one step, optionally only one
+// country, and sends the welcome emails through Resend's batch endpoint (one
+// request for up to 100 emails). The .eq('status', 'pending') guard makes it
+// idempotent: a second click never re-approves or re-emails anyone.
+const BATCH_LIMIT = 100
+
+export async function approvePendingBatch(formData: FormData) {
+  const { user, adminClient } = await getAdminContext()
+  const country = String(formData.get('country') ?? '')
+  const limit = Math.min(Math.max(Number(formData.get('limit') ?? BATCH_LIMIT) || BATCH_LIMIT, 1), BATCH_LIMIT)
+
+  let pending = adminClient.from('affiliate_profiles')
+    .select('id')
+    .eq('status', 'pending')
+    .order('created_at', { ascending: true })
+    .limit(limit)
+  if (country === 'GB' || country === 'US') pending = pending.eq('country', country)
+  const { data: rows, error: selectError } = await pending
+  if (selectError) throw new Error(`Bulk approve failed: ${selectError.message}`)
+  if (!rows?.length) return
+
+  const { data: approved, error } = await adminClient.from('affiliate_profiles')
+    .update({ status: 'active', approved_at: new Date().toISOString() })
+    .in('id', rows.map(r => r.id))
+    .eq('status', 'pending')
+    .select('id, email, code')
+  if (error) throw new Error(`Bulk approve failed: ${error.message}`)
+  if (!approved?.length) return
+
+  await adminClient.from('audit_log').insert(approved.map(a => ({
+    actor_id: user.id, actor_email: user.email!,
+    action: 'affiliate.approve', target_type: 'affiliate', target_id: a.code,
+    metadata: { bulk: true },
+  })))
+
+  const RESEND_API_KEY = process.env.RESEND_API_KEY
+  if (!RESEND_API_KEY) throw new Error('RESEND_API_KEY not configured')
+  const res = await fetch('https://api.resend.com/emails/batch', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${RESEND_API_KEY}` },
+    body: JSON.stringify(approved.map(a => ({
+      from: 'VirWave <affiliates@virwave.com>',
+      to: a.email,
+      subject: 'Welcome to the VirWave Creator Program',
+      text: `You're in!\n\nSign in at https://affiliates.virwave.com to access your dashboard.\n\nYour referral code: ${a.code}\nYour app link: https://virwave.com/ref/${a.code}\nYour VirWave Breathe for Claude link: https://virwave.com/breathe/connect?ref=${a.code}\n\nPlease read the Creator Affiliate Terms before you post: https://virwave.com/affiliates/terms`,
+      html: `<p>You're in! <a href="https://affiliates.virwave.com">Sign in to your dashboard</a> to get started.</p><p>Your code: <strong>${escapeHtml(a.code)}</strong></p><p>App link: <a href="https://virwave.com/ref/${encodeURIComponent(a.code)}">virwave.com/ref/${escapeHtml(a.code)}</a><br>VirWave Breathe for Claude: <a href="https://virwave.com/breathe/connect?ref=${encodeURIComponent(a.code)}">virwave.com/breathe/connect?ref=${escapeHtml(a.code)}</a></p><p>Please read the <a href="https://virwave.com/affiliates/terms">Creator Affiliate Terms</a> before you post.</p>`,
+    }))),
+  })
+  // Approvals stand even if the emails fail; "Resend welcome" on each affiliate re-sends one.
+  if (!res.ok) console.error(`Bulk welcome emails failed: Resend ${res.status}: ${await res.text()}`)
 
   revalidatePath('/admin/applications')
   revalidatePath('/admin/affiliates')

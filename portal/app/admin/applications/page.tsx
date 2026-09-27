@@ -1,5 +1,5 @@
 import { createAdminClient } from '@/utils/supabase/admin'
-import { approveAffiliate, rejectApplication } from '@/app/actions/admin'
+import { approveAffiliate, approvePendingBatch, rejectApplication } from '@/app/actions/admin'
 import styles from './applications.module.css'
 
 export const revalidate = 0
@@ -8,7 +8,7 @@ export default async function ApplicationsPage() {
   const adminClient = createAdminClient()
   const { data: applications } = await adminClient
     .from('affiliate_profiles')
-    .select('id, code, full_name, email, platform, audience_size, application_notes, created_at')
+    .select('id, code, full_name, email, country, platform, audience_size, application_notes, created_at')
     .eq('status', 'pending')
     .order('created_at', { ascending: true })
 
@@ -20,6 +20,18 @@ export default async function ApplicationsPage() {
           <span className={styles.count}>{applications.length} pending</span>
         )}
       </h1>
+      {!!applications?.length && (
+        <form action={approvePendingBatch} className={styles.actions} aria-label="Approve pending applications in bulk">
+          <label htmlFor="bulk-country" className={styles.srOnly}>Country</label>
+          <select id="bulk-country" name="country" defaultValue="" className={styles.reasonInput}>
+            <option value="">All countries</option>
+            <option value="GB">United Kingdom</option>
+            <option value="US">United States</option>
+          </select>
+          <input type="hidden" name="limit" value="100" />
+          <button type="submit" className={styles.approveBtn}>Approve the next 100</button>
+        </form>
+      )}
       {!applications?.length && (
         <div className={`glass-card ${styles.empty}`}>No pending applications.</div>
       )}
@@ -29,7 +41,7 @@ export default async function ApplicationsPage() {
             <div className={styles.cardHeader}>
               <div>
                 <span className={styles.name}>{app.full_name}</span>
-                <span className={styles.meta}>{app.platform} · {app.audience_size} · {app.email}</span>
+                <span className={styles.meta}>{app.country ?? '—'} · {app.platform} · {app.audience_size} · {app.email}</span>
               </div>
               <span className={styles.date}>{new Date(app.created_at).toLocaleDateString()}</span>
             </div>

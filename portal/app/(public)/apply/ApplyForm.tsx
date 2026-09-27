@@ -10,10 +10,16 @@ const AUDIENCE_SIZES = [
   { label: '50K–100K', value: '50k-100k' },
   { label: '100K+',    value: '100k+' },
 ]
+const COUNTRIES = [
+  { label: 'United Kingdom', value: 'GB' },
+  { label: 'United States',  value: 'US' },
+]
+const TERMS_URL = 'https://virwave.com/affiliates/terms'
 const STORY_MAX = 280
 
 export function ApplyForm() {
-  const [form, setForm] = useState({ name: '', email: '', platform: '', audience_size: '', story: '' })
+  const [form, setForm] = useState({ name: '', email: '', country: '', platform: '', audience_size: '', story: '' })
+  const [termsAccepted, setTermsAccepted] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
@@ -29,7 +35,7 @@ export function ApplyForm() {
     const res = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/affiliate-apply`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...form, platform: form.platform.toLowerCase() }),
+      body: JSON.stringify({ ...form, platform: form.platform.toLowerCase(), terms_accepted: termsAccepted }),
     })
 
     setSubmitting(false)
@@ -64,6 +70,14 @@ export function ApplyForm() {
       </label>
 
       <label className={styles.fieldLabel}>
+        Where you live
+        <select required value={form.country} onChange={e => setForm(f => ({ ...f, country: e.target.value }))} className={styles.select}>
+          <option value="">Select your country</option>
+          {COUNTRIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+        </select>
+      </label>
+
+      <label className={styles.fieldLabel}>
         Platform
         <select required value={form.platform} onChange={e => setForm(f => ({ ...f, platform: e.target.value }))} className={styles.select}>
           <option value="">Select your platform</option>
@@ -94,6 +108,23 @@ export function ApplyForm() {
           style={{ color: storyNearLimit ? 'var(--color-amber-400)' : 'var(--color-white-40)' }}
         >
           {storyLen} / {STORY_MAX}
+        </span>
+      </label>
+
+      <label className={styles.checkLabel}>
+        <input
+          type="checkbox"
+          required
+          checked={termsAccepted}
+          onChange={e => setTermsAccepted(e.target.checked)}
+          className={styles.checkbox}
+        />
+        <span>
+          I&rsquo;m 18 or over and I agree to the{' '}
+          <a href={TERMS_URL} target="_blank" rel="noopener noreferrer">
+            Creator Affiliate Terms<span className={styles.srOnly}> (opens in a new tab)</span>
+          </a>
+          , including labelling every post as an ad.
         </span>
       </label>
 
