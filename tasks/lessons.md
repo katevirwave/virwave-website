@@ -116,3 +116,7 @@ Use existing breathing artwork to make the app download action tangible. Assista
 ## 2026-09-27 — Consent must read like the product, not its protocol
 
 Keep the original logo inside the consent card and preserve it when focus moves to the heading. Identify known assistants by exact reviewed client IDs, translate known scopes into plain language, and retain honest unknown-permission fallbacks. Do not trade readable account-access warnings or explicit unchecked declarations for a cleaner layout. Research and advertising choices belong in their own account flow; never invent consent storage or fold those choices into assistant authorization.
+
+## 2026-09-27 — Keep consent descriptions plain
+
+The user found the slogan and repeated teal-accented feature rows artificial. On account consent screens, explain the purpose in one direct sentence; reserve hierarchy for actual permissions and the decision.

@@ -52,13 +52,7 @@
 .connect-consent { font-size: 1rem; line-height: 1.6; overflow-wrap: anywhere; }
 .connect-panel .connect-consent-account { margin-top: var(--sp-2); color: var(--text); font-size: .9375rem; }
 .connect-consent h2 { color: var(--white); font-size: 1rem; font-weight: 600; line-height: 1.5; }
-.connect-consent-purpose { margin-top: var(--sp-8); }
-.connect-panel .connect-consent-purpose ul { list-style: none; padding: 0; margin-top: var(--sp-4); }
-.connect-consent-purpose li { padding-left: var(--sp-4); border-left: 2px solid var(--teal-light); }
-.connect-consent-purpose li + li { margin-top: var(--sp-4); }
-.connect-consent-purpose strong, .connect-consent-purpose span { display: block; }
-.connect-consent-purpose strong { font-weight: 600; color: var(--white); }
-.connect-consent-purpose span { font-size: .9375rem; }
+.connect-panel .connect-consent-purpose { margin-top: var(--sp-6); }
 .connect-consent-permissions { margin-top: var(--sp-6); padding-top: var(--sp-6); border-top: 1px solid var(--border); }
 .connect-panel .connect-consent-permissions ul { padding-left: var(--sp-4); margin-top: var(--sp-3); font-size: .9375rem; }
 .connect-consent-permissions li + li { margin-top: var(--sp-2); }
