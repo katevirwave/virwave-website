@@ -46,16 +46,6 @@
       "source": "/ref/:code",
       "destination": "/ref?code=:code",
       "permanent": false
-    },
-    {
-      "source": "/aikei",
-      "destination": "https://aikei.virwave.com",
-      "permanent": false
-    },
-    {
-      "source": "/aikei/:path*",
-      "destination": "https://aikei.virwave.com/:path*",
-      "permanent": false
     }
   ],
   "headers": [
