@@ -3,6 +3,46 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/products",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/products/:path*",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/archetypes",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/archetypes/:path*",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/events",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/events/:path*",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/plushie",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/plushie/:path*",
+      "destination": "/",
+      "permanent": false
+    },
+    {
       "source": "/ref/:code",
       "destination": "/ref?code=:code",
       "permanent": false

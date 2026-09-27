@@ -30,7 +30,7 @@ Three things:
 
 We're currently in early access. The app is available for iOS and Android, with core features free and premium depth available through a subscription.
 
-We're also exploring new products beyond the app: a board game, stories, and partnership programs. More on that soon.
+You can also take a breathing break inside Claude with VirWave Breathe, our free extension. Ask for one and Claude draws the session right in the chat.
 
 ---
 
