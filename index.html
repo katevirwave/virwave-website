@@ -188,11 +188,12 @@
         <div>
           <p class="section-eyebrow">Try it in Claude</p>
           <h2>A breathing break, right in the chat.</h2>
-          <p>VirWave Breathe is a free extension for Claude. Ask for a breathing break and Claude draws a calm, animated session for you, hold-free unless you ask otherwise. It runs on your computer and collects nothing.</p>
+          <p>VirWave Breathe is free in Claude. Ask for a breathing break and Claude draws a calm, animated session for you, hold-free unless you ask otherwise. No sign-in, and nothing you say or feel is stored.</p>
+          <p>To add it: in Claude, open Settings, then Connectors, choose &ldquo;Add custom connector&rdquo;, name it VirWave Breathe and paste this address:</p>
+          <p><code class="user-claude__url">https://xswebtvkueusdaeboizp.supabase.co/functions/v1/breathe</code></p>
         </div>
         <div class="user-claude__actions">
-          <a href="https://github.com/virwave/virwave-breathe/releases/latest" class="btn btn-primary btn-lg" rel="noopener">Get VirWave Breathe</a>
-          <a href="https://github.com/virwave/virwave-breathe#readme" class="btn btn-ghost btn-lg" rel="noopener">How it works</a>
+          <button type="button" class="btn btn-primary btn-lg" data-copy="https://xswebtvkueusdaeboizp.supabase.co/functions/v1/breathe">Copy the address</button>
         </div>
       </div>
     </div>
@@ -293,5 +294,16 @@
 
   <!-- Scripts -->
   <script src="/assets/js/main.js"></script>
+  <script>
+    document.querySelectorAll('[data-copy]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var label = b.textContent;
+        navigator.clipboard.writeText(b.getAttribute('data-copy')).then(function () {
+          b.textContent = 'Copied';
+          setTimeout(function () { b.textContent = label; }, 2000);
+        });
+      });
+    });
+  </script>
 </body>
 </html>

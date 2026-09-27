@@ -7899,3 +7899,13 @@ textarea.plushie-input {
   .store-badge { transition: none; }
   .store-badge:hover { transform: none; }
 }
+
+.user-claude__url {
+  display: inline-block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  font-size: 0.875rem;
+  padding: var(--sp-1) var(--sp-2);
+  border-radius: var(--radius);
+  background: var(--glass-medium-bg, rgba(255, 255, 255, 0.08));
+}
