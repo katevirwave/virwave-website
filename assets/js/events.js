@@ -29,7 +29,8 @@
     workshop:  'Workshop',
     mixer:     'Mixer',
     dinner:    'Dinner',
-    networking:'Networking'
+    networking:'Networking',
+    online:    'Online'
   };
 
   var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];

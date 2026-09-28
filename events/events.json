@@ -17,8 +17,8 @@
   },
   {
     "code": "work-with-a-startup-networking-fair-ucl-hatchery-london-2026-03-25",
-    "title": "Work with a Startup \u2014 Networking Fair",
-    "subtitle": "UCL Hatchery networking fair \u2014 meet the VirWave team.",
+    "title": "Work with a Startup — Networking Fair",
+    "subtitle": "UCL Hatchery networking fair — meet the VirWave team.",
     "date": "2026-03-25T00:00:00+00:00",
     "venue": "UCL Hatchery",
     "city": "London",
@@ -26,9 +26,34 @@
     "status": "past",
     "kind": "fair",
     "url": null,
-    "autoSelect": ["work-with-virwave", "early-access"],
-    "pillOrder": ["work-with-virwave", "early-access", "partnership", "licensing", "event", "general"],
+    "autoSelect": [
+      "work-with-virwave",
+      "early-access"
+    ],
+    "pillOrder": [
+      "work-with-virwave",
+      "early-access",
+      "partnership",
+      "licensing",
+      "event",
+      "general"
+    ],
     "blurb": "Recruiting and partnerships conversations with UCL's startup ecosystem.",
+    "coverImage": null
+  },
+  {
+    "code": "world-mental-health-day-2026",
+    "title": "World Mental Health Day: One Breath Together",
+    "subtitle": "Take a free one-minute breathing break with VirWave, wherever you are.",
+    "date": "2026-10-10T09:00:00+01:00",
+    "venue": "Online, worldwide",
+    "city": null,
+    "country": "Worldwide",
+    "kind": "workshop",
+    "url": "https://virwave.com/wmhd/",
+    "autoSelect": [],
+    "pillOrder": null,
+    "blurb": "Theme: Lived Experiences Heard: Real Voices, Real Change. Breathe with us, share your voice, and add VirWave Breathe to Claude.",
     "coverImage": null
   }
 ]

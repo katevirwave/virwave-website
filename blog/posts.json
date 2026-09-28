@@ -1,10 +1,26 @@
 [
   {
+    "slug": "world-mental-health-day-lived-experience",
+    "title": "Lived Experiences Heard: Why VirWave Has No Streaks",
+    "date": "2026-09-28",
+    "description": "This World Mental Health Day's theme is \"Lived Experiences Heard: Real Voices, Real Change.\" Here's how lived experience shaped VirWave, and how to take part on 10 October.",
+    "tags": [
+      "world mental health day",
+      "lived experience",
+      "breathing"
+    ],
+    "file": "2026-09-28-world-mental-health-day-lived-experience.md"
+  },
+  {
     "slug": "what-is-virwave",
     "title": "What Is VirWave? A Breathing Companion for Everyone",
     "date": "2026-03-01",
     "description": "An introduction to VirWave — what we're building, why breathing matters, and who it's for.",
-    "tags": ["about", "breathing", "emotional regulation"],
+    "tags": [
+      "about",
+      "breathing",
+      "emotional regulation"
+    ],
     "file": "2026-03-01-what-is-virwave.md"
   },
   {
@@ -12,7 +28,11 @@
     "title": "How Breathing Regulates Your Nervous System",
     "date": "2026-03-03",
     "description": "A beginner-friendly look at how intentional breathing activates the parasympathetic nervous system and helps you shift from stress to steadiness.",
-    "tags": ["science", "breathing", "nervous system"],
+    "tags": [
+      "science",
+      "breathing",
+      "nervous system"
+    ],
     "file": "2026-03-03-breathing-for-nervous-system.md"
   }
 ]
