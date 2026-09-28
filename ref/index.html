@@ -230,7 +230,7 @@
 
   <!-- Store fallback links (revealed after timeout) -->
   <div class="store-links" id="store-links" aria-label="Download VirWave">
-    <a id="primary-store-link" href="https://apps.apple.com/app/id6737994265" class="store-btn store-btn-primary" aria-label="Download on the App Store">
+    <a id="primary-store-link" href="https://apps.apple.com/app/id6738364276" class="store-btn store-btn-primary" aria-label="Download on the App Store">
       Download on the App Store
     </a>
     <a id="secondary-store-link" href="https://play.google.com/store/apps/details?id=com.virwave.virwave" class="store-btn store-btn-secondary" aria-label="Get it on Google Play" style="display:none">
@@ -300,12 +300,22 @@
       }
 
       // ── Build store URLs with attribution referrer ──
-      var appStoreUrl  = 'https://apps.apple.com/app/id6737994265';
+      var appStoreUrl  = 'https://apps.apple.com/app/id6738364276';
       var playStoreUrl = 'https://play.google.com/store/apps/details?id=com.virwave.virwave';
+
+      // App Store Connect campaign link: pt = VirWave's provider token, ct = the creator code.
+      // Installs then show per creator in App Store Connect > App Analytics > Campaigns.
+      // Find the token in App Store Connect > App Analytics > Acquisition > Campaigns >
+      // "Generate a campaign link" (the number after pt=). Leave empty to skip.
+      var APPLE_PROVIDER_TOKEN = '';
 
       if (code) {
         // Android Play Install Referrer carries the affiliate code for app-side attribution
         playStoreUrl += '&referrer=' + encodeURIComponent('affiliate_code=' + code);
+        if (APPLE_PROVIDER_TOKEN) {
+          appStoreUrl += '?pt=' + encodeURIComponent(APPLE_PROVIDER_TOKEN) +
+                         '&ct=' + encodeURIComponent(code.toLowerCase()) + '&mt=8';
+        }
       }
 
       // ── Attempt to open the app via custom deep link ──
@@ -338,6 +348,7 @@
         primaryLink.textContent = 'Get it on Google Play';
         primaryLink.setAttribute('aria-label', 'Get it on Google Play');
       } else {
+        primaryLink.href = appStoreUrl;
         // On non-Android, also show the Play Store link as secondary
         secondaryLink.style.display = '';
         secondaryLink.href          = playStoreUrl;
