@@ -94,6 +94,7 @@ export async function approvePendingBatch(formData: FormData) {
     .order('created_at', { ascending: true })
     .limit(limit)
   if (country === 'GB' || country === 'US') pending = pending.eq('country', country)
+  else if (country === 'INTL') pending = pending.not('country', 'in', '(GB,US)').not('country', 'is', null)
   const { data: rows, error: selectError } = await pending
   if (selectError) throw new Error(`Bulk approve failed: ${selectError.message}`)
   if (!rows?.length) return

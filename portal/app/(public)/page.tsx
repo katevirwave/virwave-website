@@ -45,6 +45,14 @@ function LoginContent() {
       <div className={`glass-card ${styles.card}`}>
         <h1 className={styles.heading}>Welcome back</h1>
 
+        {loginError === 'not_applied' && (
+          <p className={styles.errorBanner} role="alert">
+            {"We don't have an application for this email yet. "}
+            <a href="/apply" className={styles.inlineLink}>Apply to join the programme</a>
+            {' — it takes a minute.'}
+          </p>
+        )}
+
         {loginError === 'access_revoked' && (
           <p className={styles.errorBanner} role="alert">
             That account isn't active. Reach out to us if you think this is a mistake.
@@ -111,6 +119,12 @@ function LoginContent() {
               </button>
             </form>
           </>
+        )}
+
+        {step === 'email' && (
+          <p className={styles.applyPrompt}>
+            New here? <a href="/apply" className={styles.inlineLink}>Apply to join the affiliate programme</a>
+          </p>
         )}
       </div>
     </div>

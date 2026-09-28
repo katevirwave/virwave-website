@@ -69,7 +69,13 @@ export async function GET(request: NextRequest) {
         .eq('email', user.email.toLowerCase())
         .single()
 
-  if (!profile || !['active', 'inactive', 'pending'].includes(profile.status)) {
+  if (!profile) {
+    // Signed in but never applied: send them to the application instead of a dead end.
+    await supabase.auth.signOut()
+    return NextResponse.redirect(`${origin}/?error=not_applied`)
+  }
+
+  if (!['active', 'inactive', 'pending'].includes(profile.status)) {
     // Non-affiliates, suspended, and terminated users: sign out and block.
     // 'inactive' is allowed — inactive affiliates see a reduced dashboard with reactivation CTA.
     await supabase.auth.signOut()

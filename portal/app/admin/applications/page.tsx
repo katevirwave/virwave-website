@@ -27,6 +27,7 @@ export default async function ApplicationsPage() {
             <option value="">All countries</option>
             <option value="GB">United Kingdom</option>
             <option value="US">United States</option>
+            <option value="INTL">Rest of world</option>
           </select>
           <input type="hidden" name="limit" value="100" />
           <button type="submit" className={styles.approveBtn}>Approve the next 100</button>

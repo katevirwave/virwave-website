@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import styles from './apply.module.css'
+import { COUNTRIES } from '@/utils/countries'
 
 const PLATFORMS = ['YouTube', 'Instagram', 'TikTok', 'Substack', 'Podcast', 'Newsletter', 'Blog', 'Other']
 const AUDIENCE_SIZES = [
@@ -10,10 +11,10 @@ const AUDIENCE_SIZES = [
   { label: '50K–100K', value: '50k-100k' },
   { label: '100K+',    value: '100k+' },
 ]
-const COUNTRIES = [
-  { label: 'United Kingdom', value: 'GB' },
-  { label: 'United States',  value: 'US' },
-]
+// UK and US first (most applicants), then every other eligible country A–Z.
+const PINNED = ['GB', 'US']
+const PINNED_COUNTRIES = PINNED.map(v => COUNTRIES.find(c => c.value === v)!)
+const OTHER_COUNTRIES = COUNTRIES.filter(c => !PINNED.includes(c.value))
 const TERMS_URL = 'https://virwave.com/affiliates/terms'
 const STORY_MAX = 280
 
@@ -73,7 +74,9 @@ export function ApplyForm() {
         Where you live
         <select required value={form.country} onChange={e => setForm(f => ({ ...f, country: e.target.value }))} className={styles.select}>
           <option value="">Select your country</option>
-          {COUNTRIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+          {PINNED_COUNTRIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+          <option disabled>──────────</option>
+          {OTHER_COUNTRIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
         </select>
       </label>
 

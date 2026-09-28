@@ -67,3 +67,8 @@
   background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.2);
   font-size: 0.875rem; color: var(--color-amber-400); line-height: 1.5;
 }
+
+.applyPrompt { margin-top: var(--sp-6, 24px); padding-top: var(--sp-4, 16px); border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 0.875rem; color: var(--color-white-60); text-align: center; }
+.inlineLink { color: #8CEBAA; text-decoration: underline; text-underline-offset: 2px; }
+.inlineLink:hover { color: #FFFFFF; }
+.inlineLink:focus-visible { outline: 2px solid #8CEBAA; outline-offset: 2px; border-radius: 2px; }
