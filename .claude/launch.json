@@ -10,21 +10,6 @@
         "8000"
       ],
       "port": 8000
-    },
-    {
-      "name": "aikei-app",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": [
-        "--prefix",
-        "aikei-app",
-        "run",
-        "dev",
-        "--",
-        "--port",
-        "5199",
-        "--strictPort"
-      ],
-      "port": 5199
     }
   ]
 }

@@ -90,7 +90,7 @@ Sebastian's former employer.
 
 ## A QR code is not delivered until its destination is live
 
-The AIKEI London QR was generated, decoded and visually checked while the
+An event QR was generated, decoded and visually checked while the
 page it pointed at existed only as an uncommitted file in a worktree. Kate
 scanned it and got the app's 404. "Verified locally" was true and useless —
 a QR's whole job is to be scanned by someone who is not on localhost.

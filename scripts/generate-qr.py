@@ -34,9 +34,8 @@ easy to look up which URL a given QR image encodes.
 Standalone landing pages (no interest form) use --url with a brand profile:
 
   python scripts/generate-qr.py \
-    --event "AIKEI London" \
-    --url "https://aikei.virwave.com/london" \
-    --brand aikei
+    --event "VirWave Breathe" \
+    --url "https://virwave.com/breathe/"
 
 Brand profiles:
 
@@ -45,12 +44,6 @@ Brand profiles:
     - Light modules: Off-white #F8F8F6
     - Center logo:   assets/logo_virwave.avif, circular
     - Rounded "pill" style modules
-
-  aikei — AIKEI design system (zero corner radius throughout)
-    - Dark modules:  Ink    #171C1B
-    - Light modules: Paper  #F4F5F3
-    - Center logo:   aikei-app/public/media/aikei-logo.png, square
-    - Square modules
 """
 
 import argparse
@@ -89,14 +82,8 @@ TEAL = (10, 126, 164)      # #0A7EA4
 OFF_WHITE = (248, 248, 246) # #F8F8F6
 MINT = (140, 235, 170)      # #8CEBAA
 
-AIKEI_INK = (23, 28, 27)    # #171C1B
-AIKEI_PAPER = (244, 245, 243)  # #F4F5F3
-
-AIKEI_LOGO_PATH = REPO_ROOT / "aikei-app" / "public" / "media" / "aikei-logo.png"
-
 # Brand profiles. The QR has to look like the site it lands on: VirWave is
-# rounded and navy, AIKEI is square-cornered and near-black by design (its
-# stylesheet sets every radius to 0).
+# rounded and navy.
 BRANDS = {
     "virwave": {
         "front": NAVY,
@@ -104,13 +91,6 @@ BRANDS = {
         "drawer": RoundedModuleDrawer,
         "logo": LOGO_PATH,
         "logo_shape": "circle",
-    },
-    "aikei": {
-        "front": AIKEI_INK,
-        "back": AIKEI_PAPER,
-        "drawer": SquareModuleDrawer,
-        "logo": AIKEI_LOGO_PATH,
-        "logo_shape": "square",
     },
 }
 DEFAULT_BRAND = "virwave"
@@ -169,8 +149,8 @@ def trim_to_artwork(img: Image.Image, gap_rows: int = 8) -> Image.Image:
 
     * source marks often sit off-centre in an oversized transparent canvas;
     * some exported assets carry a generator watermark in a bottom corner,
-      separated from the artwork by a band of empty rows. AIKEI's logo has a
-      Gemini badge under it, which would otherwise ride along into the QR.
+      separated from the artwork by a band of empty rows. A generator badge
+      under a logo would otherwise ride along into the QR.
 
     So: crop to the alpha bounding box, then cut at the first run of
     ``gap_rows`` fully-transparent rows. If the asset is later cleaned up, the
@@ -208,8 +188,8 @@ def get_logo_image(
     The logo occupies ~18 % of the QR width so it stays within the
     error-correction budget (QR level H can tolerate ~30 % obscured).
 
-    ``shape`` picks the backdrop: "circle" for VirWave, "square" for AIKEI,
-    whose design system sets every corner radius to zero.
+    ``shape`` picks the backdrop: "circle" for VirWave, "square" for
+    brands whose design system uses square corners.
     """
     if not logo_path.exists():
         return None
@@ -272,7 +252,7 @@ def generate_qr(
     * default — build a tracked ``virwave.com/interest/`` URL from the event,
       interest, source and campaign.
     * ``url`` given — encode that URL verbatim. Used for standalone landing
-      pages such as ``aikei.virwave.com/london``, where the path *is* the
+      pages such as ``virwave.com/breathe/``, where the path *is* the
       attribution and query params would only make the code denser.
     """
 
@@ -433,7 +413,7 @@ def main():
 Examples:
   %(prog)s --event "Kate Breathwork Berlin 2026-04"
   %(prog)s --event "Wellness Expo Munich" --interest partnership --campaign wellness-expo
-  %(prog)s --event "AIKEI London" --url https://aikei.virwave.com/london --brand aikei
+  %(prog)s --event "VirWave Breathe" --url https://virwave.com/breathe/
   %(prog)s --list
         """,
     )
@@ -458,7 +438,7 @@ Examples:
     parser.add_argument(
         "--url",
         help="Encode this URL verbatim instead of building an interest-form URL. "
-             "Use for standalone landing pages (e.g. https://aikei.virwave.com/london).",
+             "Use for standalone landing pages (e.g. https://virwave.com/breathe/).",
     )
     parser.add_argument(
         "--brand",
