@@ -761,7 +761,7 @@
     initParallax();
     initArchetypeToggle();
     initRealmTint();
-    // initSiteParticles(); — starfield retired with the light redesign (Sept 2026)
+    initSiteParticles();
     initTrustMarquees();
   }
 
