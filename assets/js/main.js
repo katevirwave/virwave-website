@@ -186,7 +186,7 @@
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     var targets = document.querySelectorAll(
-      '.section-header, .card, .card-horizontal, .card-research, .phone-frame, .trust-strip, .founder-quote blockquote, .breathing-reveal, .blog-card, .contact-buttons, .product-spread__text, .product-spread__visual, .b2b-item, .products-closing, .event-card, .events-room-card, .events-privacy-card, .events-cta-card, .realm, .archetype-card, .archetypes-cta, .realm-card'
+      '.section-header, .card, .card-horizontal, .card-research, .phone-frame, .trust-strip, .founder-quote blockquote, .breathing-reveal, .blog-card, .contact-buttons, .product-spread__text, .product-spread__visual, .b2b-item, .products-closing, .event-card, .events-room-card, .events-privacy-card, .events-cta-card, .realm, .archetype-card, .archetypes-cta, .realm-card, .calm-card, .calm-panel, .calm-story, .calm-claude, .calm-cta'
     );
     if (!targets.length) return;
 
@@ -248,6 +248,15 @@
       heroObserver.observe(hero);
     }
   }
+
+  /* --- Nav hairline once the page scrolls ------------------- */
+  (function () {
+    var nav = document.querySelector('.site-nav');
+    if (!nav) return;
+    var onScroll = function () { nav.classList.toggle('is-scrolled', window.scrollY > 8); };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
 
   /* --- Homepage immersive nav -------------------------------- */
   function initImmersiveNav() {
@@ -752,7 +761,7 @@
     initParallax();
     initArchetypeToggle();
     initRealmTint();
-    initSiteParticles();
+    // initSiteParticles(); — starfield retired with the light redesign (Sept 2026)
     initTrustMarquees();
   }
 

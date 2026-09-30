@@ -59,7 +59,7 @@ Do not add portal files to the static site root. Do not run `npm install` at the
 
 ## Brand Identity
 
-VirWave is dark-themed, animation-rich, calm luxury, neurodivergent-affirming.
+VirWave's website is **light-first** (Sept 2026 redesign, Calm / Headspace / Granola direction): warm off-white paper, navy ink, soft pastel cards, pill buttons, serif display headings. Calm, neurodivergent-affirming. Never dark page backgrounds — Kate's call.
 The app (virwave_v3) is the source of truth for brand. Key reference files:
 
 - `../virwave_v3/src/theme/tokens.ts` — authoritative design tokens
@@ -94,7 +94,7 @@ Max blur: 10px on cards (performance). 12px on nav only.
 
 ### Typography
 
-- Font: system stack (`-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto`). Don't load web fonts.
+- Font: system stack (`-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto`) for body; system serif `--font-display` (ui-serif / New York / Georgia) at weight 500 for h1/h2. Don't load web fonts.
 - Hierarchy through opacity, not weight: headings 100%, body 85%, secondary 60%
 - Max 2 font weights per section: 400 (body) + 600 (headings)
 - Section labels: `text-transform: uppercase; letter-spacing: 0.08em`
@@ -120,8 +120,8 @@ Container max-width: 1120px. Hit targets: 48px minimum.
 
 ## Design Constraints
 
-1. **Dark-first.** Navy backgrounds, light text. The app is dark — the website matches.
-2. **Glass on dark only.** `backdrop-filter` is invisible on light backgrounds.
+1. **Light-first.** `--paper` (#F7F6F2) backgrounds, `--ink` navy text, teal/sky/mint accents. Pastel tints (`--tint-*`) for cards and panels. The "Calm layer" at the end of styles.css holds the redesign rules.
+2. **No glass.** Use white `--card` surfaces with `--shadow-soft`, not `backdrop-filter` glass (it's invisible on light).
 3. **No hex colors outside `:root`.** Use CSS custom properties everywhere.
 4. **No raw `rgba()` in components.** Define glass tiers as CSS classes.
 5. **No raw border-radius numbers.** Use `--radius` (8px) or `--radius-lg` (12px).
@@ -163,7 +163,7 @@ Don't repurpose `data-section` attributes for styling — they're functional.
 - Don't use JavaScript frameworks (React, Vue, etc.).
 - Don't add web fonts via Google Fonts links (system fonts only).
 - Don't use raw hex colors outside `:root` CSS variables.
-- Don't apply glassmorphism on light backgrounds (it's invisible).
+- Don't use mint (#8CEBAA) as text colour on paper — it fails contrast. Use teal for text, mint for fills.
 - Don't use `data-section` attributes for styling (used by visibility system).
 - Don't touch `_supabase.json` without understanding RLS implications.
 - Don't force-push main (it's the production deploy branch).
