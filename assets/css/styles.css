@@ -6751,3 +6751,9 @@ h1[class], h2[class], .hero h1, .section-header h2 { font-weight: 500; }
   .calm-claude.reveal,
   .calm-cta.reveal { opacity: 1; transform: none; transition: none; }
 }
+
+/* One nav everywhere: on the light pages (body.vw-light) the frosted
+   night glass reads as grey, so the bar goes solid navy there. */
+body.vw-light .site-nav,
+body.vw-light .site-nav.nav-immersive,
+body.vw-light .site-nav.is-scrolled { background: var(--navy-deep); border-bottom-color: transparent; }
