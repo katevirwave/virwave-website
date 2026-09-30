@@ -6874,13 +6874,63 @@ h1[class], h2[class], .hero h1, .section-header h2 { font-weight: 500; }
   .calm-cta.reveal { opacity: 1; transform: none; transition: none; }
 }
 
-/* One nav everywhere: on the light pages (body.vw-light) the frosted
-   night glass reads as grey, so the bar goes solid navy there. */
-body.vw-light .site-nav,
-body.vw-light .site-nav.nav-immersive,
-body.vw-light .site-nav.is-scrolled { background: var(--navy-deep); border-bottom-color: transparent; }
 
 /* Account + assistant pages (Sebastian's reviewed design) keep their own
    sans headings rather than the Calm layer's serif display type. */
 .connect-page h1,
 .connect-page h2 { font-family: var(--font); font-weight: 600; }
+
+/* ============================================================
+   Campaign + guide pages (body.vw-page): Affiliates, Affiliate
+   terms, Breathe in Claude, World Mental Health Day. These were
+   light; they now share the night-sky look. Rules are scoped to
+   body.vw-page so they win over each page's inline <style>.
+   ============================================================ */
+body.vw-page { background: linear-gradient(180deg, var(--night-1) 0%, var(--navy-deep) 40%, var(--navy) 100%); color: var(--text); }
+body.vw-page .legal-page h1 { font-size: clamp(2.25rem, 5vw, 3.25rem); line-height: 1.08; letter-spacing: -0.02em; }
+body.vw-page .legal-page h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin-top: var(--sp-12); }
+body.vw-page .vw-eyebrow { color: var(--mint); letter-spacing: 0.02em; text-transform: none; font-size: var(--text-sm); }
+body.vw-page .legal-page .vw-big { color: var(--mint); font-family: var(--font-display); font-weight: 500; }
+body.vw-page .legal-page a { color: var(--mint); }
+body.vw-page .vw-card {
+  background: var(--glass-card);
+  border: 1px solid var(--glass-line);
+  border-radius: var(--radius-xl);
+  box-shadow: none;
+}
+body.vw-page .vw-btn,
+body.vw-page .legal-page a.vw-btn {
+  background: var(--mint);
+  color: var(--navy) !important;
+  border: 0;
+  transition: background var(--dur-snappy) var(--ease-calm), box-shadow var(--dur-snappy) var(--ease-calm);
+}
+body.vw-page .vw-btn:hover { background: var(--mint-soft); box-shadow: 0 0 24px var(--glow-mint); }
+body.vw-page .vw-btn--ghost,
+body.vw-page .legal-page a.vw-btn--ghost {
+  background: transparent;
+  color: var(--ink-on-dark) !important;
+  border: 1px solid var(--glass-line-2);
+}
+body.vw-page .vw-btn--ghost:hover { background: var(--glass-card-2); border-color: var(--mint); box-shadow: none; }
+body.vw-page .vw-note {
+  background: rgba(140, 235, 170, 0.07);
+  border-left-color: var(--mint);
+  border-radius: var(--radius-lg);
+  color: var(--text);
+}
+body.vw-page .vw-table th { background: var(--glass-card-2); color: var(--ink-on-dark); }
+body.vw-page .vw-table th,
+body.vw-page .vw-table td { border-bottom-color: var(--glass-line); }
+body.vw-page .vw-url code {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--glass-line-2);
+  color: var(--ink-on-dark);
+}
+body.vw-page .vw-badges .store-badge { background: transparent; padding: 0; }
+body.vw-page .vw-badges .store-badge:hover { background: transparent; opacity: 0.85; }
+body.vw-page .vw-phase { color: var(--ink-on-dark); font-family: var(--font-display); font-weight: 500; }
+body.vw-page .vw-sub,
+body.vw-page .vw-small-print { color: var(--text-muted); }
+.vw-small-print { font-size: 0.9rem; }
+body.vw-page .vw-orb .o3 { box-shadow: 0 0 40px var(--glow-mint); }
