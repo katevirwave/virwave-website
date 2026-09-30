@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex,nofollow">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self' https://xswebtvkueusdaeboizp.supabase.co; base-uri 'none'; form-action 'self'">
+  <title>Your account — VirWave</title>
+  <link rel="icon" href="/assets/favicon.png">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <script type="module" src="/assets/js/connect.mjs"></script>
+</head>
+<body class="connect-page">
+  <header class="connect-brand"><a href="/" aria-label="VirWave home"><img src="/assets/icon.png" width="48" height="48" alt="">VirWave</a></header>
+  <main class="connect-panel" id="connect-main">
+    <div id="connect-consent-brand" class="connect-consent-brand" hidden>
+      <img src="/assets/icon.png" width="48" height="48" alt=""><span>VirWave</span>
+      <span id="connect-assistant-brand" class="connect-assistant-brand" aria-hidden="true" hidden>
+        <svg class="connect-brand-link" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-2 2M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l2-2"/></svg>
+        <img id="connect-assistant-icon" width="40" height="40" alt="">
+      </span>
+    </div>
+    <h1 id="connect-title" tabindex="-1">Welcome back</h1>
+    <p id="connect-intro">One account for your VirWave practice.</p>
+    <p id="connect-status" role="status" aria-live="polite"></p>
+    <section id="connect-login" aria-label="Sign in or create an account">
+      <div id="connect-providers" class="connect-providers" hidden>
+        <button id="connect-apple" type="button" class="connect-provider" hidden><img src="/assets/img/partners/apple-sign-in.svg" width="34" height="48" alt=""><span>Continue with Apple</span></button>
+        <button id="connect-google" type="button" class="connect-provider" hidden><img src="/assets/img/partners/google-sign-in.png" width="20" height="20" alt=""><span>Continue with Google</span></button>
+        <div class="connect-divider"><span>or use email</span></div>
+      </div>
+      <form id="connect-email-form">
+        <label for="connect-email">Email address</label>
+        <input id="connect-email" type="email" autocomplete="email" placeholder="you@example.com" required maxlength="254" aria-describedby="connect-email-hint">
+        <p id="connect-email-hint" class="connect-small">We’ll send you a one-time code.</p>
+        <button type="submit" class="connect-primary">Send code</button>
+      </form>
+      <p class="connect-switch"><span id="connect-mode-prompt">New to VirWave?</span> <button id="connect-mode" class="connect-text-button" type="button">Create an account</button></p>
+      <p class="connect-small connect-legal">By creating an account, you agree to our <a href="/terms/" target="_blank" rel="noopener noreferrer">Terms</a> and <a href="/privacy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.</p>
+    </section>
+    <section id="connect-expired" class="connect-recovery" hidden aria-label="Sign-in recovery">
+      <p>That sign-in attempt has expired. Start again when you’re ready.</p>
+      <button id="connect-restart" type="button" class="connect-primary">Try again</button>
+      <p class="connect-small">If you were connecting an assistant, restart the connection in that app.</p>
+    </section>
+    <section id="connect-code" hidden aria-label="Verify your email">
+      <p>Enter the code sent to <strong id="connect-email-label"></strong>.</p>
+      <form id="connect-code-form">
+        <label for="connect-otp">Email code</label>
+        <input id="connect-otp" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6,8}" minlength="6" maxlength="8" required aria-describedby="connect-code-hint">
+        <p id="connect-code-hint" class="connect-small">Valid for 10 minutes. Never share it in a chat.</p>
+        <button type="submit" class="connect-primary">Verify code</button>
+      </form>
+      <div class="connect-actions"><button id="connect-resend" type="button">Resend code</button><button id="connect-change" type="button">Change email</button></div>
+    </section>
+    <section id="connect-consent" class="connect-consent" hidden aria-label="Connection permissions">
+      <p class="connect-consent-account">Using <span id="connect-user"></span></p>
+      <p id="connect-client-note" class="connect-consent-secondary" hidden></p>
+      <p class="connect-consent-purpose">Use VirWave breathing sessions in your chat and save your practice to your account.</p>
+      <section class="connect-consent-permissions" aria-labelledby="connect-permissions-title">
+        <h2 id="connect-permissions-title">What you’re allowing</h2>
+        <ul id="connect-scopes"></ul>
+      </section>
+      <aside class="connect-consent-warning" aria-labelledby="connect-access-title">
+        <h2 id="connect-access-title">Account access</h2>
+        <p>This connection can also view account details and change profile information. Depending on your account’s security settings, it may also be able to change sign-in details. Only connect an assistant you trust.</p>
+      </aside>
+      <p class="connect-consent-secondary">Connecting does not sign you up for research or marketing, or change your existing choices. Disconnect at any time from <a href="/account" target="_blank" rel="noopener noreferrer">your VirWave account</a>.</p>
+      <div class="connect-consent-declarations">
+        <label class="connect-check"><input id="connect-age" type="checkbox"> <span>I am 13 or older</span></label>
+        <label class="connect-check"><input id="connect-privacy" type="checkbox"> <span>I accept the Privacy Policy</span></label>
+        <p class="connect-consent-secondary"><a href="/privacy/" target="_blank" rel="noopener noreferrer">Read the Privacy Policy</a>. These choices are saved to your account.</p>
+      </div>
+      <div class="connect-actions"><button id="connect-allow" type="button" class="connect-primary">Allow connection</button><button id="connect-deny" type="button">Cancel</button></div>
+    </section>
+    <section id="connect-manage" hidden aria-label="Your account">
+      <p id="connect-account-email" class="connect-account-email"></p>
+      <p class="connect-account-intro">Your next breath, in the app or your assistant.</p>
+      <a class="connect-app-card" href="https://apps.apple.com/app/id6738364276" aria-label="Get the app">
+        <span class="connect-app-copy"><span class="connect-eyebrow">A little space to breathe</span><strong>Make a moment<br>your own.</strong><span class="connect-app-caption">Your breathing practice, always with you.</span><span class="connect-app-action">Get the app <span aria-hidden="true">↗</span></span></span>
+        <span class="connect-app-art" aria-hidden="true"><img src="/assets/img/app-screens/2.png" width="1242" height="2688" alt="" loading="lazy" decoding="async"></span>
+      </a>
+      <section id="connect-setup" class="connect-assistants" aria-labelledby="connect-assistants-title">
+        <h2 id="connect-assistants-title">A breathing break, right in your chat.</h2>
+        <p class="connect-small">Choose your assistant to see how to connect VirWave.</p>
+        <div class="connect-assistant-links"><a href="/assistants#chatgpt"><span>ChatGPT</span><span aria-hidden="true">↗</span></a><a href="/assistants#claude"><span>Claude</span><span aria-hidden="true">↗</span></a></div>
+        <p class="connect-small connect-preview-note">Account connections are in preview. See the guide for availability.</p>
+      </section>
+      <section class="connect-connections" aria-labelledby="connect-connections-title">
+        <h2 id="connect-connections-title" tabindex="-1">Connected assistants</h2>
+        <p id="connect-grants-status" class="connect-small" role="status" aria-live="polite"></p>
+        <ul id="connect-grants" class="connect-grants"></ul>
+        <button id="connect-grants-retry" class="connect-text-button" type="button" hidden>Try again</button>
+        <p class="connect-small">Disconnecting stops that assistant’s access. Your VirWave account, app access, and saved sessions stay.</p>
+      </section>
+      <button id="connect-signout" class="connect-text-button" type="button">Sign out</button>
+    </section>
+    <noscript>Enable JavaScript to sign in. Never enter your email code in a chat.</noscript>
+  </main>
+  <footer class="connect-footer"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="mailto:info@virwave.com">Get help</a></footer>
+</body>
+</html>

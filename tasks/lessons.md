@@ -103,3 +103,23 @@ yet rather than reporting the task as done.
 
 This applies to anything printed or handed out: QR codes, short links, email
 addresses in CTA copy, deep links, `.well-known` files.
+
+
+## 2026-09-25 — Expired sign-in recovery
+
+Show expired sign-in as its own focused recovery state, with a clear reason and one fresh retry action. Clear expired PKCE and assistant authorization context; never exchange an expired code or reuse an old assistant connection. Preserve provider callbacks in their original tab.
+
+## 2026-09-26 — Account actions should show the product and lead to setup
+
+Use existing breathing artwork to make the app download action tangible. Assistant setup belongs in a self-service guide with host-specific next steps, not an email link. Distinguish a verified public install destination from a private test connection; show accurate preview availability until installation has been proved.
+
+## 2026-09-27 — Consent must read like the product, not its protocol
+
+Keep the original logo inside the consent card and preserve it when focus moves to the heading. Identify known assistants by exact reviewed client IDs, translate known scopes into plain language, and retain honest unknown-permission fallbacks. Do not trade readable account-access warnings or explicit unchecked declarations for a cleaner layout. Research and advertising choices belong in their own account flow; never invent consent storage or fold those choices into assistant authorization.
+
+## 2026-09-27 — Keep consent descriptions plain
+
+The user found the slogan and repeated teal-accented feature rows artificial. On account consent screens, explain the purpose in one direct sentence; reserve hierarchy for actual permissions and the decision.
+
+## 2026-09-30 — Check what production is serving before pushing main
+Vercel production can be promoted from a branch, not only `main`. Before any push to `main`, compare the live site (`curl -I https://virwave.com/account`, `/connect`, `/mcp`) and open branches with deployment records (e.g. `codex/mcp-account-connect`) against the commit being pushed. A clean fast-forward of `main` is not proof that nothing live will be dropped.
