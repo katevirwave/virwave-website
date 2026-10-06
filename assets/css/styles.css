@@ -91,6 +91,10 @@
 .connect-assistant-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-3); margin-top: var(--sp-4); }
 .connect-assistant-links a { display: flex; justify-content: space-between; align-items: center; gap: var(--sp-2); min-height: 56px; padding: var(--sp-3); border: 1px solid var(--border); border-radius: var(--radius); background: var(--navy-deep); color: var(--white); text-decoration: none; transition: border-color var(--dur-snappy); }
 .connect-assistant-links a:hover { border-color: var(--mint); }
+.connect-assistant-name { display: inline-flex; align-items: center; gap: var(--sp-3); }
+.assistant-guide-title { display: flex; align-items: center; gap: var(--sp-3); }
+.assistant-guide-title img { width: 36px; height: 36px; border-radius: 10px; flex: none; object-fit: cover; }
+.connect-assistant-name img { width: 28px; height: 28px; border-radius: 8px; flex: none; object-fit: cover; }
 .connect-assistant-links a > :last-child { color: var(--mint); }
 .connect-panel .connect-preview-note { color: var(--text-muted); font-size: var(--text-xs); }
 .assistant-guide { max-width: 46rem; margin: 0 auto; }
