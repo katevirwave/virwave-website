@@ -91,6 +91,17 @@
 .connect-assistant-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-3); margin-top: var(--sp-4); }
 .connect-assistant-links a { display: flex; justify-content: space-between; align-items: center; gap: var(--sp-2); min-height: 56px; padding: var(--sp-3); border: 1px solid var(--border); border-radius: var(--radius); background: var(--navy-deep); color: var(--white); text-decoration: none; transition: border-color var(--dur-snappy); }
 .connect-assistant-links a:hover { border-color: var(--mint); }
+.connect-web { margin-top: var(--sp-8); }
+.connect-web h2 { margin: 0; font-size: var(--text-lg); color: var(--white); }
+.connect-web a.connect-web-open { display: flex; justify-content: center; align-items: center; gap: var(--sp-2); min-height: 52px; margin-top: var(--sp-4); border-radius: 999px; background: var(--mint); color: var(--navy-deep); font-weight: 600; text-decoration: none; transition: transform var(--dur-snappy), box-shadow var(--dur-snappy); }
+.connect-web a.connect-web-open:hover { transform: translateY(-1px); box-shadow: 0 0 24px var(--border); }
+.connect-web-links { display: grid; gap: var(--sp-3); margin-top: var(--sp-4); }
+.connect-web-links a { display: flex; align-items: center; gap: var(--sp-3); min-height: 64px; padding: var(--sp-3); border: 1px solid var(--border); border-radius: var(--radius); background: var(--navy-deep); color: var(--white); text-decoration: none; transition: border-color var(--dur-snappy); }
+.connect-web-links a:hover { border-color: var(--mint); }
+.connect-web-links svg { width: 28px; height: 28px; flex: none; color: var(--mint); }
+.connect-web-links a > span { display: flex; flex-direction: column; gap: 2px; }
+.connect-web-links a > span > span { color: var(--text); font-size: var(--text-xs); }
+@media (prefers-reduced-motion: reduce) { .connect-web a.connect-web-open, .connect-web-links a { transition: none; } .connect-web a.connect-web-open:hover { transform: none; } }
 .connect-assistant-name { display: inline-flex; align-items: center; gap: var(--sp-3); }
 .assistant-guide-title { display: flex; align-items: center; gap: var(--sp-3); }
 .assistant-guide-title img { width: 36px; height: 36px; border-radius: 10px; flex: none; object-fit: cover; }
