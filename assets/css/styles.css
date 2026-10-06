@@ -95,6 +95,7 @@
 .connect-web h2 { margin: 0; font-size: var(--text-lg); color: var(--white); }
 .connect-web a.connect-web-open { display: flex; justify-content: center; align-items: center; gap: var(--sp-2); min-height: 52px; margin-top: var(--sp-4); border-radius: 999px; background: var(--mint); color: var(--navy-deep); font-weight: 600; text-decoration: none; transition: transform var(--dur-snappy), box-shadow var(--dur-snappy); }
 .connect-web a.connect-web-open:hover { transform: translateY(-1px); box-shadow: 0 0 24px var(--border); }
+.connect-web a[aria-busy="true"] { opacity: .7; cursor: progress; }
 .connect-web-links { display: grid; gap: var(--sp-3); margin-top: var(--sp-4); }
 .connect-web-links a { display: flex; align-items: center; gap: var(--sp-3); min-height: 64px; padding: var(--sp-3); border: 1px solid var(--border); border-radius: var(--radius); background: var(--navy-deep); color: var(--white); text-decoration: none; transition: border-color var(--dur-snappy); }
 .connect-web-links a:hover { border-color: var(--mint); }

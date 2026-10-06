@@ -1,4 +1,4 @@
-import { createAccountClient, safeReturnUrl, startProviderLogin, consumeProviderReturn, clearProviderLogin } from './connect-auth.mjs';
+import { createAccountClient, safeReturnUrl, startProviderLogin, consumeProviderReturn, clearProviderLogin, appHandoffUrl } from './connect-auth.mjs';
 
 const el = (name) => document.getElementById(`connect-${name}`);
 const arrivalUrl = new URL(location.href);
@@ -178,6 +178,23 @@ for (const provider of ['apple', 'google']) el(provider).addEventListener('click
   const url = await startProviderLogin(configuration.url, provider, `${location.origin}${location.pathname}`, authorizationId);
   location.assign(url.href);
 }));
+
+// Open the web app already signed in as this account. Plain clicks only
+// (new-tab / modified clicks follow the link as usual). If anything fails,
+// the link still opens the app, where they can sign in.
+for (const link of document.querySelectorAll('.connect-web a[href^="https://app.virwave.com"]')) {
+  link.addEventListener('click', (event) => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    if (!client || el('manage').hidden) return;
+    event.preventDefault();
+    if (link.getAttribute('aria-busy') === 'true') return;
+    link.setAttribute('aria-busy', 'true');
+    client.webHandoff()
+      .then((token) => location.assign(appHandoffUrl(link.href, token)))
+      .catch(() => location.assign(link.href))
+      .finally(() => link.removeAttribute('aria-busy'));
+  });
+}
 
 void action(async () => {
   const response = await fetch('/_supabase.json', { cache: 'no-store', redirect: 'error', signal: AbortSignal.timeout(10000) });

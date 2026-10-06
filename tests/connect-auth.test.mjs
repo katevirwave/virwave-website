@@ -67,3 +67,32 @@ test('account terms require both explicit declarations and use the verified app 
   assert.equal(calls.at(-1).headers.authorization, 'Bearer account-secret');
   assert.deepEqual(calls.at(-1).body, {});
 });
+test('web handoff asks the edge function with the account token and only builds app links', async () => {
+  const calls = [];
+  const token = 'a3f1c0de9b8e7d6c5b4a39281706f5e4d3c2b1a0';
+  const client = createAccountClient({ url: 'https://auth.example', anonKey: 'public' }, async (url, init) => {
+    calls.push({ url, ...init });
+    if (url.endsWith('/verify')) return Response.json({ access_token: 'account-secret', user: { id: 'u1', email: 'a@example.com', is_anonymous: false } });
+    if (url.endsWith('/user')) return Response.json({ id: 'u1', email: 'a@example.com', is_anonymous: false });
+    if (url.endsWith('/functions/v1/web-handoff')) return Response.json({ token_hash: token });
+    return Response.json({});
+  });
+  await assert.rejects(client.webHandoff(), /Sign in/);
+  await client.verifyCode('a@example.com', '123456');
+  assert.equal(await client.webHandoff(), token);
+  const call = calls.at(-1);
+  assert.equal(call.method, 'POST');
+  assert.equal(call.headers.authorization, 'Bearer account-secret');
+  const { appHandoffUrl } = await import('../assets/js/connect-auth.mjs');
+  assert.equal(appHandoffUrl('https://app.virwave.com/journey', token), `https://app.virwave.com/journey#vw_handoff=${token}`);
+  assert.throws(() => appHandoffUrl('https://evil.example/', token), /app link/);
+});
+test('web handoff rejects a malformed token', async () => {
+  const client = createAccountClient({ url: 'https://auth.example', anonKey: 'public' }, async (url) => {
+    if (url.endsWith('/verify')) return Response.json({ access_token: 't', user: { id: 'u1', is_anonymous: false } });
+    if (url.endsWith('/user')) return Response.json({ id: 'u1', is_anonymous: false });
+    return Response.json({ token_hash: '<x>' });
+  });
+  await client.verifyCode('a@example.com', '123456');
+  await assert.rejects(client.webHandoff(), /signed in/);
+});

@@ -102,6 +102,23 @@ export function createAccountClient(config, send = fetch) {
     grants: () => request('/user/oauth/grants'),
     revoke: async (id) => request(`/user/oauth/grants?client_id=${uuid(id)}`, 'DELETE'),
     settings: () => request('/settings', 'GET', undefined, false),
+    // One-time sign-in token for app.virwave.com (a different origin can't
+    // share this page's session). Carried in the URL fragment to the app,
+    // which redeems it once; a used token is worthless.
+    async webHandoff() {
+      const result = await request('/web-handoff', 'POST', {}, true, 'functions/v1');
+      if (typeof result?.token_hash !== 'string' || !/^[A-Za-z0-9_-]{16,256}$/.test(result.token_hash)) throw new Error('Could not open the app signed in.');
+      return result.token_hash;
+    },
     forget: () => { accessToken = null; },
   };
+}
+
+const APP_ORIGIN = 'https://app.virwave.com';
+// Only app.virwave.com links get a token; anything else is refused.
+export function appHandoffUrl(href, token) {
+  const url = new URL(href);
+  if (url.origin !== APP_ORIGIN) throw new Error('Not a VirWave app link.');
+  url.hash = new URLSearchParams({ vw_handoff: token }).toString();
+  return url.href;
 }
