@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="base-path" content="/">
+
+  <title>What Colour Are You? The free 84-day challenge from VirWave</title>
+  <meta name="description" content="One question a day for 84 days: what colour are you? Then one breath. Free, with no streaks and no guilt. Starts Friday 27 November 2026.">
+  <link rel="canonical" href="https://virwave.com/84">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="VirWave">
+  <meta property="og:title" content="What Colour Are You? A free 84-day challenge">
+  <meta property="og:description" content="One question a day for 84 days, then one breath. No streaks, no guilt. Starts 27 November.">
+  <meta property="og:url" content="https://virwave.com/84">
+  <meta property="og:image" content="https://virwave.com/assets/img/og-default.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://virwave.com/assets/img/og-default.jpg">
+
+  <link rel="icon" href="/assets/favicon.png" type="image/png">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+
+  <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script defer src="/assets/js/analytics.js"></script>
+
+  <style>
+    /* Light campaign page: off-white ground, navy text, teal/sky/mint accents.
+       Colours are page-scoped variables so the shared stylesheet is untouched. */
+    body.vw-light {
+      --c84-bg: #FFFDF8; --c84-panel: #F3EEE4; --c84-ink: #14284B; --c84-ink-soft: rgba(20, 40, 75, 0.74);
+      --c84-teal: #0B6E7D; --c84-teal-dark: #08535E; --c84-sky: #8ECDE8; --c84-mint: #8CEBAA; --c84-line: rgba(20, 40, 75, 0.12);
+      --c84-white: #FFFFFF;
+      --c84-red: #E8604C; --c84-amber: #F2A33A; --c84-gold: #E9C93B; --c84-green: #3FB27F; --c84-blue: #2E8FD6; --c84-indigo: #7A5BD0; --c84-pink: #D45BB5;
+      background: var(--c84-bg); color: var(--c84-ink);
+    }
+    body.vw-light .site-nav, body.vw-light .site-nav.is-scrolled { background: var(--c84-ink); }
+    body.vw-light .site-footer { background: var(--c84-ink); }
+    .c84 { max-width: 760px; margin: 0 auto; padding: calc(var(--sp-24) + var(--sp-4)) var(--sp-6) var(--sp-16); }
+    .c84 h1 { font-size: clamp(2.25rem, 6vw, 3.4rem); line-height: 1.06; letter-spacing: -0.02em; margin: 0 0 var(--sp-4); color: var(--c84-ink); font-weight: 600; }
+    .c84 h2 { font-size: clamp(1.5rem, 3.5vw, 2rem); line-height: 1.15; margin: var(--sp-16) 0 var(--sp-4); color: var(--c84-ink); font-weight: 600; }
+    .c84 h3 { font-size: var(--text-xl); margin: 0 0 var(--sp-2); color: var(--c84-ink); font-weight: 600; }
+    .c84 p, .c84 li { font-size: var(--text-lg); line-height: 1.6; color: var(--c84-ink-soft); }
+    .c84 p { margin: 0 0 var(--sp-4); }
+    .c84 ul { margin: 0 0 var(--sp-4); padding-left: var(--sp-6); }
+    .c84 a { color: var(--c84-teal); }
+    .c84 strong { color: var(--c84-ink); }
+    .c84-eyebrow { display: inline-flex; align-items: center; gap: var(--sp-2); font-size: var(--text-sm); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c84-teal); margin: 0 0 var(--sp-4); }
+    .c84-lede { font-size: var(--text-xl) !important; }
+    .c84-rainbow { display: flex; gap: 6px; margin: var(--sp-6) 0; }
+    .c84-rainbow span { width: 28px; height: 28px; border-radius: 50%; }
+    .c84-card { background: var(--c84-white); border: 1px solid var(--c84-line); border-radius: 16px; padding: var(--sp-6); margin: var(--sp-6) 0; }
+    .c84-panel { background: var(--c84-panel); border-radius: 16px; padding: var(--sp-6); margin: var(--sp-6) 0; }
+    .c84-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--sp-3); margin: var(--sp-6) 0; }
+    .c84-day { background: var(--c84-white); border: 1px solid var(--c84-line); border-radius: 12px; padding: var(--sp-4); }
+    .c84-day b { display: block; font-size: var(--text-2xl); color: var(--c84-ink); }
+    .c84-day span { display: block; font-size: var(--text-sm); color: var(--c84-ink-soft); }
+    .c84-day em { display: block; font-style: normal; font-size: var(--text-sm); color: var(--c84-teal); margin-top: var(--sp-1); }
+    .c84-ways { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: var(--sp-4); }
+    .c84-ways .c84-card { margin: 0; }
+    .c84-actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; margin: var(--sp-4) 0 0; }
+    .c84-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 var(--sp-6); border-radius: 999px; border: 0; background: var(--c84-teal); color: var(--c84-white) !important; font-weight: 600; font-size: var(--text-base); cursor: pointer; text-decoration: none; font-family: var(--font); }
+    .c84-btn:hover { background: var(--c84-teal-dark); }
+    .c84-btn--ghost { background: transparent; color: var(--c84-teal) !important; border: 1.5px solid var(--c84-teal); }
+    .c84-btn--ghost:hover { background: var(--c84-panel); }
+    .c84-btn[aria-disabled="true"] { opacity: 0.5; cursor: default; }
+    .c84-btn:focus-visible, .c84 input:focus-visible { outline: 3px solid var(--c84-sky); outline-offset: 2px; }
+    .c84 form label { display: block; font-weight: 600; color: var(--c84-ink); margin: var(--sp-4) 0 var(--sp-1); font-size: var(--text-base); }
+    .c84 input[type="text"], .c84 input[type="email"] { width: 100%; min-height: 48px; border: 1.5px solid var(--c84-line); border-radius: 12px; padding: 0 var(--sp-4); font-size: var(--text-base); font-family: var(--font); color: var(--c84-ink); background: var(--c84-white); }
+    .c84-check { display: flex !important; gap: var(--sp-3); align-items: flex-start; font-weight: 400 !important; color: var(--c84-ink-soft) !important; }
+    .c84-check input { width: 22px; height: 22px; margin-top: 3px; flex: none; accent-color: var(--c84-teal); }
+    .c84-status { min-height: 1.6em; font-weight: 600; color: var(--c84-ink) !important; }
+    .c84 .c84-price { font-size: clamp(2rem, 5vw, 2.6rem); font-weight: 600; color: var(--c84-ink); margin: 0; line-height: 1.1; }
+    .c84 .c84-price small { font-size: var(--text-lg); font-weight: 400; color: var(--c84-ink-soft); }
+    .c84-list li { margin-bottom: var(--sp-2); }
+    .c84-small { font-size: var(--text-sm) !important; }
+    .c84-badges { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-4); }
+    .c84-badges a { display: inline-flex; background: var(--c84-ink); border-radius: 12px; padding: 6px 10px; }
+    .c84-badges img { display: block; height: 40px; width: auto; }
+    .c84 hr { border: 0; border-top: 1px solid var(--c84-line); margin: var(--sp-16) 0 0; }
+    .c84-hide { display: none !important; }
+  </style>
+</head>
+<body class="vw-light">
+
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo" aria-label="VirWave home">
+        <img src="/assets/logo_virwave.avif" alt="" width="32" height="32">
+        VirWave
+      </a>
+      <button id="nav-toggle" class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+      <ul id="nav-links" class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/84" aria-current="page">84-day challenge</a></li>
+        <li><a href="/breathe/connect/">Breathe in Claude</a></li>
+        <li><a href="/affiliates/">Affiliates</a></li>
+        <li><a href="/account">Account</a></li>
+        <li><a href="#join" class="nav-cta">Join free</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="main-content" class="c84">
+
+    <p class="c84-eyebrow">Free &middot; Starts Friday 27 November 2026</p>
+    <h1>What colour are you?</h1>
+    <p class="c84-lede">For 84 days, ask yourself one question each day: <strong>what colour are you?</strong> Then take one breath. That&rsquo;s the whole challenge.</p>
+    <p>There are no streaks and no guilt. If you miss a day, the next one is still there. Dark colours count too. There&rsquo;s no bad colour, only the one you are today.</p>
+    <div class="c84-rainbow" aria-hidden="true">
+      <span style="background:var(--c84-red)"></span><span style="background:var(--c84-amber)"></span><span style="background:var(--c84-gold)"></span><span style="background:var(--c84-green)"></span><span style="background:var(--c84-blue)"></span><span style="background:var(--c84-indigo)"></span><span style="background:var(--c84-pink)"></span>
+    </div>
+    <div class="c84-actions">
+      <a class="c84-btn" href="#join" data-track="c84_join_hero">Join free</a>
+      <a class="c84-btn c84-btn--ghost" href="#founding" data-track="c84_founding_hero">Founding Lifetime</a>
+    </div>
+
+    <h2>Why 84 days?</h2>
+    <p>A UCL study followed people for 84 days while they built a new daily habit. On average it took 66 days for the habit to feel automatic, though it varied a lot from person to person. Missing the odd day didn&rsquo;t undo anyone&rsquo;s progress. So the challenge runs for the full 84 days, with check-in points along the way.</p>
+    <div class="c84-grid" role="list">
+      <div class="c84-day" role="listitem"><b>Day 1</b><span>Fri 27 Nov 2026</span><em>We start together</em></div>
+      <div class="c84-day" role="listitem"><b>Day 30</b><span>Sat 26 Dec 2026</span><em>First look back</em></div>
+      <div class="c84-day" role="listitem"><b>Day 66</b><span>Sun 31 Jan 2027</span><em>The study&rsquo;s average</em></div>
+      <div class="c84-day" role="listitem"><b>Day 84</b><span>Thu 18 Feb 2027</span><em>Twelve weeks</em></div>
+    </div>
+    <p class="c84-small">Study: Lally, P., van Jaarsveld, C. H. M., Potts, H. W. W. &amp; Wardle, J. (2010). How are habits formed: Modelling habit formation in the real world. <em>European Journal of Social Psychology</em>, 40(6), 998&ndash;1009.</p>
+
+    <h2>Three ways to do it</h2>
+    <div class="c84-ways">
+      <div class="c84-card">
+        <h3>In the app</h3>
+        <p>VirWave is free. When you open it for the first time, choose <strong>84 days</strong>. Each day, pick your colour and breathe with a shape.</p>
+        <div class="c84-badges">
+          <a id="c84-ios" href="https://apps.apple.com/app/id6738364276" rel="noopener" data-track="store_click_ios"><img src="/assets/img/partners/app-store.png" alt="Download on the App Store" width="134" height="40"></a>
+          <a id="c84-android" href="https://play.google.com/store/apps/details?id=com.virwave.virwave" rel="noopener" data-track="store_click_android"><img src="/assets/img/partners/google-play.png" alt="Get it on Google Play" width="134" height="40"></a>
+        </div>
+      </div>
+      <div class="c84-card">
+        <h3>On paper</h3>
+        <p>The <em>What Colour Are You?</em> journal has a page for each check-in, an 84-dot tracker and a breathing shape for every day.</p>
+        <div class="c84-actions">
+          <a class="c84-btn c84-btn--ghost" id="c84-book-uk" href="https://www.amazon.co.uk/s?k=What+Colour+Are+You+Kate+Julia" rel="noopener" data-track="c84_book_uk">Amazon UK</a>
+          <a class="c84-btn c84-btn--ghost" id="c84-book-us" href="https://www.amazon.com/s?k=What+Colour+Are+You+Kate+Julia" rel="noopener" data-track="c84_book_us">Amazon US</a>
+        </div>
+      </div>
+      <div class="c84-card">
+        <h3>Both</h3>
+        <p>Write it in the journal in the morning, breathe in the app when you need to. There&rsquo;s a QR code in the journal that opens the app.</p>
+      </div>
+    </div>
+
+    <h2 id="join">Join free</h2>
+    <div class="c84-card">
+      <p>Join and I&rsquo;ll email you on day 1, 30, 66 and 84 with a short note and one breath. That&rsquo;s all.</p>
+      <form id="c84-form" novalidate>
+        <label for="c84-name">First name <span style="font-weight:400">(optional)</span></label>
+        <input type="text" id="c84-name" name="name" autocomplete="given-name" maxlength="80">
+        <label for="c84-email">Email</label>
+        <input type="email" id="c84-email" name="email" autocomplete="email" required maxlength="254" aria-describedby="c84-status">
+        <label class="c84-check" for="c84-consent">
+          <input type="checkbox" id="c84-consent" required>
+          <span>Email me the four challenge notes and occasional VirWave news. I can unsubscribe at any time. See the <a href="/privacy/">privacy policy</a>.</span>
+        </label>
+        <div class="c84-actions">
+          <button type="submit" class="c84-btn" id="c84-submit" data-track="c84_join_submit">Join the challenge</button>
+        </div>
+        <p class="c84-status" id="c84-status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+
+    <h2 id="founding">Founding Lifetime</h2>
+    <div class="c84-panel">
+      <p>I know a lot of us are tired of monthly charges. So, for the start of the challenge, you can pay once instead.</p>
+      <p class="c84-price"><span id="c84-price-main">&pound;79.99</span> <small>once &middot; <span id="c84-price-alt">or $99.99</span></small></p>
+      <p class="c84-small" id="c84-until">Founding price until 31 December 2026. After that, Lifetime will cost more.</p>
+      <ul class="c84-list">
+        <li>Everything in VirWave Premium, with no monthly or yearly charge</li>
+        <li>Every update I make to the app, for as long as VirWave runs it</li>
+        <li>Works on iPhone, Android and the web app with one account</li>
+      </ul>
+      <div class="c84-actions" id="c84-pay">
+        <a class="c84-btn" id="c84-pay-gbp" href="#founding" aria-disabled="true" data-track="c84_founding_gbp">Pay &pound;79.99</a>
+        <a class="c84-btn c84-btn--ghost" id="c84-pay-usd" href="#founding" aria-disabled="true" data-track="c84_founding_usd">Pay $99.99</a>
+      </div>
+      <p class="c84-small" id="c84-pay-note">Opens on 27 November.</p>
+      <p class="c84-small"><strong>After you pay:</strong> use the email address you use for your VirWave account. I&rsquo;ll switch on Lifetime within 24 hours and email you when it&rsquo;s done. If you don&rsquo;t have an account yet, download the app and sign up with that same email.</p>
+      <p>Thank you. I&rsquo;m just really glad you&rsquo;re here.<br>&mdash; Kate</p>
+    </div>
+
+    <h3 id="lifetime-terms" style="margin-top:var(--sp-8)">What &ldquo;lifetime&rdquo; means</h3>
+    <ul class="c84-list c84-small">
+      <li>Lifetime unlocks VirWave Premium on your account for as long as VirWave OAM runs the VirWave app. It is a one-off payment with no renewal.</li>
+      <li>It includes future updates and new Premium features in the app. Separately ticketed live events (in person or online) are not included, and nothing you get with Lifetime will ever be moved behind a new charge.</li>
+      <li>If you already pay for Premium through the App Store or Google Play, cancel that renewal in your phone&rsquo;s settings after Lifetime is switched on. Only you can cancel it.</li>
+      <li>Changed your mind? Email <a href="mailto:kate@virwave.com">kate@virwave.com</a> within 14 days of paying for a full refund.</li>
+      <li>Payments are taken by Stripe: in pounds by VirWave OAM UK Ltd, in dollars by VirWave OAM, Inc.</li>
+    </ul>
+
+    <hr>
+    <h2>If you need support now</h2>
+    <p>VirWave is for relaxing and resetting. It is not medical care or a crisis service. If you&rsquo;re struggling, you don&rsquo;t have to wait:</p>
+    <ul>
+      <li><strong>UK:</strong> call Samaritans on <a href="tel:116123">116&nbsp;123</a>, free, day or night.</li>
+      <li><strong>US:</strong> call or text <a href="tel:988">988</a> (Suicide &amp; Crisis Lifeline).</li>
+      <li>If you are in immediate danger, call your local emergency number.</li>
+    </ul>
+    <p class="c84-small">If you feel lightheaded while breathing, stop and breathe normally.</p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copy">&copy; 2026 VirWave OAM. All rights reserved.</p>
+      <nav aria-label="Footer">
+        <ul class="footer-links">
+          <li><a href="/privacy/">Privacy</a></li>
+          <li><a href="/terms/">Terms</a></li>
+          <li><a href="/affiliates/">Affiliates</a></li>
+          <li><a href="/interest/">Contact</a></li>
+          <li><a href="/">Home</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="/assets/js/supabase.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      // ---- Founding Lifetime payment links (Stripe). Paste the two links here. ----
+      var PAY = {
+        gbp: '',   // Stripe payment link, VirWave OAM UK Ltd, GBP 79.99
+        usd: ''    // Stripe payment link, VirWave OAM, Inc, USD 99.99
+      };
+      var FOUNDING_ENDS = new Date('2027-01-01T00:00:00Z'); // end of 31 Dec 2026, UK time
+
+      var params = new URLSearchParams(window.location.search);
+      var raw = (params.get('ref') || params.get('code') || '').trim().toUpperCase();
+      var code = /^[A-Z0-9]{3,20}$/.test(raw) ? raw : '';
+
+      // Creator codes: send store links through /ref so the creator is credited.
+      if (code) {
+        document.getElementById('c84-ios').href = '/ref/' + code;
+        document.getElementById('c84-android').href = '/ref/' + code;
+      }
+
+      // Show pounds first for UK visitors, dollars first for everyone else.
+      var lang = (navigator.language || '').toLowerCase();
+      var uk = lang === 'en-gb' || /europe\/london/i.test((Intl.DateTimeFormat().resolvedOptions().timeZone || ''));
+      if (!uk) {
+        document.getElementById('c84-price-main').textContent = '$99.99';
+        document.getElementById('c84-price-alt').innerHTML = 'or &pound;79.99';
+        var pay = document.getElementById('c84-pay');
+        pay.insertBefore(document.getElementById('c84-pay-usd'), pay.firstChild);
+        document.getElementById('c84-pay-usd').classList.remove('c84-btn--ghost');
+        document.getElementById('c84-pay-gbp').classList.add('c84-btn--ghost');
+      }
+
+      // Payment buttons: live once the links are set; closed after 31 December.
+      var note = document.getElementById('c84-pay-note');
+      function wire(id, url) {
+        var el = document.getElementById(id);
+        if (!url) return false;
+        var u = url + (url.indexOf('?') === -1 ? '?' : '&') + 'client_reference_id=' + encodeURIComponent(code || 'direct');
+        el.href = u; el.removeAttribute('aria-disabled'); el.rel = 'noopener';
+        return true;
+      }
+      if (new Date() >= FOUNDING_ENDS) {
+        document.getElementById('c84-pay').classList.add('c84-hide');
+        document.getElementById('c84-until').textContent = 'The founding price has ended.';
+        note.textContent = 'Lifetime will be back in the app soon.';
+      } else {
+        var live = wire('c84-pay-gbp', PAY.gbp) && wire('c84-pay-usd', PAY.usd);
+        if (live) note.classList.add('c84-hide');
+        ['c84-pay-gbp', 'c84-pay-usd'].forEach(function (id) {
+          document.getElementById(id).addEventListener('click', function (e) {
+            if (this.getAttribute('aria-disabled') === 'true') e.preventDefault();
+          });
+        });
+      }
+
+      // Free sign-up: stored in event_interest (insert-only for the public key).
+      var form = document.getElementById('c84-form');
+      var status = document.getElementById('c84-status');
+      var btn = document.getElementById('c84-submit');
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        var email = document.getElementById('c84-email').value.trim();
+        var name = document.getElementById('c84-name').value.trim().slice(0, 80);
+        var consent = document.getElementById('c84-consent').checked;
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { status.textContent = 'Please check your email address.'; return; }
+        if (!consent) { status.textContent = 'Please tick the box so I can email you the challenge notes.'; return; }
+        btn.disabled = true; status.textContent = 'Joining…';
+        var row = {
+          email: email,
+          email_normalized: email.toLowerCase(),
+          display_name: name || null,
+          consent_marketing: true,
+          consent_release_updates: true,
+          consent_privacy_version: '2026-03-04',
+          consented_at: new Date().toISOString(),
+          source: 'web_84',
+          event_code: 'colour84-2026',
+          campaign_id: code || null,
+          interest_type: 'challenge'
+        };
+        var result = await VWSupabase.insert('event_interest', row);
+        btn.disabled = false;
+        if (result.ok) {
+          form.reset();
+          status.textContent = 'You’re in. See you on Friday 27 November.';
+          if (window.va) window.va('event', { name: 'c84_join_success' });
+        } else if (result.error === 'duplicate') {
+          status.textContent = 'You’re already in with that email. See you on the 27th.';
+        } else {
+          status.textContent = 'That didn’t go through. Please try again, or email kate@virwave.com.';
+        }
+      });
+    })();
+  </script>
+  <script src="/assets/js/main.js"></script>
+</body>
+</html>
