@@ -186,10 +186,9 @@
         <li>Works on iPhone, Android and the web app with one account</li>
       </ul>
       <div class="c84-actions" id="c84-pay">
-        <a class="c84-btn" id="c84-pay-gbp" href="#founding" aria-disabled="true" data-track="c84_founding_gbp">Pay &pound;79.99</a>
-        <a class="c84-btn c84-btn--ghost" id="c84-pay-usd" href="#founding" aria-disabled="true" data-track="c84_founding_usd">Pay $99.99</a>
+        <a class="c84-btn" id="c84-pay-btn" href="https://buy.stripe.com/bJe6oIciX78o10VdaZgMw00" rel="noopener" data-track="c84_founding_pay">Become a founding member</a>
       </div>
-      <p class="c84-small" id="c84-pay-note">Opens on 27 November.</p>
+      <p class="c84-small" id="c84-pay-note">Checkout shows &pound;79.99 in the UK and $99.99 everywhere else.</p>
       <p class="c84-small"><strong>After you pay:</strong> use the email address you use for your VirWave account. I&rsquo;ll switch on Lifetime within 24 hours and email you when it&rsquo;s done. If you don&rsquo;t have an account yet, download the app and sign up with that same email.</p>
       <p>Thank you. I&rsquo;m just really glad you&rsquo;re here.<br>&mdash; Kate</p>
     </div>
@@ -200,7 +199,7 @@
       <li>It includes future updates and new Premium features in the app. Separately ticketed live events (in person or online) are not included, and nothing you get with Lifetime will ever be moved behind a new charge.</li>
       <li>If you already pay for Premium through the App Store or Google Play, cancel that renewal in your phone&rsquo;s settings after Lifetime is switched on. Only you can cancel it.</li>
       <li>Changed your mind? Email <a href="mailto:kate@virwave.com">kate@virwave.com</a> within 14 days of paying for a full refund.</li>
-      <li>Payments are taken by Stripe: in pounds by VirWave OAM UK Ltd, in dollars by VirWave OAM, Inc.</li>
+      <li>Payments are taken securely by Stripe for VirWave OAM, Inc.</li>
     </ul>
 
     <hr>
@@ -234,56 +233,35 @@
     (function () {
       'use strict';
 
-      // ---- Founding Lifetime payment links (Stripe). Paste the two links here. ----
-      var PAY = {
-        gbp: '',   // Stripe payment link, VirWave OAM UK Ltd, GBP 79.99
-        usd: ''    // Stripe payment link, VirWave OAM, Inc, USD 99.99
-      };
+      // ---- Founding Lifetime: one Stripe payment link (VirWave OAM, Inc). ----
+      // The price is GBP 79.99 / USD 99.99; Stripe picks by the buyer's location.
       var FOUNDING_ENDS = new Date('2027-01-01T00:00:00Z'); // end of 31 Dec 2026, UK time
 
       var params = new URLSearchParams(window.location.search);
       var raw = (params.get('ref') || params.get('code') || '').trim().toUpperCase();
       var code = /^[A-Z0-9]{3,20}$/.test(raw) ? raw : '';
 
-      // Creator codes: send store links through /ref so the creator is credited.
+      // Creator codes: send store links through /ref, and tag the payment with the code.
       if (code) {
         document.getElementById('c84-ios').href = '/ref/' + code;
         document.getElementById('c84-android').href = '/ref/' + code;
       }
+      var payBtn = document.getElementById('c84-pay-btn');
+      payBtn.href += '?client_reference_id=' + encodeURIComponent(code || 'direct');
 
       // Show pounds first for UK visitors, dollars first for everyone else.
       var lang = (navigator.language || '').toLowerCase();
       var uk = lang === 'en-gb' || /europe\/london/i.test((Intl.DateTimeFormat().resolvedOptions().timeZone || ''));
       if (!uk) {
         document.getElementById('c84-price-main').textContent = '$99.99';
-        document.getElementById('c84-price-alt').innerHTML = 'or &pound;79.99';
-        var pay = document.getElementById('c84-pay');
-        pay.insertBefore(document.getElementById('c84-pay-usd'), pay.firstChild);
-        document.getElementById('c84-pay-usd').classList.remove('c84-btn--ghost');
-        document.getElementById('c84-pay-gbp').classList.add('c84-btn--ghost');
+        document.getElementById('c84-price-alt').innerHTML = 'or &pound;79.99 in the UK';
       }
 
-      // Payment buttons: live once the links are set; closed after 31 December.
-      var note = document.getElementById('c84-pay-note');
-      function wire(id, url) {
-        var el = document.getElementById(id);
-        if (!url) return false;
-        var u = url + (url.indexOf('?') === -1 ? '?' : '&') + 'client_reference_id=' + encodeURIComponent(code || 'direct');
-        el.href = u; el.removeAttribute('aria-disabled'); el.rel = 'noopener';
-        return true;
-      }
+      // After 31 December the founding price closes.
       if (new Date() >= FOUNDING_ENDS) {
         document.getElementById('c84-pay').classList.add('c84-hide');
-        document.getElementById('c84-until').textContent = 'The founding price has ended.';
-        note.textContent = 'Lifetime will be back in the app soon.';
-      } else {
-        var live = wire('c84-pay-gbp', PAY.gbp) && wire('c84-pay-usd', PAY.usd);
-        if (live) note.classList.add('c84-hide');
-        ['c84-pay-gbp', 'c84-pay-usd'].forEach(function (id) {
-          document.getElementById(id).addEventListener('click', function (e) {
-            if (this.getAttribute('aria-disabled') === 'true') e.preventDefault();
-          });
-        });
+        document.getElementById('c84-pay-note').classList.add('c84-hide');
+        document.getElementById('c84-until').textContent = 'The founding price has ended. Lifetime will be back in the app soon.';
       }
 
       // Free sign-up: stored in event_interest (insert-only for the public key).
