@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="base-path" content="/">
+
+  <title>VirWave Yoga: calm, playful yoga for kids and their grown-ups in Camden</title>
+  <meta name="description" content="Calm, playful, sensory-safe yoga for children and their grown-ups, grounded in emotional regulation. Everyone starts as a Seedling. Starting January 2027 in Camden, London.">
+  <link rel="canonical" href="https://virwave.com/yoga">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="VirWave">
+  <meta property="og:title" content="VirWave Yoga: everyone starts as a Seedling">
+  <meta property="og:description" content="Calm, playful, sensory-safe yoga for kids and their grown-ups. Starting January 2027 in Camden, London.">
+  <meta property="og:url" content="https://virwave.com/yoga">
+  <meta property="og:image" content="https://virwave.com/assets/img/og-default.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://virwave.com/assets/img/og-default.jpg">
+
+  <link rel="icon" href="/assets/favicon.png" type="image/png">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+
+  <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script defer src="/assets/js/analytics.js"></script>
+
+  <style>
+    /* Light page: off-white ground, navy text, teal/sky/mint accents.
+       Colours are page-scoped variables so the shared stylesheet is untouched
+       (same pattern as /84). Land colours follow the World of VirWave canon. */
+    body.vw-light {
+      --yg-bg: #FFFDF8; --yg-panel: #F3EEE4; --yg-ink: #14284B; --yg-ink-soft: rgba(20, 40, 75, 0.74);
+      --yg-teal: #0B6E7D; --yg-teal-dark: #08535E; --yg-sky: #8ECDE8; --yg-mint: #8CEBAA; --yg-line: rgba(20, 40, 75, 0.12);
+      --yg-white: #FFFFFF;
+      --yg-sukadam: #3FB27F; --yg-opowatha: #2E8FD6; --yg-kridasar: #F2A33A; --yg-kithkin: #E8604C; --yg-indigo: #7A5BD0;
+      background: var(--yg-bg); color: var(--yg-ink);
+    }
+    body.vw-light .site-nav, body.vw-light .site-nav.is-scrolled { background: var(--yg-ink); }
+    body.vw-light .site-footer { background: var(--yg-ink); }
+
+    .yg { max-width: 960px; margin: 0 auto; padding: calc(var(--sp-24) + var(--sp-4)) var(--sp-6) var(--sp-16); }
+    .yg-narrow { max-width: 720px; }
+    .yg h1 { font-size: clamp(2.4rem, 6.5vw, 3.8rem); line-height: 1.04; letter-spacing: -0.02em; margin: 0 0 var(--sp-4); color: var(--yg-ink); font-weight: 600; }
+    .yg h2 { font-size: clamp(1.6rem, 3.6vw, 2.2rem); line-height: 1.15; margin: var(--sp-16) 0 var(--sp-4); color: var(--yg-ink); font-weight: 600; }
+    .yg h3 { font-size: var(--text-xl); margin: 0 0 var(--sp-2); color: var(--yg-ink); font-weight: 600; }
+    .yg p, .yg li { font-size: var(--text-lg); line-height: 1.6; color: var(--yg-ink-soft); }
+    .yg p { margin: 0 0 var(--sp-4); }
+    .yg ul { margin: 0 0 var(--sp-4); padding-left: var(--sp-6); }
+    .yg a { color: var(--yg-teal); }
+    .yg strong { color: var(--yg-ink); }
+
+    .yg-eyebrow { display: inline-block; font-size: var(--text-sm); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--yg-teal); margin: 0 0 var(--sp-4); }
+    .yg-lede { font-size: var(--text-xl) !important; max-width: 640px; }
+    .yg-small { font-size: var(--text-sm) !important; }
+
+    .yg-shapes { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin: var(--sp-8) 0 var(--sp-2); }
+    .yg-shapes svg { width: 44px; height: 44px; }
+    @media (max-width: 640px) { .yg-shapes { gap: var(--sp-2); } .yg-shapes svg { width: 36px; height: 36px; } }
+
+    .yg-actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; margin: var(--sp-6) 0 0; }
+    .yg-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 var(--sp-6); border-radius: 999px; border: 0; background: var(--yg-teal); color: var(--yg-white) !important; font-weight: 600; font-size: var(--text-base); cursor: pointer; text-decoration: none; font-family: var(--font); }
+    .yg-btn:hover { background: var(--yg-teal-dark); }
+    .yg-btn--ghost { background: transparent; color: var(--yg-teal) !important; border: 1.5px solid var(--yg-teal); }
+    .yg-btn--ghost:hover { background: var(--yg-panel); }
+    .yg-btn:focus-visible, .yg input:focus-visible, .yg summary:focus-visible { outline: 3px solid var(--yg-sky); outline-offset: 2px; }
+
+    .yg-card { background: var(--yg-white); border: 1px solid var(--yg-line); border-radius: 16px; padding: var(--sp-6); }
+    .yg-panel { background: var(--yg-panel); border-radius: 16px; padding: var(--sp-6) var(--sp-8); margin: var(--sp-6) 0; }
+    .yg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--sp-4); margin: var(--sp-6) 0; }
+    .yg-grid .yg-card p:last-child { margin-bottom: 0; }
+    .yg-tag { display: inline-block; font-size: var(--text-sm); font-weight: 600; color: var(--yg-teal); margin-bottom: var(--sp-2); }
+
+    .yg-equal { list-style: none; padding: 0 !important; display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-3); }
+    @media (max-width: 640px) { .yg-equal { grid-template-columns: 1fr; } }
+    .yg-equal li { background: var(--yg-white); border: 1px solid var(--yg-line); border-radius: 12px; padding: var(--sp-4); margin: 0; font-size: var(--text-base); }
+    .yg-equal li strong { display: block; margin-bottom: var(--sp-1); font-weight: 600; }
+
+    .yg-steps { list-style: none; padding: 0 !important; counter-reset: step; display: grid; gap: var(--sp-3); }
+    .yg-steps li { counter-increment: step; display: grid; grid-template-columns: 48px 1fr; gap: var(--sp-4); align-items: start; background: var(--yg-white); border: 1px solid var(--yg-line); border-radius: 12px; padding: var(--sp-4); margin: 0; }
+    .yg-steps li::before { content: counter(step); display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: var(--yg-mint); color: var(--yg-ink); font-weight: 600; font-size: var(--text-lg); }
+    .yg-steps h3 { font-size: var(--text-lg); margin: 0 0 var(--sp-1); }
+    .yg-steps p { margin: 0; font-size: var(--text-base); }
+
+    .yg-journey { list-style: none; padding: 0 !important; display: grid; gap: var(--sp-3); margin: var(--sp-6) 0; }
+    .yg-land { display: grid; grid-template-columns: 64px 1fr; gap: var(--sp-4); align-items: center; background: var(--yg-white); border: 1px solid var(--yg-line); border-left: 6px solid var(--land); border-radius: 12px; padding: var(--sp-4) var(--sp-5, 20px); margin: 0; }
+    .yg-land svg { width: 56px; height: 56px; color: var(--land); }
+    .yg-land .yg-weeks { display: block; font-size: var(--text-sm); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--yg-ink-soft); }
+    .yg-land h3 { margin: var(--sp-1) 0; }
+    .yg-land h3 span { font-weight: 400; color: var(--yg-ink-soft); }
+    .yg-land p { margin: 0; font-size: var(--text-base); }
+    .yg-land .yg-poses { margin-top: var(--sp-1); font-size: var(--text-sm); color: var(--yg-ink); }
+
+    .yg-faq details { background: var(--yg-white); border: 1px solid var(--yg-line); border-radius: 12px; padding: 0 var(--sp-4); margin: 0 0 var(--sp-3); }
+    .yg-faq summary { cursor: pointer; min-height: 48px; display: flex; align-items: center; font-weight: 600; font-size: var(--text-lg); color: var(--yg-ink); list-style: none; }
+    .yg-faq summary::-webkit-details-marker { display: none; }
+    .yg-faq summary::after { content: "+"; margin-left: auto; padding-left: var(--sp-4); font-size: var(--text-xl); color: var(--yg-teal); }
+    .yg-faq details[open] summary::after { content: "\2212"; }
+    .yg-faq details p { font-size: var(--text-base); }
+
+    .yg form label { display: block; font-weight: 600; color: var(--yg-ink); margin: var(--sp-4) 0 var(--sp-1); font-size: var(--text-base); }
+    .yg fieldset { border: 0; padding: 0; margin: var(--sp-4) 0 0; }
+    .yg legend { font-weight: 600; color: var(--yg-ink); font-size: var(--text-base); margin-bottom: var(--sp-1); padding: 0; }
+    .yg input[type="text"], .yg input[type="email"] { width: 100%; min-height: 48px; border: 1.5px solid var(--yg-line); border-radius: 12px; padding: 0 var(--sp-4); font-size: var(--text-base); font-family: var(--font); color: var(--yg-ink); background: var(--yg-white); }
+    .yg-check { display: flex !important; gap: var(--sp-3); align-items: flex-start; font-weight: 400 !important; color: var(--yg-ink-soft) !important; margin: var(--sp-2) 0 !important; }
+    .yg-check input { width: 22px; height: 22px; margin-top: 3px; flex: none; accent-color: var(--yg-teal); }
+    .yg-status { min-height: 1.6em; font-weight: 600; color: var(--yg-ink) !important; margin-top: var(--sp-3) !important; }
+
+    .yg hr { border: 0; border-top: 1px solid var(--yg-line); margin: var(--sp-16) 0 0; }
+  </style>
+</head>
+<body class="vw-light">
+
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo" aria-label="VirWave home">
+        <img src="/assets/logo_virwave.avif" alt="" width="32" height="32">
+        VirWave
+      </a>
+      <button id="nav-toggle" class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+      <ul id="nav-links" class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/yoga" aria-current="page">Yoga</a></li>
+        <li><a href="/84">84-day challenge</a></li>
+        <li><a href="/account">Account</a></li>
+        <li><a href="#register" class="nav-cta">Register interest</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="main-content" class="yg">
+
+    <p class="yg-eyebrow">VirWave Yoga &middot; Camden, London &middot; From January 2027</p>
+    <h1>Everyone starts as a&nbsp;Seedling.</h1>
+    <p class="yg-lede">Calm, playful, sensory-safe yoga for children and their grown-ups, grounded in emotional regulation.</p>
+    <p class="yg-narrow">Kids and grown-ups begin in the same place in the VirWave world. Nobody is ahead and nobody is behind. You don&rsquo;t have to be calm to start.</p>
+
+    <div class="yg-shapes" aria-hidden="true">
+      <svg viewBox="0 0 100 100" fill="none" stroke="var(--yg-sukadam)" stroke-width="6" stroke-linejoin="round"><polygon points="50,10 88,37 74,85 26,85 12,37"/></svg>
+      <svg viewBox="0 0 100 100" fill="none" stroke="var(--yg-sukadam)" stroke-width="6" stroke-linejoin="round"><polygon points="92,50 71,87 29,87 8,50 29,14 71,14"/></svg>
+      <svg viewBox="0 0 100 100" fill="none" stroke="var(--yg-opowatha)" stroke-width="6"><ellipse cx="50" cy="50" rx="38" ry="25"/></svg>
+      <svg viewBox="0 0 100 100" fill="none" stroke="var(--yg-opowatha)" stroke-width="6"><circle cx="50" cy="50" r="40"/></svg>
+      <svg viewBox="0 0 100 100" fill="none" stroke="var(--yg-opowatha)" stroke-width="6" stroke-linejoin="round"><path d="M 5,50 C 18,20 32,20 50,50 C 68,80 82,80 95,50 L 95,55 C 82,85 68,85 50,55 C 32,25 18,25 5,55 Z"/></svg>
+      <svg viewBox="0 0 100 100" fill="none" stroke="var(--yg-kridasar)" stroke-width="6" stroke-linejoin="round"><polygon points="50,6 61,35 92,34 68,56 76,83 50,68 24,83 32,56 8,34 39,35"/></svg>
+      <svg viewBox="0 0 100 100" fill="none" stroke="var(--yg-kithkin)" stroke-width="6" stroke-linejoin="round"><polygon points="50,8 8,88 92,88"/></svg>
+    </div>
+
+    <div class="yg-actions">
+      <a class="yg-btn" href="#register" data-track="yoga_register_hero">Register interest</a>
+      <a class="yg-btn yg-btn--ghost" href="#settings" data-track="yoga_settings_hero">For nurseries and schools</a>
+    </div>
+
+    <h2 id="equal">Kids and grown-ups start equal</h2>
+    <p class="yg-narrow">At your first class, everyone hatches as a Seedling: a three-year-old, a nine-year-old, and the mum, dad, or grandparent next to them. There are no levels and no badges. We travel the VirWave lands together, each at our own pace.</p>
+    <ul class="yg-equal">
+      <li><strong>The same shape every week</strong>Every class follows the same calm pattern, so children know what comes next.</li>
+      <li><strong>Gentle on the senses</strong>Soft music, calm lighting, and a quiet spot to rest whenever someone needs it.</li>
+      <li><strong>A seated version of every pose</strong>Everyone can take part, from the floor or from a chair.</li>
+      <li><strong>Joining in looks different for everyone</strong>Moving, watching, and resting all count.</li>
+    </ul>
+
+    <h2 id="classes">Classes</h2>
+    <div class="yg-grid">
+      <div class="yg-card">
+        <span class="yg-tag">All ages</span>
+        <h3>Family classes</h3>
+        <p>Children and their grown-ups, together on the mat. Everyone is a Seedling, whatever their age.</p>
+      </div>
+      <div class="yg-card">
+        <span class="yg-tag">Ages 3&ndash;5</span>
+        <h3>Little ones</h3>
+        <p>Short, playful, and full of movement. A grown-up stays in the room.</p>
+      </div>
+      <div class="yg-card">
+        <span class="yg-tag">Ages 6&ndash;9</span>
+        <h3>Kids</h3>
+        <p>Longer journeys, trickier poses, and more breathing games.</p>
+      </div>
+    </div>
+    <p class="yg-small">Classes start in January 2027 in Camden. Venues, times, and prices are coming soon. <a href="#register">Register interest</a> and you&rsquo;ll hear first.</p>
+
+    <h2 id="journey">Each term is a journey through the four lands</h2>
+    <p class="yg-narrow">A term is 10 weeks. Each land brings a new breath and new poses, and every class practises the land at its own level.</p>
+    <ol class="yg-journey">
+      <li class="yg-land" style="--land: var(--yg-sukadam)">
+        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round" aria-hidden="true"><polygon points="50,10 88,37 74,85 26,85 12,37"/></svg>
+        <div>
+          <span class="yg-weeks">Weeks 1&ndash;2</span>
+          <h3>Sukadam <span>&middot; Rooted</span></h3>
+          <p>Home, where everyone feels safe. We find our feet and our breath.</p>
+          <p class="yg-poses">Mountain, tree, and child&rsquo;s pose</p>
+        </div>
+      </li>
+      <li class="yg-land" style="--land: var(--yg-opowatha)">
+        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="5" aria-hidden="true"><ellipse cx="50" cy="50" rx="38" ry="25"/></svg>
+        <div>
+          <span class="yg-weeks">Weeks 3&ndash;4</span>
+          <h3>Opowatha <span>&middot; Naming</span></h3>
+          <p>The land of rivers and reflection. We ask each other, &ldquo;What colour are you?&rdquo;</p>
+          <p class="yg-poses">Cat and cow</p>
+        </div>
+      </li>
+      <li class="yg-land" style="--land: var(--yg-kridasar)">
+        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round" aria-hidden="true"><polygon points="50,6 61,35 92,34 68,56 76,83 50,68 24,83 32,56 8,34 39,35"/></svg>
+        <div>
+          <span class="yg-weeks">Weeks 5&ndash;6</span>
+          <h3>Kridasar <span>&middot; Reaching</span></h3>
+          <p>The land of joy and play. We stretch, reach, and wiggle.</p>
+          <p class="yg-poses">Downward dog and happy baby</p>
+        </div>
+      </li>
+      <li class="yg-land" style="--land: var(--yg-kithkin)">
+        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round" aria-hidden="true"><polygon points="50,8 8,88 92,88"/></svg>
+        <div>
+          <span class="yg-weeks">Weeks 7&ndash;8</span>
+          <h3>Kithkin <span>&middot; Brave</span></h3>
+          <p>The land of courage. We feel strong and find our brave.</p>
+          <p class="yg-poses">Plank and upward dog</p>
+        </div>
+      </li>
+      <li class="yg-land" style="--land: var(--yg-indigo)">
+        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="5" aria-hidden="true"><circle cx="50" cy="50" r="40"/></svg>
+        <div>
+          <span class="yg-weeks">Weeks 9&ndash;10</span>
+          <h3>All four lands</h3>
+          <p>We travel the whole map, and grown-ups join the last class to celebrate.</p>
+          <p class="yg-poses">Lotus, plus everyone&rsquo;s favourites</p>
+        </div>
+      </li>
+    </ol>
+
+    <h2 id="class">What a class looks like</h2>
+    <ol class="yg-steps">
+      <li><div><h3>Arrive</h3><p>We settle in and ask, &ldquo;What colour are you today?&rdquo; Every colour is welcome.</p></div></li>
+      <li><div><h3>Breathe</h3><p>We trace a shape with a finger and breathe along with it.</p></div></li>
+      <li><div><h3>Move</h3><p>Poses and games from this week&rsquo;s land.</p></div></li>
+      <li><div><h3>Rest</h3><p>We lie down, slow our breathing, and check in again: &ldquo;What colour are you now?&rdquo;</p></div></li>
+    </ol>
+
+    <h2 id="home">Keep going at home</h2>
+    <div class="yg-grid">
+      <div class="yg-card">
+        <h3>The VirWave app</h3>
+        <p>The same shapes and breaths, ready for bedtime, the school run, or a wobbly moment.</p>
+        <div class="yg-actions"><a class="yg-btn yg-btn--ghost" href="/ref" data-track="yoga_app">Get the app</a></div>
+      </div>
+      <div class="yg-card">
+        <h3>A VirWave yoga book</h3>
+        <p>A picture book of the same poses is on its way, so you can practise together at home.</p>
+      </div>
+    </div>
+
+    <h2 id="settings">For nurseries and schools</h2>
+    <div class="yg-panel">
+      <p>VirWave Yoga can come to you. Sessions follow the same four-lands journey and fit nurseries, primary schools, and after-school clubs.</p>
+      <div class="yg-actions" style="margin-top:0">
+        <a class="yg-btn" href="mailto:info@virwave.com?subject=VirWave%20Yoga%20for%20our%20setting" data-track="yoga_settings_email">Email us about your setting</a>
+      </div>
+    </div>
+
+    <h2 id="kate">Hi, I&rsquo;m Kate</h2>
+    <div class="yg-narrow">
+      <p>I&rsquo;m a yoga teacher and the founder of VirWave, and I build the VirWave app. I taught at a yoga studio in Detroit for two years, taught private clients for six years, and taught yoga at Wayne State University. I&rsquo;m a registered RYT-200 teacher and trained in children&rsquo;s yoga with Kidding Around Yoga.</p>
+      <p>I&rsquo;ve given two TEDx talks called <em>The Myth of Calm</em>. Everyone kept telling me to calm down, and nobody ever told me how. These classes are the how, for kids and grown-ups together.</p>
+    </div>
+
+    <h2 id="faq">Questions</h2>
+    <div class="yg-faq yg-narrow">
+      <details>
+        <summary>Do grown-ups join in?</summary>
+        <p>In family classes, yes. That&rsquo;s the point: everyone starts as a Seedling. For ages 3&ndash;5, a grown-up stays in the room. For ages 6&ndash;9, grown-ups can drop off.</p>
+      </details>
+      <details>
+        <summary>Does my child need to have done yoga before?</summary>
+        <p>No. Everyone starts at the beginning.</p>
+      </details>
+      <details>
+        <summary>What if my child doesn&rsquo;t want to join in?</summary>
+        <p>That&rsquo;s okay. They can watch, rest in the quiet spot, or join in when they&rsquo;re ready. Every pose also has a seated version.</p>
+      </details>
+      <details>
+        <summary>What should we bring?</summary>
+        <p>Comfy clothes and a water bottle. We do yoga in bare feet or grippy socks.</p>
+      </details>
+      <details>
+        <summary>Is it safe?</summary>
+        <p>Yes. Before classes start, every VirWave Yoga teacher is DBS-checked and insured, and every class follows a written safeguarding policy.</p>
+      </details>
+      <details>
+        <summary>Is this therapy?</summary>
+        <p>No. VirWave Yoga is movement, breathing, and play for everyday wellbeing. It isn&rsquo;t medical care or therapy.</p>
+      </details>
+    </div>
+
+    <h2 id="register">Register interest</h2>
+    <div class="yg-card yg-narrow">
+      <p>Leave your email and I&rsquo;ll let you know when times and venues are confirmed, before anyone else.</p>
+      <form id="yg-form" novalidate>
+        <label for="yg-name">First name <span style="font-weight:400">(optional)</span></label>
+        <input type="text" id="yg-name" name="name" autocomplete="given-name" maxlength="80">
+        <label for="yg-email">Email</label>
+        <input type="email" id="yg-email" name="email" autocomplete="email" required maxlength="254" aria-describedby="yg-status">
+        <fieldset>
+          <legend>Which classes interest you? <span style="font-weight:400">(optional)</span></legend>
+          <label class="yg-check"><input type="checkbox" name="classes" value="family"><span>Family classes</span></label>
+          <label class="yg-check"><input type="checkbox" name="classes" value="ages-3-5"><span>Little ones, ages 3&ndash;5</span></label>
+          <label class="yg-check"><input type="checkbox" name="classes" value="ages-6-9"><span>Kids, ages 6&ndash;9</span></label>
+          <label class="yg-check"><input type="checkbox" name="classes" value="setting"><span>For my nursery or school</span></label>
+        </fieldset>
+        <label class="yg-check" for="yg-consent" style="margin-top:var(--sp-4) !important">
+          <input type="checkbox" id="yg-consent" required>
+          <span>Email me when VirWave Yoga classes open, and occasional VirWave news. I can unsubscribe at any time. See the <a href="/privacy/">privacy policy</a>.</span>
+        </label>
+        <div class="yg-actions">
+          <button type="submit" class="yg-btn" id="yg-submit" data-track="yoga_register_submit">Register interest</button>
+        </div>
+        <p class="yg-status" id="yg-status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+
+    <hr>
+    <p class="yg-small yg-narrow">VirWave Yoga is for movement, breathing, and play. It isn&rsquo;t medical care or a crisis service. If anyone feels lightheaded while breathing, stop and breathe normally.</p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copy">&copy; 2026 VirWave OAM. All rights reserved.</p>
+      <nav aria-label="Footer">
+        <ul class="footer-links">
+          <li><a href="/privacy/">Privacy</a></li>
+          <li><a href="/terms/">Terms</a></li>
+          <li><a href="/interest/">Contact</a></li>
+          <li><a href="/">Home</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="/assets/js/supabase.js"></script>
+  <script>
+    (function () {
+      'use strict';
+      // Register interest: stored in event_interest (insert-only for the public key),
+      // one row per email for this event code.
+      var form = document.getElementById('yg-form');
+      var status = document.getElementById('yg-status');
+      var btn = document.getElementById('yg-submit');
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        var email = document.getElementById('yg-email').value.trim();
+        var name = document.getElementById('yg-name').value.trim().slice(0, 80);
+        var consent = document.getElementById('yg-consent').checked;
+        var classes = Array.prototype.map.call(form.querySelectorAll('input[name="classes"]:checked'), function (el) { return el.value; });
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { status.textContent = 'Please check your email address.'; return; }
+        if (!consent) { status.textContent = 'Please tick the box so I can email you when classes open.'; return; }
+        btn.disabled = true; status.textContent = 'Sending…';
+        var row = {
+          email: email,
+          email_normalized: email.toLowerCase(),
+          display_name: name || null,
+          consent_marketing: true,
+          consent_release_updates: true,
+          consent_privacy_version: '2026-03-04',
+          consented_at: new Date().toISOString(),
+          source: 'web_yoga',
+          event_code: 'yoga-2027',
+          interest_type: 'yoga',
+          message: classes.length ? 'classes: ' + classes.join(', ') : null
+        };
+        var result = await VWSupabase.insert('event_interest', row);
+        btn.disabled = false;
+        if (result.ok) {
+          form.reset();
+          status.textContent = 'Thank you. You’ll hear first when classes open.';
+          if (window.va) window.va('event', { name: 'yoga_register_success' });
+        } else if (result.error === 'duplicate') {
+          status.textContent = 'You’re already on the list with that email.';
+        } else {
+          status.textContent = 'That didn’t go through. Please try again, or email info@virwave.com.';
+        }
+      });
+    })();
+  </script>
+  <script src="/assets/js/main.js"></script>
+</body>
+</html>
